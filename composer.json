@@ -33,6 +33,7 @@
     "autoload": {
         "psr-4": {
             "App\\": "application/",
+            "App\\Core\\": "application/core/Core/",
             "App\\Modules\\": "application/modules/"
         },
         "files": [
