@@ -336,21 +336,29 @@ $this->db->query('SELECT * FROM ip_invoices WHERE invoice_id = ?', [$invoice_id]
 git clone https://github.com/InvoicePlane/InvoicePlane.git
 cd InvoicePlane
 
-# Copy environment file
-cp .env.example .env
-
 # Start Docker containers
 docker-compose up --build -d
 
 # Install PHP dependencies
-docker-compose exec app composer install
+docker-compose exec php composer install
 
 # Install Node dependencies and build assets
-docker-compose exec app npm install
-docker-compose exec app npm run build
+docker-compose exec php npm install
+docker-compose exec php npm run build
 ```
 
-Access the application at `http://localhost:8080/index.php/setup`
+Access the application at `http://localhost/index.php/setup`
+
+**Available Services:**
+- Application: `http://localhost` (nginx on port 80)
+- phpMyAdmin: `http://localhost:8081` (database admin)
+- MariaDB: `localhost:3306` (user/password: `ipdevdb`)
+
+**Container Names:**
+- `invoiceplane-php` - PHP 8.1 FPM
+- `invoiceplane-nginx` - nginx web server
+- `invoiceplane-db` - MariaDB 10.9 database
+- `invoiceplane-dbadmin` - phpMyAdmin
 
 ### Traditional Setup (Without Docker)
 
@@ -455,10 +463,13 @@ composer rector                    # Run automated refactoring with Rector
 # Docker Commands
 docker-compose up -d               # Start containers in background
 docker-compose down                # Stop containers
-docker-compose logs -f app         # View application logs
-docker-compose exec app bash       # Access container shell
-docker-compose exec app composer install  # Run composer in container
+docker-compose logs -f php         # View PHP container logs
+docker-compose logs -f nginx       # View nginx logs
+docker-compose exec php bash       # Access PHP container shell
+docker-compose exec php composer install  # Run composer in container
+docker-compose exec php npm install        # Run npm in container
 docker-compose restart             # Restart all containers
+docker-compose ps                  # List running containers
 
 # Database
 # (Run these inside your database container or locally)
