@@ -258,6 +258,28 @@ class MX_Loader extends CI_Loader
             return $this;
         }
 
+        // Try PSR-4 namespaced model first
+        $module = $this->_module;
+        if ($module) {
+            // Build PSR-4 class name: App\Modules\{Module}\Models\{Model}
+            $model_basename = basename($model);
+            $psr4_class = "App\\Modules\\" . ucfirst($module) . "\\Models\\" . ucfirst($model_basename);
+            
+            if (class_exists($psr4_class)) {
+                if ($connect !== false && ! class_exists('CI_DB', false)) {
+                    if ($connect === true) {
+                        $connect = '';
+                    }
+                    $this->database($connect, false, true);
+                }
+                
+                CI::$APP->{$_alias} = new $psr4_class();
+                $this->_ci_models[] = $_alias;
+                
+                return $this;
+            }
+        }
+
         // check module
         list($path, $_model) = Modules::find(mb_strtolower($model), $this->_module, 'models/');
 

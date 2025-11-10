@@ -129,6 +129,75 @@ class Invoice extends Response_Model
 }
 ```
 
+## PSR-4 Migration Status
+
+### ✅ Completed Features
+The application now supports **dual loading** - both PSR-4 and legacy naming conventions work simultaneously.
+
+**MX Enhancements:**
+- `MX/Modules.php::load()` - Checks for PSR-4 controllers first, falls back to legacy
+- `MX/Router.php::locate()` - Looks in `Controllers/` before `controllers/`
+- `MX/Loader.php::model()` - Supports PSR-4 models: `App\Modules\{Module}\Models\{Model}`
+
+**URL Routing:**
+- `invoices/form` → `App\Modules\Invoices\Controllers\InvoicesController::form()` ✅
+- Legacy URLs continue to work unchanged
+- No URL structure changes required
+
+**Autoloading:**
+```json
+{
+  "autoload": {
+    "psr-4": {
+      "App\\": "application/",
+      "App\\Modules\\": "application/modules/"
+    }
+  }
+}
+```
+
+### How MX Loads Controllers (Priority Order)
+
+1. **PSR-4 First**: Checks for `App\Modules\{Module}\Controllers\{Controller}Controller`
+   - Example: `invoices/form` → checks for `App\Modules\Invoices\Controllers\InvoicesController`
+   - Location: `application/modules/invoices/Controllers/InvoicesController.php`
+
+2. **Legacy Fallback**: Loads from `controllers/` directory
+   - Example: `invoices/status` → loads `Invoices` class
+   - Location: `application/modules/invoices/controllers/Invoices.php`
+
+### How MX Loads Models (Priority Order)
+
+1. **PSR-4 First**: Checks for `App\Modules\{Module}\Models\{Model}`
+   - Example: `$this->load->model('invoice')` → checks `App\Modules\Invoices\Models\Invoice`
+   - Location: `application/modules/invoices/Models/Invoice.php`
+
+2. **Legacy Fallback**: Loads from `models/` directory
+   - Example: `$this->load->model('mdl_invoices')` → loads `Mdl_invoices`
+   - Location: `application/modules/invoices/models/Mdl_invoices.php`
+
+### Migration Example: Invoices Module
+
+**Legacy Structure (Still Works):**
+```
+application/modules/invoices/
+├── controllers/
+│   └── Invoices.php          (class Invoices)
+└── models/
+    └── Mdl_invoices.php      (class Mdl_invoices)
+```
+
+**PSR-4 Structure (Now Active):**
+```
+application/modules/invoices/
+├── Controllers/              ← Note: Capital C
+│   └── InvoicesController.php  (namespace App\Modules\Invoices\Controllers)
+└── Models/                   ← Note: Capital M
+    └── Invoice.php           (namespace App\Modules\Invoices\Models)
+```
+
+Both structures coexist. MX tries PSR-4 first, then falls back to legacy.
+
 ## Directory Structure
 
 ### Source vs Built Assets

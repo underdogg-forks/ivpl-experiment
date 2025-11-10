@@ -67,7 +67,49 @@ class MX_Router extends CI_Router
 
         // check modules
         foreach (Modules::$locations as $location => $offset) {
-            // module exists?
+            // Check for PSR-4 Controllers directory first
+            $psr4_source = $location . $module . '/Controllers/';
+            
+            if (is_dir($psr4_source)) {
+                $this->module    = $module;
+                $this->directory = $offset . $module . '/Controllers/';
+
+                // module sub-controller exists?
+                if ($directory) {
+                    // module sub-directory exists?
+                    if (is_dir($psr4_source . $directory . '/')) {
+                        $psr4_source .= $directory . '/';
+                        $this->directory .= $directory . '/';
+
+                        // module sub-directory controller exists?
+                        if ($controller) {
+                            // Check PSR-4 naming: {Controller}Controller.php
+                            if (is_file($psr4_source . ucfirst($controller) . 'Controller' . EXT)) {
+                                $this->located = 3;
+                                return array_slice($segments, 2);
+                            }
+
+                            $this->located = -1;
+                        }
+                    } else {
+                        // Check PSR-4 naming: {Directory}Controller.php
+                        if (is_file($psr4_source . ucfirst($directory) . 'Controller' . EXT)) {
+                            $this->located = 2;
+                            return array_slice($segments, 1);
+                        }
+
+                        $this->located = -1;
+                    }
+                }
+
+                // module controller exists? Check PSR-4 naming: {Module}Controller.php
+                if (is_file($psr4_source . ucfirst($module) . 'Controller' . EXT)) {
+                    $this->located = 1;
+                    return $segments;
+                }
+            }
+            
+            // Fall back to legacy controllers/ directory
             if (is_dir($source = $location . $module . '/controllers/')) {
                 $this->module    = $module;
                 $this->directory = $offset . $module . '/controllers/';
