@@ -2,6 +2,8 @@
 
 namespace App\Modules\Quotes\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class QuotesController extends \Admin_Controller
+class QuotesController extends AdminController
 {
     /**
      * Quotes constructor.
@@ -25,7 +27,7 @@ class QuotesController extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('quotes/quotes');
+        $this->load->model('quotes/quote');
     }
 
     public function index()
@@ -42,27 +44,27 @@ class QuotesController extends \Admin_Controller
         // Determine which group of quotes to load
         switch ($status) {
             case 'draft':
-                $this->quotes->is_draft();
+                $this->quote->is_draft();
                 break;
             case 'sent':
-                $this->quotes->is_sent();
+                $this->quote->is_sent();
                 break;
             case 'viewed':
-                $this->quotes->is_viewed();
+                $this->quote->is_viewed();
                 break;
             case 'approved':
-                $this->quotes->is_approved();
+                $this->quote->is_approved();
                 break;
             case 'rejected':
-                $this->quotes->is_rejected();
+                $this->quote->is_rejected();
                 break;
             case 'canceled':
-                $this->quotes->is_canceled();
+                $this->quote->is_canceled();
                 break;
         }
 
-        $this->quotes->paginate(site_url('quotes/status/' . $status), $page);
-        $quotes = $this->quotes->result();
+        $this->quote->paginate(site_url('quotes/status/' . $status), $page);
+        $quotes = $this->quote->result();
 
         $this->layout->set(
             [
@@ -71,7 +73,7 @@ class QuotesController extends \Admin_Controller
                 'filter_display'     => true,
                 'filter_placeholder' => trans('filter_quotes'),
                 'filter_method'      => 'filter_quotes',
-                'quote_statuses'     => $this->quotes->statuses(),
+                'quote_statuses'     => $this->quote->statuses(),
             ]
         );
 
@@ -110,11 +112,11 @@ class QuotesController extends \Admin_Controller
             unset($quote_custom->quote_id, $quote_custom->quote_custom_id);
 
             foreach ($quote_custom as $key => $val) {
-                $this->quotes->set_form_value('custom[' . $key . ']', $val);
+                $this->quote->set_form_value('custom[' . $key . ']', $val);
             }
         }
 
-        $quote = $this->quotes->get_by_id($quote_id);
+        $quote = $this->quote->get_by_id($quote_id);
 
         if ( ! $quote) {
             show_404();
@@ -133,7 +135,7 @@ class QuotesController extends \Admin_Controller
             foreach ($fields as $fvalue) {
                 if ($fvalue->quote_custom_fieldid == $cfield->custom_field_id) {
                     // TODO: Hackish, may need a better optimization
-                    $this->quotes->set_form_value(
+                    $this->quote->set_form_value(
                         'custom[' . $cfield->custom_field_id . ']',
                         $fvalue->quote_custom_fieldvalue
                     );
@@ -158,10 +160,10 @@ class QuotesController extends \Admin_Controller
                 'quote_id'        => $quote_id,
                 'einvoice'        => $einvoice,
                 'change_user'     => $change_user,
-                'units'           => $this->units->get()->result(),
+                'units'           => $this->unit->get()->result(),
                 'tax_rates'       => $this->taxrates->get()->result(),
                 'quote_tax_rates' => $this->quotetaxrates->where('quote_id', $quote_id)->get()->result(),
-                'quote_statuses'  => $this->quotes->statuses(),
+                'quote_statuses'  => $this->quote->statuses(),
                 'custom_fields'   => $custom_fields,
                 'custom_values'   => $custom_values,
                 'custom_js_vars'  => [
@@ -190,7 +192,7 @@ class QuotesController extends \Admin_Controller
     public function delete($quote_id)
     {
         // Delete the quote
-        $this->quotes->delete($quote_id);
+        $this->quote->delete($quote_id);
 
         // Redirect to quote index
         redirect('quotes/index');
@@ -205,8 +207,8 @@ class QuotesController extends \Admin_Controller
         $this->load->helper('pdf');
 
         if (get_setting('mark_quotes_sent_pdf') == 1) {
-            $this->quotes->generate_quote_number_if_applicable($quote_id);
-            $this->quotes->mark_sent($quote_id);
+            $this->quote->generate_quote_number_if_applicable($quote_id);
+            $this->quote->mark_sent($quote_id);
         }
 
         generate_quote_pdf($quote_id, $stream, $quote_template);

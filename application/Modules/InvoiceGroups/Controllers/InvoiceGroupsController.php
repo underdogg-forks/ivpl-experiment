@@ -2,6 +2,8 @@
 
 namespace App\Modules\InvoiceGroups\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class Invoice_Groups extends \Admin_Controller
+class Invoice_Groups extends AdminController
 {
     /**
      * Invoice_Groups constructor.

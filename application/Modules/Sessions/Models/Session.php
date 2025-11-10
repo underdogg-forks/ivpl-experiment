@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class Sessions extends CI_Model
+class Session extends CI_Model
 {
     /**
      * @param $email

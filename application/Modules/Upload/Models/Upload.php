@@ -2,6 +2,8 @@
 
 namespace App\Modules\Upload\Models;
 
+use App\Core\ResponseModel;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class Uploads extends \Response_Model
+class Upload extends ResponseModel
 {
     public $table = 'ip_uploads';
 

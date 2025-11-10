@@ -2,6 +2,8 @@
 
 namespace App\Modules\Upload\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class UploadController extends \Admin_Controller
+class UploadController extends AdminController
 {
     public $targetPath = UPLOADS_CFILES_FOLDER; // UPLOADS_FOLDER . 'customer_files/';
 
@@ -33,7 +35,7 @@ class UploadController extends \Admin_Controller
     {
         parent::__construct();
         $this->load->model('upload/uploads');
-        $this->content_types = $this->uploads->content_types;
+        $this->content_types = $this->upload->content_types;
     }
 
     public function upload_file(int $customerId, string $url_key): void
@@ -79,7 +81,7 @@ class UploadController extends \Admin_Controller
     public function show_files($url_key = null): void
     {
         header('Content-Type: application/json; charset=utf-8');
-        if ($url_key && ! $result = $this->uploads->get_files($url_key)) {
+        if ($url_key && ! $result = $this->upload->get_files($url_key)) {
             exit('{}');
         }
 
@@ -100,7 +102,7 @@ class UploadController extends \Admin_Controller
         $finalPath = $this->targetPath . $url_key . '_' . $filename;
 
         if (realpath($this->targetPath) === mb_substr(realpath($finalPath), 0, mb_strlen(realpath($this->targetPath))) && ( ! file_exists($finalPath) || @unlink($finalPath))) {
-            $this->uploads->delete_file($url_key, $filename);
+            $this->upload->delete_file($url_key, $filename);
             $this->respond_message(200, 'upload_file_deleted_successfully', $filename);
         }
 
@@ -182,7 +184,7 @@ class UploadController extends \Admin_Controller
             'file_name_new'      => $url_key . '_' . $filename,
         ];
 
-        if ( ! $this->uploads->create($data)) {
+        if ( ! $this->upload->create($data)) {
             $this->respond_message(500, 'upload_error_database', $filename);
         }
     }

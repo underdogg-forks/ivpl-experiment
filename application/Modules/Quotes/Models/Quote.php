@@ -2,6 +2,8 @@
 
 namespace App\Modules\Quotes\Models;
 
+use App\Core\ResponseModel;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class Quotes extends \Response_Model
+class Quote extends ResponseModel
 {
     public $table = 'ip_quotes';
 

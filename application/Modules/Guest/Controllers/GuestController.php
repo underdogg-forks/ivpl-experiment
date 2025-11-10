@@ -27,9 +27,9 @@ class GuestController extends \Base_Controller
             show_404();
         }
 
-        $this->load->model('invoices/invoices');
+        $this->load->model('invoices/invoice');
 
-        $invoice = $this->invoices->guest_visible()->where('invoice_url_key', $invoice_url_key)->get();
+        $invoice = $this->invoice->guest_visible()->where('invoice_url_key', $invoice_url_key)->get();
 
         if ($invoice->num_rows() != 1) {
             show_404();
@@ -49,7 +49,7 @@ class GuestController extends \Base_Controller
         $invoice = $invoice->row();
 
         if ($this->session->userdata('user_type') != 1 && $invoice->invoice_status_id == 2) {
-            $this->invoices->mark_viewed($invoice->invoice_id);
+            $this->invoice->mark_viewed($invoice->invoice_id);
         }
 
         $payment_method = $this->paymentmethods->where('payment_method_id', $invoice->payment_method)->get()->row();
@@ -94,9 +94,9 @@ class GuestController extends \Base_Controller
      */
     public function generate_invoice_pdf($invoice_url_key, $stream = true, $invoice_template = null)
     {
-        $this->load->model('invoices/invoices');
+        $this->load->model('invoices/invoice');
 
-        $invoice = $this->invoices->guest_visible()->where('invoice_url_key', $invoice_url_key)->get();
+        $invoice = $this->invoice->guest_visible()->where('invoice_url_key', $invoice_url_key)->get();
 
         if ($invoice->num_rows() == 1) {
             $invoice = $invoice->row();
@@ -118,9 +118,9 @@ class GuestController extends \Base_Controller
      */
     public function generate_sumex_pdf($invoice_url_key, $stream = true, $invoice_template = null)
     {
-        $this->load->model('invoices/invoices');
+        $this->load->model('invoices/invoice');
 
-        $invoice = $this->invoices->guest_visible()->where('invoice_url_key', $invoice_url_key)->get();
+        $invoice = $this->invoice->guest_visible()->where('invoice_url_key', $invoice_url_key)->get();
 
         if ($invoice->num_rows() == 1) {
             $invoice = $invoice->row();
@@ -148,9 +148,9 @@ class GuestController extends \Base_Controller
             show_404();
         }
 
-        $this->load->model('quotes/quotes');
+        $this->load->model('quotes/quote');
 
-        $quote = $this->quotes->guest_visible()->where('quote_url_key', $quote_url_key)->get();
+        $quote = $this->quote->guest_visible()->where('quote_url_key', $quote_url_key)->get();
 
         if ($quote->num_rows() != 1) {
             show_404();
@@ -163,7 +163,7 @@ class GuestController extends \Base_Controller
         $quote = $quote->row();
 
         if ($this->session->userdata('user_type') != 1 && $quote->quote_status_id == 2) {
-            $this->quotes->mark_viewed($quote->quote_id);
+            $this->quote->mark_viewed($quote->quote_id);
         }
 
         // Get all custom fields
@@ -200,9 +200,9 @@ class GuestController extends \Base_Controller
      */
     public function generate_quote_pdf($quote_url_key, $stream = true, $quote_template = null)
     {
-        $this->load->model('quotes/quotes');
+        $this->load->model('quotes/quote');
 
-        $quote = $this->quotes->guest_visible()->where('quote_url_key', $quote_url_key)->get()->row();
+        $quote = $this->quote->guest_visible()->where('quote_url_key', $quote_url_key)->get()->row();
 
         if ( ! $quote) {
             show_404();
@@ -222,11 +222,11 @@ class GuestController extends \Base_Controller
      */
     public function approve_quote(string $quote_url_key)
     {
-        $this->load->model('quotes/quotes');
+        $this->load->model('quotes/quote');
         $this->load->helper('mailer');
 
-        $this->quotes->approve_quote_by_key($quote_url_key);
-        email_quote_status($this->quotes->where('ip_quotes.quote_url_key', $quote_url_key)->get()->row()->quote_id, 'approved');
+        $this->quote->approve_quote_by_key($quote_url_key);
+        email_quote_status($this->quote->where('ip_quotes.quote_url_key', $quote_url_key)->get()->row()->quote_id, 'approved');
 
         redirect('guest/view/quote/' . $quote_url_key);
     }
@@ -236,11 +236,11 @@ class GuestController extends \Base_Controller
      */
     public function reject_quote(string $quote_url_key)
     {
-        $this->load->model('quotes/quotes');
+        $this->load->model('quotes/quote');
         $this->load->helper('mailer');
 
-        $this->quotes->reject_quote_by_key($quote_url_key);
-        email_quote_status($this->quotes->where('ip_quotes.quote_url_key', $quote_url_key)->get()->row()->quote_id, 'rejected');
+        $this->quote->reject_quote_by_key($quote_url_key);
+        email_quote_status($this->quote->where('ip_quotes.quote_url_key', $quote_url_key)->get()->row()->quote_id, 'rejected');
 
         redirect('guest/view/quote/' . $quote_url_key);
     }

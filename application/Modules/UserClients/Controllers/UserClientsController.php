@@ -2,6 +2,8 @@
 
 namespace App\Modules\UserClients\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class User_Clients extends \Admin_Controller
+class User_Clients extends AdminController
 {
     /**
      * Custom_Values constructor.
@@ -25,8 +27,8 @@ class User_Clients extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('users/users');
-        $this->load->model('clients/clients');
+        $this->load->model('users/user');
+        $this->load->model('clients/client');
         $this->load->model('user_clients/userclients');
     }
 
@@ -41,7 +43,7 @@ class User_Clients extends \Admin_Controller
             redirect('users');
         }
 
-        $user = $this->users->get_by_id($id);
+        $user = $this->user->get_by_id($id);
 
         if (empty($user)) {
             redirect('users');
@@ -87,8 +89,8 @@ class User_Clients extends \Admin_Controller
             redirect('user_clients/user/' . $user_id);
         }
 
-        $user    = $this->users->get_by_id($user_id);
-        $clients = $this->clients->get_not_assigned_to_user($user_id);
+        $user    = $this->user->get_by_id($user_id);
+        $clients = $this->client->get_not_assigned_to_user($user_id);
 
         $this->layout->set(
             [

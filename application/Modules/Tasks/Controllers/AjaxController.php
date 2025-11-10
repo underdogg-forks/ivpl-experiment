@@ -2,6 +2,8 @@
 
 namespace App\Modules\Tasks\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class AjaxController extends \Admin_Controller
+class TasksAjaxController extends AdminController
 {
     /**
      * @param null|int $invoice_id
@@ -30,8 +32,8 @@ class AjaxController extends \Admin_Controller
         ];
 
         if ( ! empty($invoice_id)) {
-            $this->load->model('tasks/tasks');
-            $data['tasks'] = $this->tasks->get_tasks_to_invoice($invoice_id);
+            $this->load->model('tasks/task');
+            $data['tasks'] = $this->task->get_tasks_to_invoice($invoice_id);
         }
 
         $this->layout->load_view('tasks/modal_task_lookups', $data);
@@ -39,9 +41,9 @@ class AjaxController extends \Admin_Controller
 
     public function process_task_selections()
     {
-        $this->load->model('tasks/tasks');
+        $this->load->model('tasks/task');
 
-        $tasks = $this->tasks->where_in('task_id', $this->input->post('task_ids'))->get()->result();
+        $tasks = $this->task->where_in('task_id', $this->input->post('task_ids'))->get()->result();
         foreach ($tasks as $task) {
             $task->task_price = format_amount($task->task_price);
         }

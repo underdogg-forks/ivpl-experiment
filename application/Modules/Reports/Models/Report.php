@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class Reports extends CI_Model
+class Report extends CI_Model
 {
     /**
      * @return mixed

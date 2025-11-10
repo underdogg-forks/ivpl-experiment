@@ -2,6 +2,8 @@
 
 namespace App\Modules\Invoices\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class InvoicesController extends \Admin_Controller
+class InvoicesController extends AdminController
 {
     /**
      * Invoices constructor.
@@ -25,7 +27,7 @@ class InvoicesController extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('invoices/invoices');
+        $this->load->model('invoices/invoice');
     }
 
     public function index(): void
@@ -42,24 +44,24 @@ class InvoicesController extends \Admin_Controller
         // Determine which group of invoices to load
         switch ($status) {
             case 'draft':
-                $this->invoices->is_draft();
+                $this->invoice->is_draft();
                 break;
             case 'sent':
-                $this->invoices->is_sent();
+                $this->invoice->is_sent();
                 break;
             case 'viewed':
-                $this->invoices->is_viewed();
+                $this->invoice->is_viewed();
                 break;
             case 'paid':
-                $this->invoices->is_paid();
+                $this->invoice->is_paid();
                 break;
             case 'overdue':
-                $this->invoices->is_overdue();
+                $this->invoice->is_overdue();
                 break;
         }
 
-        $this->invoices->paginate(site_url('invoices/status/' . $status), $page);
-        $invoices = $this->invoices->result();
+        $this->invoice->paginate(site_url('invoices/status/' . $status), $page);
+        $invoices = $this->invoice->result();
 
         $this->layout->set(
             [
@@ -68,7 +70,7 @@ class InvoicesController extends \Admin_Controller
                 'filter_display'     => true,
                 'filter_placeholder' => trans('filter_invoices'),
                 'filter_method'      => 'filter_invoices',
-                'invoice_statuses'   => $this->invoices->statuses(),
+                'invoice_statuses'   => $this->invoice->statuses(),
             ]
         );
 
@@ -78,7 +80,7 @@ class InvoicesController extends \Admin_Controller
 
     public function archive(): void
     {
-        $invoice_array = $this->invoices->get_archives(0);
+        $invoice_array = $this->invoice->get_archives(0);
         $this->layout->set(
             [
                 'filter_display'     => true,
@@ -147,12 +149,12 @@ class InvoicesController extends \Admin_Controller
             unset($invoice_custom->invoice_id, $invoice_custom->invoice_custom_id);
 
             foreach ($invoice_custom as $key => $val) {
-                $this->invoices->set_form_value('custom[' . $key . ']', $val);
+                $this->invoice->set_form_value('custom[' . $key . ']', $val);
             }
         }*/
 
         $fields  = $this->invoicecustom->by_id($invoice_id)->get()->result();
-        $invoice = $this->invoices->get_by_id($invoice_id);
+        $invoice = $this->invoice->get_by_id($invoice_id);
 
         if ( ! $invoice) {
             show_404();
@@ -171,7 +173,7 @@ class InvoicesController extends \Admin_Controller
             foreach ($fields as $fvalue) {
                 if ($fvalue->invoice_custom_fieldid == $cfield->custom_field_id) {
                     // TODO: Hackish, may need a better optimization
-                    $this->invoices->set_form_value(
+                    $this->invoice->set_form_value(
                         'custom[' . $cfield->custom_field_id . ']',
                         $fvalue->invoice_custom_fieldvalue
                     );
@@ -200,7 +202,7 @@ class InvoicesController extends \Admin_Controller
                 'change_user'       => $change_user,
                 'tax_rates'         => $this->taxrates->get()->result(),
                 'invoice_tax_rates' => $this->invoicetaxrates->where('invoice_id', $invoice_id)->get()->result(),
-                'units'             => $this->units->get()->result(),
+                'units'             => $this->unit->get()->result(),
                 'payment_methods'   => $this->paymentmethods->get()->result(),
                 'custom_fields'     => $custom_fields,
                 'custom_values'     => $custom_values,
@@ -209,7 +211,7 @@ class InvoicesController extends \Admin_Controller
                     'currency_symbol_placement' => get_setting('currency_symbol_placement'),
                     'decimal_point'             => get_setting('decimal_point'),
                 ],
-                'invoice_statuses'   => $this->invoices->statuses(),
+                'invoice_statuses'   => $this->invoice->statuses(),
                 'payment_cf_exist'   => $payment_cf_exist,
                 'legacy_calculation' => config_item('legacy_calculation'),
             ]
@@ -230,16 +232,16 @@ class InvoicesController extends \Admin_Controller
     public function delete($invoice_id): void
     {
         // Get the status of the invoice
-        $invoice        = $this->invoices->get_by_id($invoice_id);
+        $invoice        = $this->invoice->get_by_id($invoice_id);
         $invoice_status = $invoice->invoice_status_id;
 
         if ($invoice_status == 1 || $this->config->item('enable_invoice_deletion') === true) {
             // If invoice refers to tasks, mark those tasks back to 'Complete'
-            $this->load->model('tasks/tasks');
-            $tasks = $this->tasks->update_on_invoice_delete($invoice_id);
+            $this->load->model('tasks/task');
+            $tasks = $this->task->update_on_invoice_delete($invoice_id);
 
             // Delete the invoice
-            $this->invoices->delete($invoice_id);
+            $this->invoice->delete($invoice_id);
         } else {
             // Add alert that invoices can't be deleted
             $this->session->set_flashdata('alert_error', trans('invoice_deletion_forbidden'));
@@ -258,8 +260,8 @@ class InvoicesController extends \Admin_Controller
         $this->load->helper('pdf');
 
         if (get_setting('mark_invoices_sent_pdf') == 1) {
-            $this->invoices->generate_invoice_number_if_applicable($invoice_id);
-            $this->invoices->mark_sent($invoice_id);
+            $this->invoice->generate_invoice_number_if_applicable($invoice_id);
+            $this->invoice->mark_sent($invoice_id);
         }
 
         generate_invoice_pdf($invoice_id, $stream, $invoice_template, null);
@@ -267,7 +269,7 @@ class InvoicesController extends \Admin_Controller
 
     public function generate_xml($invoice_id): void
     {
-        $invoice = $this->invoices->get_by_id($invoice_id);
+        $invoice = $this->invoice->get_by_id($invoice_id);
         if ( ! $invoice) {
             show_404();
         }
@@ -311,7 +313,7 @@ class InvoicesController extends \Admin_Controller
     {
         $this->load->model('invoices/items');
         $this->load->library('Sumex', [
-            'invoice' => $this->invoices->get_by_id($invoice_id),
+            'invoice' => $this->invoice->get_by_id($invoice_id),
             'items'   => $this->items->where('invoice_id', $invoice_id)->get()->result(),
             'options' => [
                 'copy'   => '1',

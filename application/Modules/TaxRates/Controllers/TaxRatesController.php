@@ -2,6 +2,8 @@
 
 namespace App\Modules\TaxRates\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class Tax_Rates extends \Admin_Controller
+class Tax_Rates extends AdminController
 {
     /**
      * Tax_Rates constructor.

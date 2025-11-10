@@ -2,6 +2,8 @@
 
 namespace App\Modules\Payments\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class PaymentsController extends \Admin_Controller
+class PaymentsController extends AdminController
 {
     /**
      * Payments constructor.
@@ -25,7 +27,7 @@ class PaymentsController extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('payments/payments');
+        $this->load->model('payments/payment');
     }
 
     /**
@@ -33,8 +35,8 @@ class PaymentsController extends \Admin_Controller
      */
     public function index($page = 0)
     {
-        $this->payments->paginate(site_url('payments/index'), $page);
-        $payments = $this->payments->result();
+        $this->payment->paginate(site_url('payments/index'), $page);
+        $payments = $this->payment->result();
 
         $this->layout->set(
             [
@@ -59,8 +61,8 @@ class PaymentsController extends \Admin_Controller
 
         $this->load->model('custom_fields/paymentcustom');
 
-        if ($this->payments->run_validation()) {
-            $id = $this->payments->save($id);
+        if ($this->payment->run_validation()) {
+            $id = $this->payment->save($id);
 
             $this->paymentcustom->save_custom($id, $this->input->post('custom'));
 
@@ -68,7 +70,7 @@ class PaymentsController extends \Admin_Controller
         }
 
         if ( ! $this->input->post('btn_submit')) {
-            $prep_form = $this->payments->prep_form($id);
+            $prep_form = $this->payment->prep_form($id);
             if ($id && ! $prep_form) {
                 show_404();
             }
@@ -81,12 +83,12 @@ class PaymentsController extends \Admin_Controller
                 unset($payment_custom->payment_id, $payment_custom->payment_custom_id);
 
                 foreach ($payment_custom as $key => $val) {
-                    $this->payments->set_form_value('custom[' . $key . ']', $val);
+                    $this->payment->set_form_value('custom[' . $key . ']', $val);
                 }
             }
         } elseif ($this->input->post('custom')) {
             foreach ($this->input->post('custom') as $key => $val) {
-                $this->payments->set_form_value('custom[' . $key . ']', $val);
+                $this->payment->set_form_value('custom[' . $key . ']', $val);
             }
         }
 
@@ -98,7 +100,7 @@ class PaymentsController extends \Admin_Controller
             'custom_values/mdl_custom_values',
         ]);
 
-        $open_invoices = $this->invoices->is_open()->get()->result();
+        $open_invoices = $this->invoice->is_open()->get()->result();
 
         $custom_fields = $this->customfields->by_table('ip_payment_custom')->get()->result();
         $custom_values = [];
@@ -116,7 +118,7 @@ class PaymentsController extends \Admin_Controller
             foreach ($fields as $fvalue) {
                 if ($fvalue->payment_custom_fieldid == $cfield->custom_field_id) {
                     // TODO: Hackish, may need a better optimization
-                    $this->payments->set_form_value(
+                    $this->payment->set_form_value(
                         'custom[' . $cfield->custom_field_id . ']',
                         $fvalue->payment_custom_fieldvalue
                     );
@@ -145,7 +147,7 @@ class PaymentsController extends \Admin_Controller
         );
 
         if ($id) {
-            $this->layout->set('payment', $this->payments->where('ip_payments.payment_id', $id)->get()->row());
+            $this->layout->set('payment', $this->payment->where('ip_payments.payment_id', $id)->get()->row());
         }
 
         $this->layout->buffer('content', 'payments/form');
@@ -180,7 +182,7 @@ class PaymentsController extends \Admin_Controller
      */
     public function delete($id)
     {
-        $this->payments->delete($id);
+        $this->payment->delete($id);
         redirect('payments');
     }
 }

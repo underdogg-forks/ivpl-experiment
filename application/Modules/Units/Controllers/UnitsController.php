@@ -2,6 +2,8 @@
 
 namespace App\Modules\Units\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class UnitsController extends \Admin_Controller
+class UnitsController extends AdminController
 {
     /**
      * Units constructor.
@@ -25,7 +27,7 @@ class UnitsController extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('units/units');
+        $this->load->model('units/unit');
     }
 
     /**
@@ -33,8 +35,8 @@ class UnitsController extends \Admin_Controller
      */
     public function index($page = 0)
     {
-        $this->units->paginate(site_url('units/index'), $page);
-        $units = $this->units->result();
+        $this->unit->paginate(site_url('units/index'), $page);
+        $units = $this->unit->result();
 
         $this->layout->set('units', $units);
         $this->layout->buffer('content', 'units/index');
@@ -62,17 +64,17 @@ class UnitsController extends \Admin_Controller
             }
         }
 
-        if ($this->units->run_validation()) {
-            $this->units->save($id);
+        if ($this->unit->run_validation()) {
+            $this->unit->save($id);
             redirect('units');
         }
 
         if ($id && ! $this->input->post('btn_submit')) {
-            if ( ! $this->units->prep_form($id)) {
+            if ( ! $this->unit->prep_form($id)) {
                 show_404();
             }
 
-            $this->units->set_form_value('is_update', true);
+            $this->unit->set_form_value('is_update', true);
         }
 
         $this->layout->buffer('content', 'units/form');
@@ -84,7 +86,7 @@ class UnitsController extends \Admin_Controller
      */
     public function delete($id)
     {
-        $this->units->delete($id);
+        $this->unit->delete($id);
         redirect('units');
     }
 }

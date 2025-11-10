@@ -2,6 +2,8 @@
 
 namespace App\Modules\EmailTemplates\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class EmailTemplatesController extends \Admin_Controller
+class EmailTemplatesController extends AdminController
 {
     /**
      * Email_Templates constructor.

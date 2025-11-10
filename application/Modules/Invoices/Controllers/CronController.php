@@ -63,7 +63,7 @@ class CronController extends \Base_Controller
             $source_id = $invoice_recurring->invoice_id;
 
             // This is the original invoice
-            $invoice = $this->invoices->get_by_id($source_id);
+            $invoice = $this->invoice->get_by_id($source_id);
 
             // Automatic calculation mode
             if (get_setting('einvoicing')) {
@@ -77,24 +77,24 @@ class CronController extends \Base_Controller
                 'client_id'                => $invoice->client_id,
                 'payment_method'           => $invoice->payment_method,
                 'invoice_date_created'     => $invoice_recurring->recur_next_date,
-                'invoice_date_due'         => $this->invoices->get_date_due($invoice_recurring->recur_next_date),
+                'invoice_date_due'         => $this->invoice->get_date_due($invoice_recurring->recur_next_date),
                 'invoice_group_id'         => $invoice->invoice_group_id,
                 'user_id'                  => $invoice->user_id,
-                'invoice_number'           => $this->invoices->get_invoice_number($invoice->invoice_group_id),
-                'invoice_url_key'          => $this->invoices->get_url_key(),
+                'invoice_number'           => $this->invoice->get_invoice_number($invoice->invoice_group_id),
+                'invoice_url_key'          => $this->invoice->get_url_key(),
                 'invoice_terms'            => $invoice->invoice_terms,
                 'invoice_discount_amount'  => $invoice->invoice_discount_amount,
                 'invoice_discount_percent' => $invoice->invoice_discount_percent,
             ];
 
             // This is the new invoice id
-            $target_id = $this->invoices->create($db_array, false);
+            $target_id = $this->invoice->create($db_array, false);
             if (IP_DEBUG) {
                 log_message('debug', '[Cron Recurring Invoices] Recurring Invoice with id ' . $target_id . ' was created');
             }
 
             // Copy the original invoice to the new invoice
-            $this->invoices->copy_invoice($source_id, $target_id, false);
+            $this->invoice->copy_invoice($source_id, $target_id, false);
             if (IP_DEBUG) {
                 log_message('debug', '[Cron Recurring Invoices] Recurring Invoice with sourceId ' . $source_id . ' was copied to id ' . $target_id);
             }
@@ -107,7 +107,7 @@ class CronController extends \Base_Controller
 
             // Email the new invoice if applicable
             if (get_setting('automatic_email_on_recur') && mailer_configured()) {
-                $new_invoice = $this->invoices->get_by_id($target_id);
+                $new_invoice = $this->invoice->get_by_id($target_id);
 
                 // Set the email body, use default email template if available
                 $this->load->model('email_templates/emailtemplates');
@@ -128,7 +128,7 @@ class CronController extends \Base_Controller
 
                 // Prepare the attachments
                 $this->load->model('upload/uploads');
-                $attachment_files = $this->uploads->get_invoice_uploads($target_id);
+                $attachment_files = $this->upload->get_invoice_uploads($target_id);
 
                 // Prepare the body
                 $body = $tpl->email_template_body;
@@ -154,7 +154,7 @@ class CronController extends \Base_Controller
                 $email_invoice = email_invoice($target_id, $pdf_template, $from, $to, $subject, $body, $cc, $bcc, $attachment_files);
 
                 if ($email_invoice) {
-                    $this->invoices->mark_sent($target_id);
+                    $this->invoice->mark_sent($target_id);
                 } else {
                     log_message('error', '[Cron Recurring Invoices] Invoice ' . $target_id . 'could not be sent. Please review your Email settings.');
                 }

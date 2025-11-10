@@ -2,6 +2,8 @@
 
 namespace App\Modules\Filter\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,13 +18,13 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class AjaxController extends \Admin_Controller
+class FilterAjaxController extends AdminController
 {
     public $ajax_controller = true;
 
     public function filter_invoices()
     {
-        $this->load->model('invoices/invoices');
+        $this->load->model('invoices/invoice');
 
         $query    = $this->input->post('filter_query');
         $keywords = explode(' ', $query);
@@ -30,13 +32,13 @@ class AjaxController extends \Admin_Controller
         foreach ($keywords as $keyword) {
             if ($keyword) {
                 $keyword = mb_strtolower($keyword);
-                $this->invoices->like("CONCAT_WS('^',LOWER(invoice_number),invoice_date_created,invoice_date_due,LOWER(client_title),LOWER(client_name),LOWER(client_surname),invoice_total,invoice_balance)", $keyword);
+                $this->invoice->like("CONCAT_WS('^',LOWER(invoice_number),invoice_date_created,invoice_date_due,LOWER(client_title),LOWER(client_name),LOWER(client_surname),invoice_total,invoice_balance)", $keyword);
             }
         }
 
         $data = [
-            'invoices'         => $this->invoices->get()->result(),
-            'invoice_statuses' => $this->invoices->statuses(),
+            'invoices'         => $this->invoice->get()->result(),
+            'invoice_statuses' => $this->invoice->statuses(),
         ];
 
         $this->layout->load_view('invoices/partial_invoice_table', $data);
@@ -44,7 +46,7 @@ class AjaxController extends \Admin_Controller
 
     public function filter_quotes()
     {
-        $this->load->model('quotes/quotes');
+        $this->load->model('quotes/quote');
 
         $query    = $this->input->post('filter_query');
         $keywords = explode(' ', $query);
@@ -52,13 +54,13 @@ class AjaxController extends \Admin_Controller
         foreach ($keywords as $keyword) {
             if ($keyword) {
                 $keyword = mb_strtolower($keyword);
-                $this->quotes->like("CONCAT_WS('^',LOWER(quote_number),quote_date_created,quote_date_expires,LOWER(client_title),LOWER(client_name),LOWER(client_surname),quote_total)", $keyword);
+                $this->quote->like("CONCAT_WS('^',LOWER(quote_number),quote_date_created,quote_date_expires,LOWER(client_title),LOWER(client_name),LOWER(client_surname),quote_total)", $keyword);
             }
         }
 
         $data = [
-            'quotes'         => $this->quotes->get()->result(),
-            'quote_statuses' => $this->quotes->statuses(),
+            'quotes'         => $this->quote->get()->result(),
+            'quote_statuses' => $this->quote->statuses(),
         ];
 
         $this->layout->load_view('quotes/partial_quote_table', $data);
@@ -66,7 +68,7 @@ class AjaxController extends \Admin_Controller
 
     public function filter_clients()
     {
-        $this->load->model('clients/clients');
+        $this->load->model('clients/client');
 
         $query    = $this->input->post('filter_query');
         $keywords = explode(' ', $query);
@@ -74,12 +76,12 @@ class AjaxController extends \Admin_Controller
         foreach ($keywords as $keyword) {
             if ($keyword) {
                 $keyword = mb_trim(mb_strtolower($keyword));
-                $this->clients->like("CONCAT_WS('^',LOWER(client_title),LOWER(client_name),LOWER(client_surname),LOWER(client_email),client_phone,client_active)", $keyword);
+                $this->client->like("CONCAT_WS('^',LOWER(client_title),LOWER(client_name),LOWER(client_surname),LOWER(client_email),client_phone,client_active)", $keyword);
             }
         }
 
         $data = [
-            'records'    => $this->clients->with_total_balance()->get()->result(),
+            'records'    => $this->client->with_total_balance()->get()->result(),
             'einvoicing' => get_setting('einvoicing'),
         ];
 
@@ -184,7 +186,7 @@ class AjaxController extends \Admin_Controller
 
     public function filter_projects()
     {
-        $this->load->model('projects/projects');
+        $this->load->model('projects/project');
 
         $query    = $this->input->post('filter_query');
         $keywords = explode(' ', $query);
@@ -194,12 +196,12 @@ class AjaxController extends \Admin_Controller
         foreach ($keywords as $keyword) {
             if ($keyword) {
                 $keyword = mb_strtolower($keyword);
-                $this->projects->like("CONCAT_WS('^',LOWER(client_title),LOWER(client_name),LOWER(client_surname),LOWER(project_name))", $keyword);
+                $this->project->like("CONCAT_WS('^',LOWER(client_title),LOWER(client_name),LOWER(client_surname),LOWER(project_name))", $keyword);
             }
         }
 
         $data = [
-            'projects' => $this->projects->get()->result(),
+            'projects' => $this->project->get()->result(),
         ];
 
         $this->layout->load_view('projects/partial_projects_table', $data);
@@ -207,7 +209,7 @@ class AjaxController extends \Admin_Controller
 
     public function filter_tasks()
     {
-        $this->load->model('tasks/tasks');
+        $this->load->model('tasks/task');
 
         $query    = $this->input->post('filter_query');
         $keywords = explode(' ', $query);
@@ -217,13 +219,13 @@ class AjaxController extends \Admin_Controller
         foreach ($keywords as $keyword) {
             if ($keyword) {
                 $keyword = mb_strtolower($keyword);
-                $this->tasks->like("CONCAT_WS('^',LOWER(task_name),LOWER(project_name),LOWER(task_price),task_finish_date,LOWER(task_status),LOWER(tax_rate_id))", $keyword);
+                $this->task->like("CONCAT_WS('^',LOWER(task_name),LOWER(project_name),LOWER(task_price),task_finish_date,LOWER(task_status),LOWER(tax_rate_id))", $keyword);
             }
         }
 
         $data = [
-            'tasks'         => $this->tasks->get()->result(),
-            'task_statuses' => $this->tasks->statuses(),
+            'tasks'         => $this->task->get()->result(),
+            'task_statuses' => $this->task->statuses(),
         ];
 
         $this->layout->load_view('tasks/partial_tasks_table', $data);
@@ -231,7 +233,7 @@ class AjaxController extends \Admin_Controller
 
     public function filter_products()
     {
-        $this->load->model('products/products');
+        $this->load->model('products/product');
 
         $query    = $this->input->post('filter_query');
         $keywords = explode(' ', $query);
@@ -242,12 +244,12 @@ class AjaxController extends \Admin_Controller
         foreach ($keywords as $keyword) {
             if ($keyword) {
                 $keyword = mb_strtolower($keyword);
-                $this->products->like("CONCAT_WS('^',product_sku,LOWER(family_name),LOWER(product_name),LOWER(product_description),product_price,product_tariff)", $keyword);
+                $this->product->like("CONCAT_WS('^',product_sku,LOWER(family_name),LOWER(product_name),LOWER(product_description),product_price,product_tariff)", $keyword);
             }
         }
 
         $data = [
-            'products' => $this->products->get()->result(),
+            'products' => $this->product->get()->result(),
         ];
 
         $this->layout->load_view('products/partial_products_table', $data);
@@ -255,7 +257,7 @@ class AjaxController extends \Admin_Controller
 
     public function filter_users()
     {
-        $this->load->model('users/users');
+        $this->load->model('users/user');
 
         $query    = $this->input->post('filter_query');
         $keywords = explode(' ', $query);
@@ -269,13 +271,13 @@ class AjaxController extends \Admin_Controller
         foreach ($keywords as $keyword) {
             if ($keyword) {
                 $keyword = mb_strtolower($keyword);
-                $this->users->like("CONCAT_WS('^', LOWER(user_name), LOWER(user_email))", $keyword);
+                $this->user->like("CONCAT_WS('^', LOWER(user_name), LOWER(user_email))", $keyword);
             }
         }
 
         $data = [
-            'users'      => $this->users->get()->result(),
-            'user_types' => $this->users->user_types(),
+            'users'      => $this->user->get()->result(),
+            'user_types' => $this->user->user_types(),
         ];
 
         $this->layout->load_view('users/partial_users_table', $data);
@@ -283,7 +285,7 @@ class AjaxController extends \Admin_Controller
 
     public function filter_families()
     {
-        $this->load->model('families/families');
+        $this->load->model('families/family');
 
         $query    = $this->input->post('filter_query');
         $keywords = explode(' ', $query);
@@ -292,12 +294,12 @@ class AjaxController extends \Admin_Controller
         foreach ($keywords as $keyword) {
             if ($keyword) {
                 $keyword = mb_strtolower($keyword);
-                $this->families->like("CONCAT_WS('^',LOWER(family_name))", $keyword);
+                $this->family->like("CONCAT_WS('^',LOWER(family_name))", $keyword);
             }
         }
 
         $data = [
-            'families' => $this->families->get()->result(),
+            'families' => $this->family->get()->result(),
         ];
 
         $this->layout->load_view('families/partial_families_table', $data);
@@ -349,10 +351,10 @@ class AjaxController extends \Admin_Controller
 
     public function filter_archives()
     {
-        $this->load->model('invoices/invoices');
+        $this->load->model('invoices/invoice');
 
         $data = [
-            'invoices_archive' => $this->invoices->get_archives($this->input->post('filter_query')),
+            'invoices_archive' => $this->invoice->get_archives($this->input->post('filter_query')),
         ];
 
         $this->layout->load_view('invoices/partial_invoice_archive', $data);
@@ -360,7 +362,7 @@ class AjaxController extends \Admin_Controller
 
     public function filter_payments()
     {
-        $this->load->model('payments/payments');
+        $this->load->model('payments/payment');
 
         $query    = $this->input->post('filter_query');
         $keywords = explode(' ', $query);
@@ -368,12 +370,12 @@ class AjaxController extends \Admin_Controller
         foreach ($keywords as $keyword) {
             if ($keyword) {
                 $keyword = mb_strtolower($keyword);
-                $this->payments->like("CONCAT_WS('^',payment_date,LOWER(invoice_number),LOWER(client_title),LOWER(client_name),LOWER(client_surname),payment_amount,LOWER(payment_method_name),LOWER(payment_note))", $keyword);
+                $this->payment->like("CONCAT_WS('^',payment_date,LOWER(invoice_number),LOWER(client_title),LOWER(client_name),LOWER(client_surname),payment_amount,LOWER(payment_method_name),LOWER(payment_note))", $keyword);
             }
         }
 
         $data = [
-            'payments' => $this->payments->get()->result(),
+            'payments' => $this->payment->get()->result(),
         ];
 
         $this->layout->load_view('payments/partial_payments_table', $data);

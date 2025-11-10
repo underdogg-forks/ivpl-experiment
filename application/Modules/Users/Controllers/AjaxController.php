@@ -2,6 +2,8 @@
 
 namespace App\Modules\Users\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,14 +18,14 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class AjaxController extends \Admin_Controller
+class UsersAjaxController extends AdminController
 {
     public $ajax_controller = true;
 
     public function name_query($type = 1)
     {
         // Load the model & helper
-        $this->load->model('users/users');
+        $this->load->model('users/user');
         $this->load->helper('user');
 
         $response = [];
@@ -44,7 +46,7 @@ class AjaxController extends \Admin_Controller
         $escapedQuery = $this->db->escape_str($query);
         $escapedQuery = str_replace('%', '', $escapedQuery);
         // Not searched: user_address_1 user_address_2 user_city user_state user_zip user_country user_invoicing_contact
-        $users = $this->users
+        $users = $this->user
             ->where('user_active', 1)
             ->where('user_type', $type)
             ->having("user_name LIKE '" . $moreUsersQuery . $escapedQuery . "%'")
@@ -71,11 +73,11 @@ class AjaxController extends \Admin_Controller
     public function get_latest()
     {
         // Load the model & helper
-        $this->load->model('users/users');
+        $this->load->model('users/user');
 
         $response = [];
 
-        $users = $this->users
+        $users = $this->user
             ->where('user_active', 1)
             ->limit(5)
             ->order_by('user_date_created')
@@ -110,10 +112,10 @@ class AjaxController extends \Admin_Controller
         $user_id   = $this->input->post('user_id');
         $client_id = $this->input->post('client_id');
 
-        $this->load->model('clients/clients');
+        $this->load->model('clients/client');
         $this->load->model('user_clients/userclients');
 
-        $client = $this->clients->get_by_id($client_id);
+        $client = $this->client->get_by_id($client_id);
         if ($client) {
             $client_id = $client->client_id;
 
@@ -142,11 +144,11 @@ class AjaxController extends \Admin_Controller
         $session_user_clients = $this->session->userdata('user_clients');
 
         if ($session_user_clients) {
-            $this->load->model('clients/clients');
+            $this->load->model('clients/client');
 
             $data = [
                 'id'           => null,
-                'user_clients' => $this->clients->where_in('ip_clients.client_id', $session_user_clients)->get()->result(),
+                'user_clients' => $this->client->where_in('ip_clients.client_id', $session_user_clients)->get()->result(),
             ];
         } else {
             $this->load->model('user_clients/userclients');
@@ -162,10 +164,10 @@ class AjaxController extends \Admin_Controller
 
     public function modal_add_user_client($user_id = null)
     {
-        $this->load->model('clients/clients');
+        $this->load->model('clients/client');
 
         if ($session_user_clients = $this->session->userdata('user_clients')) {
-            $clients          = $this->clients->where_not_in('ip_clients.client_id', $session_user_clients)->get()->result();
+            $clients          = $this->client->where_not_in('ip_clients.client_id', $session_user_clients)->get()->result();
             $assigned_clients = [];
         } else {
             $this->load->model('user_clients/userclients');
@@ -177,9 +179,9 @@ class AjaxController extends \Admin_Controller
             }
 
             if ($assigned_clients === []) {
-                $clients = $this->clients->get()->result();
+                $clients = $this->client->get()->result();
             } else {
-                $clients = $this->clients->where_not_in('ip_clients.client_id', $assigned_clients)->get()->result();
+                $clients = $this->client->where_not_in('ip_clients.client_id', $assigned_clients)->get()->result();
             }
         }
 

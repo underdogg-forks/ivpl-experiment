@@ -2,6 +2,8 @@
 
 namespace App\Modules\Users\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class UsersController extends \Admin_Controller
+class UsersController extends AdminController
 {
     /**
      * Users constructor.
@@ -25,7 +27,7 @@ class UsersController extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('users/users');
+        $this->load->model('users/user');
     }
 
     /**
@@ -33,8 +35,8 @@ class UsersController extends \Admin_Controller
      */
     public function index($page = 0)
     {
-        $this->users->paginate(site_url('users/index'), $page);
-        $users = $this->users->result();
+        $this->user->paginate(site_url('users/index'), $page);
+        $users = $this->user->result();
 
         $this->layout->set(
             [
@@ -42,7 +44,7 @@ class UsersController extends \Admin_Controller
                 'filter_placeholder' => trans('filter_users'),
                 'filter_method'      => 'filter_users',
                 'users'              => $users,
-                'user_types'         => $this->users->user_types(),
+                'user_types'         => $this->user->user_types(),
             ]
         );
         $this->layout->buffer('content', 'users/index');
@@ -57,15 +59,15 @@ class UsersController extends \Admin_Controller
 
         $this->filter_input();  // <<<--- filters _POST array for nastiness
 
-        if ($this->users->run_validation(($id) ? 'validation_rules_existing' : 'validation_rules')) {
-            $id = $this->users->save($id);
+        if ($this->user->run_validation(($id) ? 'validation_rules_existing' : 'validation_rules')) {
+            $id = $this->user->save($id);
 
             $this->load->model('custom_fields/usercustom');
             $this->usercustom->save_custom($id, $this->input->post('custom'));
 
             // Update the session details if the logged in user edited his account
             if ($this->session->userdata('user_id') == $id) {
-                $new_details = $this->users->get_by_id($id);
+                $new_details = $this->user->get_by_id($id);
 
                 $session_data = [
                     'user_type'     => $new_details->user_type,
@@ -85,7 +87,7 @@ class UsersController extends \Admin_Controller
         }
 
         if ($id && ! $this->input->post('btn_submit')) {
-            if ( ! $this->users->prep_form($id)) {
+            if ( ! $this->user->prep_form($id)) {
                 show_404();
             }
 
@@ -99,13 +101,13 @@ class UsersController extends \Admin_Controller
                 unset($user_custom->user_id, $user_custom->user_custom_id);
 
                 foreach ($user_custom as $key => $val) {
-                    $this->users->set_form_value('custom[' . $key . ']', $val);
+                    $this->user->set_form_value('custom[' . $key . ']', $val);
                 }
             }
         } elseif ($this->input->post('btn_submit')) {
             if ($this->input->post('custom')) {
                 foreach ($this->input->post('custom') as $key => $val) {
-                    $this->users->set_form_value('custom[' . $key . ']', $val);
+                    $this->user->set_form_value('custom[' . $key . ']', $val);
                 }
             }
         }
@@ -136,7 +138,7 @@ class UsersController extends \Admin_Controller
             foreach ($fields as $fvalue) {
                 if ($fvalue->user_custom_fieldid == $cfield->custom_field_id) {
                     // TODO: Hackish, may need a better optimization
-                    $this->users->set_form_value(
+                    $this->user->set_form_value(
                         'custom[' . $cfield->custom_field_id . ']',
                         $fvalue->user_custom_fieldvalue
                     );
@@ -151,13 +153,13 @@ class UsersController extends \Admin_Controller
         $this->layout->set(
             [
                 'id'               => $id,
-                'user_types'       => $this->users->user_types(),
+                'user_types'       => $this->user->user_types(),
                 'user_clients'     => $this->userclients->where('ip_user_clients.user_id', $id)->get()->result(),
                 'custom_fields'    => $custom_fields,
                 'custom_values'    => $custom_values,
                 'countries'        => get_country_list(trans('cldr')),
-                'selected_country' => $this->users->form_value('user_country') ?: get_setting('default_country'),
-                'clients'          => $this->clients->where('client_active', 1)->get()->result(),
+                'selected_country' => $this->user->form_value('user_country') ?: get_setting('default_country'),
+                'clients'          => $this->client->where('client_active', 1)->get()->result(),
                 'languages'        => get_available_languages(),
                 'einvoicing'       => get_setting('einvoicing'),
             ]
@@ -176,8 +178,8 @@ class UsersController extends \Admin_Controller
             redirect('users');
         }
 
-        if ($this->users->run_validation('validation_rules_change_password')) {
-            $this->users->save_change_password($user_id, $this->input->post('user_password'));
+        if ($this->user->run_validation('validation_rules_change_password')) {
+            $this->user->save_change_password($user_id, $this->input->post('user_password'));
             redirect('users/form/' . $user_id);
         }
 
@@ -191,7 +193,7 @@ class UsersController extends \Admin_Controller
     public function delete($id)
     {
         if ($id != 1) {
-            $this->users->delete($id);
+            $this->user->delete($id);
         }
 
         redirect('users');

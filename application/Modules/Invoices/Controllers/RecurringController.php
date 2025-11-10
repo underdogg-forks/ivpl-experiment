@@ -2,6 +2,8 @@
 
 namespace App\Modules\Invoices\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class RecurringController extends \Admin_Controller
+class RecurringController extends AdminController
 {
     /**
      * Recurring constructor.

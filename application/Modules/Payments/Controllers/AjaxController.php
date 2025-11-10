@@ -2,6 +2,8 @@
 
 namespace App\Modules\Payments\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,16 +18,16 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class AjaxController extends \Admin_Controller
+class PaymentsAjaxController extends AdminController
 {
     public $ajax_controller = true;
 
     public function add()
     {
-        $this->load->model('payments/payments');
+        $this->load->model('payments/payment');
 
-        if ($this->payments->run_validation()) {
-            $payment_id = $this->payments->save();
+        if ($this->payment->run_validation()) {
+            $payment_id = $this->payment->save();
 
             $response = [
                 'success'    => 1,
@@ -45,7 +47,7 @@ class AjaxController extends \Admin_Controller
     public function modal_add_payment()
     {
         $this->load->module('layout');
-        $this->load->model('payments/payments');
+        $this->load->model('payments/payment');
         $this->load->model('payment_methods/paymentmethods');
         $this->load->model('custom_fields/paymentcustom');
 

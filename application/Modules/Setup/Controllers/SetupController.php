@@ -215,15 +215,15 @@ class SetupController extends MX_Controller
 
         $this->load_ci_database();
 
-        $this->load->model('users/users');
+        $this->load->model('users/user');
 
         $this->load->helper('country');
 
-        if ($this->users->run_validation()) {
-            $db_array              = $this->users->db_array();
+        if ($this->user->run_validation()) {
+            $db_array              = $this->user->db_array();
             $db_array['user_type'] = 1;
 
-            $this->users->save(null, $db_array);
+            $this->user->save(null, $db_array);
 
             $this->session->set_userdata('install_step', 'calculation_info');
             redirect('setup/calculation_info');

@@ -2,6 +2,8 @@
 
 namespace App\Modules\Tasks\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class TasksController extends \Admin_Controller
+class TasksController extends AdminController
 {
     /**
      * Tasks constructor.
@@ -25,7 +27,7 @@ class TasksController extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('tasks/tasks');
+        $this->load->model('tasks/task');
     }
 
     /**
@@ -33,8 +35,8 @@ class TasksController extends \Admin_Controller
      */
     public function index($page = 0)
     {
-        $this->tasks->paginate(site_url('tasks/index'), $page);
-        $tasks = $this->tasks->result();
+        $this->task->paginate(site_url('tasks/index'), $page);
+        $tasks = $this->task->result();
 
         $this->layout->set(
             [
@@ -42,7 +44,7 @@ class TasksController extends \Admin_Controller
                 'filter_placeholder' => trans('filter_tasks'),
                 'filter_method'      => 'filter_tasks',
                 'tasks'              => $tasks,
-                'task_statuses'      => $this->tasks->statuses(),
+                'task_statuses'      => $this->task->statuses(),
             ]
         );
         $this->layout->buffer('content', 'tasks/index');
@@ -57,25 +59,25 @@ class TasksController extends \Admin_Controller
 
         $this->filter_input();  // <<<--- filters _POST array for nastiness
 
-        if ($this->tasks->run_validation()) {
-            $this->tasks->save($id);
+        if ($this->task->run_validation()) {
+            $this->task->save($id);
             redirect('tasks');
         }
 
         if ( ! $this->input->post('btn_submit')) {
-            $prep_form = $this->tasks->prep_form($id);
+            $prep_form = $this->task->prep_form($id);
             if ($id && ! $prep_form) {
                 show_404();
             }
         }
 
-        $this->load->model('projects/projects');
+        $this->load->model('projects/project');
         $this->load->model('tax_rates/taxrates');
 
         $this->layout->set(
             [
-                'projects'      => $this->projects->get()->result(),
-                'task_statuses' => $this->tasks->statuses(),
+                'projects'      => $this->project->get()->result(),
+                'task_statuses' => $this->task->statuses(),
                 'tax_rates'     => $this->taxrates->get()->result(),
             ]
         );
@@ -88,7 +90,7 @@ class TasksController extends \Admin_Controller
      */
     public function delete($id)
     {
-        $this->tasks->delete($id);
+        $this->task->delete($id);
         redirect('tasks');
     }
 }

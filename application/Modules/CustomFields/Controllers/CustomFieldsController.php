@@ -2,6 +2,8 @@
 
 namespace App\Modules\CustomFields\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class Custom_Fields extends \Admin_Controller
+class Custom_Fields extends AdminController
 {
     /**
      * Custom_Fields constructor.

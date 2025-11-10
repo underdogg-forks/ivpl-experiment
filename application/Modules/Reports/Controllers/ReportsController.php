@@ -2,6 +2,8 @@
 
 namespace App\Modules\Reports\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class ReportsController extends \Admin_Controller
+class ReportsController extends AdminController
 {
     /**
      * Reports constructor.
@@ -25,14 +27,14 @@ class ReportsController extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('reports/reports');
+        $this->load->model('reports/report');
     }
 
     public function sales_by_client()
     {
         if ($this->input->post('btn_submit')) {
             $data = [
-                'results'   => $this->reports->sales_by_client($this->input->post('from_date'), $this->input->post('to_date')),
+                'results'   => $this->report->sales_by_client($this->input->post('from_date'), $this->input->post('to_date')),
                 'from_date' => $this->input->post('from_date'),
                 'to_date'   => $this->input->post('to_date'),
             ];
@@ -51,7 +53,7 @@ class ReportsController extends \Admin_Controller
     {
         if ($this->input->post('btn_submit')) {
             $data = [
-                'results'   => $this->reports->invoices_per_client($this->input->post('from_date'), $this->input->post('to_date')),
+                'results'   => $this->report->invoices_per_client($this->input->post('from_date'), $this->input->post('to_date')),
                 'from_date' => $this->input->post('from_date'),
                 'to_date'   => $this->input->post('to_date'),
             ];
@@ -70,7 +72,7 @@ class ReportsController extends \Admin_Controller
     {
         if ($this->input->post('btn_submit')) {
             $data = [
-                'results'   => $this->reports->payment_history($this->input->post('from_date'), $this->input->post('to_date')),
+                'results'   => $this->report->payment_history($this->input->post('from_date'), $this->input->post('to_date')),
                 'from_date' => $this->input->post('from_date'),
                 'to_date'   => $this->input->post('to_date'),
             ];
@@ -89,7 +91,7 @@ class ReportsController extends \Admin_Controller
     {
         if ($this->input->post('btn_submit')) {
             $data = [
-                'results' => $this->reports->invoice_aging(),
+                'results' => $this->report->invoice_aging(),
             ];
 
             $html = $this->load->view('reports/invoice_aging', $data, true);
@@ -106,7 +108,7 @@ class ReportsController extends \Admin_Controller
     {
         if ($this->input->post('btn_submit')) {
             $data = [
-                'results'   => $this->reports->sales_by_year($this->input->post('from_date'), $this->input->post('to_date'), $this->input->post('minQuantity'), $this->input->post('maxQuantity'), $this->input->post('checkboxTax')),
+                'results'   => $this->report->sales_by_year($this->input->post('from_date'), $this->input->post('to_date'), $this->input->post('minQuantity'), $this->input->post('maxQuantity'), $this->input->post('checkboxTax')),
                 'from_date' => $this->input->post('from_date'),
                 'to_date'   => $this->input->post('to_date'),
             ];

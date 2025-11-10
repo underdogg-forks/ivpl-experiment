@@ -2,6 +2,8 @@
 
 namespace App\Modules\Dashboard\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,16 +18,16 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class DashboardController extends \Admin_Controller
+class DashboardController extends AdminController
 {
     public function index()
     {
         $this->load->model('invoices/invoiceamounts');
         $this->load->model('quotes/quoteamounts');
-        $this->load->model('invoices/invoices');
-        $this->load->model('quotes/quotes');
-        $this->load->model('projects/projects');
-        $this->load->model('tasks/tasks');
+        $this->load->model('invoices/invoice');
+        $this->load->model('quotes/quote');
+        $this->load->model('projects/project');
+        $this->load->model('tasks/task');
 
         $quote_overview_period   = get_setting('quote_overview_period');
         $invoice_overview_period = get_setting('invoice_overview_period');
@@ -36,14 +38,14 @@ class DashboardController extends \Admin_Controller
                 'quote_status_totals'   => $this->quoteamounts->get_status_totals($quote_overview_period),
                 'invoice_status_period' => str_replace('-', '_', $invoice_overview_period),
                 'quote_status_period'   => str_replace('-', '_', $quote_overview_period),
-                'invoices'              => $this->invoices->limit(10)->get()->result(),
-                'quotes'                => $this->quotes->limit(10)->get()->result(),
-                'invoice_statuses'      => $this->invoices->statuses(),
-                'quote_statuses'        => $this->quotes->statuses(),
-                'overdue_invoices'      => $this->invoices->is_overdue()->get()->result(),
-                'projects'              => $this->projects->get_latest()->get()->result(),
-                'tasks'                 => $this->tasks->get_latest()->get()->result(),
-                'task_statuses'         => $this->tasks->statuses(),
+                'invoices'              => $this->invoice->limit(10)->get()->result(),
+                'quotes'                => $this->quote->limit(10)->get()->result(),
+                'invoice_statuses'      => $this->invoice->statuses(),
+                'quote_statuses'        => $this->quote->statuses(),
+                'overdue_invoices'      => $this->invoice->is_overdue()->get()->result(),
+                'projects'              => $this->project->get_latest()->get()->result(),
+                'tasks'                 => $this->task->get_latest()->get()->result(),
+                'task_statuses'         => $this->task->statuses(),
             ]
         );
 

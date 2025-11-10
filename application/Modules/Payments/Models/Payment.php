@@ -2,6 +2,8 @@
 
 namespace App\Modules\Payments\Models;
 
+use App\Core\ResponseModel;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class Payments extends \Response_Model
+class Payment extends ResponseModel
 {
     public $table = 'ip_payments';
 

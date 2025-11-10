@@ -2,6 +2,8 @@
 
 namespace App\Modules\Families\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class FamiliesController extends \Admin_Controller
+class FamiliesController extends AdminController
 {
     /**
      * Families constructor.
@@ -25,7 +27,7 @@ class FamiliesController extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('families/families');
+        $this->load->model('families/family');
     }
 
     /**
@@ -33,8 +35,8 @@ class FamiliesController extends \Admin_Controller
      */
     public function index($page = 0)
     {
-        $this->families->paginate(site_url('families/index'), $page);
-        $families = $this->families->result();
+        $this->family->paginate(site_url('families/index'), $page);
+        $families = $this->family->result();
 
         $this->layout->set([
             'filter_display'     => true,
@@ -63,17 +65,17 @@ class FamiliesController extends \Admin_Controller
             }
         }
 
-        if ($this->families->run_validation()) {
-            $this->families->save($id);
+        if ($this->family->run_validation()) {
+            $this->family->save($id);
             redirect('families');
         }
 
         if ($id && ! $this->input->post('btn_submit')) {
-            if ( ! $this->families->prep_form($id)) {
+            if ( ! $this->family->prep_form($id)) {
                 show_404();
             }
 
-            $this->families->set_form_value('is_update', true);
+            $this->family->set_form_value('is_update', true);
         }
 
         $this->layout->buffer('content', 'families/form');
@@ -85,7 +87,7 @@ class FamiliesController extends \Admin_Controller
      */
     public function delete($id)
     {
-        $this->families->delete($id);
+        $this->family->delete($id);
         redirect('families');
     }
 }

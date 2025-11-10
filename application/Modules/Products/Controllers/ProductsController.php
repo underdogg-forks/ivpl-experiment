@@ -2,6 +2,8 @@
 
 namespace App\Modules\Products\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class ProductsController extends \Admin_Controller
+class ProductsController extends AdminController
 {
     /**
      * Products constructor.
@@ -25,7 +27,7 @@ class ProductsController extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('products/products');
+        $this->load->model('products/product');
     }
 
     /**
@@ -33,8 +35,8 @@ class ProductsController extends \Admin_Controller
      */
     public function index($page = 0)
     {
-        $this->products->paginate(site_url('products/index'), $page);
-        $products = $this->products->result();
+        $this->product->paginate(site_url('products/index'), $page);
+        $products = $this->product->result();
 
         $this->layout->set(
             [
@@ -56,25 +58,25 @@ class ProductsController extends \Admin_Controller
 
         $this->filter_input();  // <<<--- filters _POST array for nastiness
 
-        if ($this->products->run_validation()) {
+        if ($this->product->run_validation()) {
             // Get the db array
-            $db_array = $this->products->db_array();
-            $this->products->save($id, $db_array);
+            $db_array = $this->product->db_array();
+            $this->product->save($id, $db_array);
             redirect('products');
         }
 
-        if ($id && ! $this->input->post('btn_submit') && ! $this->products->prep_form($id)) {
+        if ($id && ! $this->input->post('btn_submit') && ! $this->product->prep_form($id)) {
             show_404();
         }
 
-        $this->load->model('families/families');
-        $this->load->model('units/units');
+        $this->load->model('families/family');
+        $this->load->model('units/unit');
         $this->load->model('tax_rates/taxrates');
 
         $this->layout->set(
             [
-                'families'  => $this->families->get()->result(),
-                'units'     => $this->units->get()->result(),
+                'families'  => $this->family->get()->result(),
+                'units'     => $this->unit->get()->result(),
                 'tax_rates' => $this->taxrates->get()->result(),
             ]
         );
@@ -88,7 +90,7 @@ class ProductsController extends \Admin_Controller
      */
     public function delete($id)
     {
-        $this->products->delete($id);
+        $this->product->delete($id);
         redirect('products');
     }
 }

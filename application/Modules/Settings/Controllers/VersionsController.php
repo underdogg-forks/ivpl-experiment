@@ -18,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class SettingsController extends AdminController
+class VersionsController extends AdminController
 {
     /**
      * Versions constructor.
@@ -27,7 +27,7 @@ class SettingsController extends AdminController
     {
         parent::__construct();
 
-        $this->load->model('settings/versions');
+        $this->load->model('settings/version');
     }
 
     /**
@@ -35,8 +35,8 @@ class SettingsController extends AdminController
      */
     public function index($page = 0)
     {
-        $this->versions->paginate(site_url('versions/index'), $page);
-        $versions = $this->versions->result();
+        $this->version->paginate(site_url('versions/index'), $page);
+        $versions = $this->version->result();
 
         $this->layout->set('versions', $versions);
         $this->layout->buffer('content', 'settings/versions');

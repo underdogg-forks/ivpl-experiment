@@ -2,6 +2,8 @@
 
 namespace App\Modules\Settings\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class AjaxController extends \Admin_Controller
+class SettingsAjaxController extends AdminController
 {
     public $ajax_controller = true;
 

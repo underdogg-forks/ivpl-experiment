@@ -2,6 +2,8 @@
 
 namespace App\Modules\Clients\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,14 +18,14 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class AjaxController extends \Admin_Controller
+class ClientsAjaxController extends AdminController
 {
     public $ajax_controller = true;
 
     public function name_query()
     {
         // Load the model & helper
-        $this->load->model('clients/clients');
+        $this->load->model('clients/client');
 
         $response = [];
 
@@ -43,7 +45,7 @@ class AjaxController extends \Admin_Controller
         $escapedQuery = $this->db->escape_str($query);
         $escapedQuery = str_replace('%', '', $escapedQuery);
 
-        $clients = $this->clients
+        $clients = $this->client
             ->where('client_active', 1)
             ->having("client_name LIKE '" . $moreClientsQuery . $escapedQuery . "%'")
             ->or_having("client_surname LIKE '" . $moreClientsQuery . $escapedQuery . "%'")
@@ -69,11 +71,11 @@ class AjaxController extends \Admin_Controller
     public function get_latest()
     {
         // Load the model & helper
-        $this->load->model('clients/clients');
+        $this->load->model('clients/client');
 
         $response = [];
 
-        $clients = $this->clients
+        $clients = $this->client
             ->where('client_active', 1)
             ->limit(5)
             ->order_by('client_date_created')

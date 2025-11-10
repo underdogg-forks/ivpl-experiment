@@ -2,6 +2,8 @@
 
 namespace App\Modules\Mailer\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class MailerController extends \Admin_Controller
+class MailerController extends AdminController
 {
     private bool $mailer_configured;
 
@@ -58,7 +60,7 @@ class MailerController extends \Admin_Controller
 
         $this->load->helper(['template', 'dropzone']);
 
-        $invoice           = $this->invoices->get_by_id($invoice_id);
+        $invoice           = $this->invoice->get_by_id($invoice_id);
         $email_template_id = select_email_invoice_template($invoice);
         $email_template    = '{}';
 
@@ -129,7 +131,7 @@ class MailerController extends \Admin_Controller
                 'email_template'          => $email_template,
                 'custom_fields'           => $custom_fields,
                 'pdf_templates'           => $this->templates->get_quote_templates(),
-                'quote'                   => $this->quotes->get_by_id($quote_id),
+                'quote'                   => $this->quote->get_by_id($quote_id),
             ]
         );
         $this->layout->buffer('content', 'mailer/quote');
@@ -168,12 +170,12 @@ class MailerController extends \Admin_Controller
         $bcc = $this->input->post('bcc');
 
         $this->load->model('upload/uploads');
-        $attachment_files = $this->uploads->get_invoice_uploads($invoice_id);
+        $attachment_files = $this->upload->get_invoice_uploads($invoice_id);
 
-        $this->invoices->generate_invoice_number_if_applicable($invoice_id);
+        $this->invoice->generate_invoice_number_if_applicable($invoice_id);
 
         if (email_invoice($invoice_id, $pdf_template, $from, $to, $subject, $body, $cc, $bcc, $attachment_files)) {
-            $this->invoices->mark_sent($invoice_id);
+            $this->invoice->mark_sent($invoice_id);
             $this->session->set_flashdata('alert_success', trans('email_successfully_sent'));
             redirect('invoices/view/' . $invoice_id);
         }
@@ -212,12 +214,12 @@ class MailerController extends \Admin_Controller
         $bcc = $this->input->post('bcc');
 
         $this->load->model('upload/uploads');
-        $attachment_files = $this->uploads->get_quote_uploads($quote_id);
+        $attachment_files = $this->upload->get_quote_uploads($quote_id);
 
-        $this->quotes->generate_quote_number_if_applicable($quote_id);
+        $this->quote->generate_quote_number_if_applicable($quote_id);
 
         if (email_quote($quote_id, $pdf_template, $from, $to, $subject, $body, $cc, $bcc, $attachment_files)) {
-            $this->quotes->mark_sent($quote_id);
+            $this->quote->mark_sent($quote_id);
             $this->session->set_flashdata('alert_success', trans('email_successfully_sent'));
 
             redirect('quotes/view/' . $quote_id);

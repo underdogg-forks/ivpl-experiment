@@ -2,6 +2,8 @@
 
 namespace App\Modules\Invoices\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class AjaxController extends \Admin_Controller
+class InvoicesAjaxController extends AdminController
 {
     public $ajax_controller = true;
 
@@ -31,9 +33,9 @@ class AjaxController extends \Admin_Controller
 
         $invoice_id = $this->security->xss_clean($this->input->post('invoice_id', true));
 
-        $this->invoices->set_id($invoice_id);
+        $this->invoice->set_id($invoice_id);
 
-        if ($this->invoices->run_validation('validation_rules_save_invoice')) {
+        if ($this->invoice->run_validation('validation_rules_save_invoice')) {
             $items = json_decode($this->input->post('items'));
 
             $invoice_discount_percent = (float) $this->input->post('invoice_discount_percent');
@@ -77,7 +79,7 @@ class AjaxController extends \Admin_Controller
                     $item->item_discount_amount = $item->item_discount_amount ? standardize_amount($item->item_discount_amount) : null;
                     $item->item_product_id      = $item->item_product_id ? $item->item_product_id : null;
                     $item->item_product_unit_id = $item->item_product_unit_id ? $item->item_product_unit_id : null;
-                    $item->item_product_unit    = $this->units->get_name($item->item_product_unit_id, $item->item_quantity);
+                    $item->item_product_unit    = $this->unit->get_name($item->item_product_unit_id, $item->item_quantity);
                     if (property_exists($item, 'item_date')) {
                         $item->item_date = $item->item_date ? date_to_mysql($item->item_date) : null;
                     }
@@ -88,11 +90,11 @@ class AjaxController extends \Admin_Controller
                     if ( ! $item->item_task_id) {
                         unset($item->item_task_id);
                     } else {
-                        if (empty($this->tasks)) {
-                            $this->load->model('tasks/tasks');
+                        if (empty($this->task)) {
+                            $this->load->model('tasks/task');
                         }
 
-                        $this->tasks->update_status(4, $item->item_task_id);
+                        $this->task->update_status(4, $item->item_task_id);
                     }
 
                     $this->items->save($item_id, $item, $global_discount);
@@ -119,8 +121,8 @@ class AjaxController extends \Admin_Controller
             $invoice_number = $this->input->post('invoice_number');
 
             if (empty($invoice_number) && $invoice_status_id != 1) {
-                $invoice_group_id = $this->invoices->get_invoice_group_id($invoice_id);
-                $invoice_number   = $this->invoices->get_invoice_number($invoice_group_id);
+                $invoice_group_id = $this->invoice->get_invoice_group_id($invoice_id);
+                $invoice_number   = $this->invoice->get_invoice_number($invoice_group_id);
             }
 
             // Sometime global discount total value (round) need little adjust to be valid in ZugFerd2.3 standard
@@ -146,9 +148,9 @@ class AjaxController extends \Admin_Controller
                 $db_array['is_read_only'] = 1;
             }
 
-            $this->invoices->save($invoice_id, $db_array);
+            $this->invoice->save($invoice_id, $db_array);
 
-            $sumexInvoice = $this->invoices->where('sumex_invoice', $invoice_id)->get()->num_rows();
+            $sumexInvoice = $this->invoice->where('sumex_invoice', $invoice_id)->get()->num_rows();
 
             if ($sumexInvoice >= 1) {
                 $sumex_array = [
@@ -247,10 +249,10 @@ class AjaxController extends \Admin_Controller
     {
         $success = 0;
         $item_id = $this->security->xss_clean($this->input->post('item_id'));
-        $this->load->model('invoices/invoices');
+        $this->load->model('invoices/invoice');
 
         // Only continue if the invoice exists or no item id was provided
-        if ($this->invoices->get_by_id($invoice_id) || empty($item_id)) {
+        if ($this->invoice->get_by_id($invoice_id) || empty($item_id)) {
             // Delete invoice item
             $this->load->model('invoices/items');
             $item = $this->items->delete($item_id);
@@ -260,8 +262,8 @@ class AjaxController extends \Admin_Controller
                 $success = 1;
                 // Mark task as complete from invoiced
                 if (isset($item->item_task_id) && $item->item_task_id) {
-                    $this->load->model('tasks/tasks');
-                    $this->tasks->update_status(3, $item->item_task_id);
+                    $this->load->model('tasks/task');
+                    $this->task->update_status(3, $item->item_task_id);
                 }
             }
         }
@@ -294,8 +296,8 @@ class AjaxController extends \Admin_Controller
             'invoice_groups' => $this->invoicegroups->get()->result(),
             'tax_rates'      => $this->taxrates->get()->result(),
             'invoice_id'     => $this->security->xss_clean($this->input->post('invoice_id')),
-            'invoice'        => $this->invoices->where('ip_invoices.invoice_id', $this->security->xss_clean($this->input->post('invoice_id')))->get()->row(),
-            'client'         => $this->clients->get_by_id($this->input->post('client_id')),
+            'invoice'        => $this->invoice->where('ip_invoices.invoice_id', $this->security->xss_clean($this->input->post('invoice_id')))->get()->row(),
+            'client'         => $this->client->get_by_id($this->input->post('client_id')),
         ];
 
         $this->layout->load_view('invoices/modal_copy_invoice', $data);
@@ -309,17 +311,17 @@ class AjaxController extends \Admin_Controller
             'invoices/mdl_invoice_tax_rates',
         ]);
 
-        if ($this->invoices->run_validation()) {
+        if ($this->invoice->run_validation()) {
             // Automatic calculation mode
             if (get_setting('einvoicing')) {
                 // Shift to false (by default). Need true? See Dev Note on ipconfig example
                 $this->config->set_item('legacy_calculation', ! empty($this->input->post('legacy_calculation')));
             }
 
-            $target_id = $this->invoices->save();
+            $target_id = $this->invoice->save();
             $source_id = $this->security->xss_clean($this->input->post('invoice_id'));
 
-            $this->invoices->copy_invoice($source_id, $target_id);
+            $this->invoice->copy_invoice($source_id, $target_id);
 
             $response = [
                 'success'    => 1,
@@ -339,12 +341,12 @@ class AjaxController extends \Admin_Controller
     public function modal_change_user()
     {
         $this->load->module('layout');
-        $this->load->model('users/users');
+        $this->load->model('users/user');
 
         $data = [
             'user_id'    => $this->security->xss_clean($this->input->post('user_id')),
             'invoice_id' => $this->security->xss_clean($this->input->post('invoice_id')),
-            'users'      => $this->users->get_latest(),
+            'users'      => $this->user->get_latest(),
         ];
 
         $this->layout->load_view('layout/ajax/modal_change_user_client', $data);
@@ -359,7 +361,7 @@ class AjaxController extends \Admin_Controller
 
         // Get the user ID
         $user_id = $this->security->xss_clean($this->input->post('user_id'));
-        $user    = $this->users->where('ip_users.user_id', $user_id)->get()->row();
+        $user    = $this->user->where('ip_users.user_id', $user_id)->get()->row();
 
         if ( ! empty($user)) {
             $invoice_id = $this->security->xss_clean($this->input->post('invoice_id'));
@@ -388,12 +390,12 @@ class AjaxController extends \Admin_Controller
     public function modal_change_client()
     {
         $this->load->module('layout');
-        $this->load->model('clients/clients');
+        $this->load->model('clients/client');
 
         $data = [
             'client_id'  => $this->security->xss_clean($this->input->post('client_id')),
             'invoice_id' => $this->security->xss_clean($this->input->post('invoice_id')),
-            'clients'    => $this->clients->get_latest(),
+            'clients'    => $this->client->get_latest(),
         ];
 
         $this->layout->load_view('layout/ajax/modal_change_user_client', $data);
@@ -408,7 +410,7 @@ class AjaxController extends \Admin_Controller
 
         // Get the client ID
         $client_id = $this->security->xss_clean($this->input->post('client_id'));
-        $client    = $this->clients->where('ip_clients.client_id', $client_id)->get()->row();
+        $client    = $this->client->where('ip_clients.client_id', $client_id)->get()->row();
 
         if ( ! empty($client)) {
             $invoice_id = $this->security->xss_clean($this->input->post('invoice_id'));
@@ -446,8 +448,8 @@ class AjaxController extends \Admin_Controller
         $data = [
             'invoice_groups' => $this->invoicegroups->get()->result(),
             'tax_rates'      => $this->taxrates->get()->result(),
-            'client'         => $this->clients->get_by_id($this->input->post('client_id')),
-            'clients'        => $this->clients->get_latest(),
+            'client'         => $this->client->get_by_id($this->input->post('client_id')),
+            'clients'        => $this->client->get_latest(),
         ];
 
         $this->layout->load_view('invoices/modal_create_invoice', $data);
@@ -455,10 +457,10 @@ class AjaxController extends \Admin_Controller
 
     public function create()
     {
-        $this->load->model('invoices/invoices');
+        $this->load->model('invoices/invoice');
 
-        if ($this->invoices->run_validation()) {
-            $invoice_id = $this->invoices->create();
+        if ($this->invoice->run_validation()) {
+            $invoice_id = $this->invoice->create();
 
             $response = [
                 'success'    => 1,
@@ -531,7 +533,7 @@ class AjaxController extends \Admin_Controller
             'invoice_groups' => $this->invoicegroups->get()->result(),
             'tax_rates'      => $this->taxrates->get()->result(),
             'invoice_id'     => $this->security->xss_clean($this->input->post('invoice_id')),
-            'invoice'        => $this->invoices->where('ip_invoices.invoice_id', $this->security->xss_clean($this->input->post('invoice_id')))->get()->row(),
+            'invoice'        => $this->invoice->where('ip_invoices.invoice_id', $this->security->xss_clean($this->input->post('invoice_id')))->get()->row(),
         ];
 
         $this->layout->load_view('invoices/modal_create_credit', $data);
@@ -545,30 +547,30 @@ class AjaxController extends \Admin_Controller
             'invoices/mdl_invoice_tax_rates',
         ]);
 
-        if ($this->invoices->run_validation()) {
+        if ($this->invoice->run_validation()) {
             // Automatic calculation mode
             if (get_setting('einvoicing')) {
                 // Shift to false (by default). Need true? See Dev Note on ipconfig example
                 $this->config->set_item('legacy_calculation', ! empty($this->input->post('legacy_calculation')));
             }
 
-            $target_id = $this->invoices->save();
+            $target_id = $this->invoice->save();
             $source_id = $this->security->xss_clean($this->input->post('invoice_id'));
 
-            $this->invoices->copy_credit_invoice($source_id, $target_id);
+            $this->invoice->copy_credit_invoice($source_id, $target_id);
 
             // Set source invoice to read-only
             if ($this->config->item('disable_read_only') == false) {
-                $this->invoices->where('invoice_id', $source_id);
-                $this->invoices->update('ip_invoices', ['is_read_only' => '1']);
+                $this->invoice->where('invoice_id', $source_id);
+                $this->invoice->update('ip_invoices', ['is_read_only' => '1']);
             }
 
             // Set target invoice to credit invoice
-            $this->invoices->where('invoice_id', $target_id);
-            $this->invoices->update('ip_invoices', ['creditinvoice_parent_id' => $source_id]);
+            $this->invoice->where('invoice_id', $target_id);
+            $this->invoice->update('ip_invoices', ['creditinvoice_parent_id' => $source_id]);
 
-            $this->invoices->where('invoice_id', $target_id);
-            $this->invoices->update('ip_invoice_amounts', ['invoice_sign' => '-1']);
+            $this->invoice->where('invoice_id', $target_id);
+            $this->invoice->update('ip_invoice_amounts', ['invoice_sign' => '-1']);
 
             $response = [
                 'success'    => 1,

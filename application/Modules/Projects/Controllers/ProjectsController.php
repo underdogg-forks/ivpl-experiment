@@ -2,6 +2,8 @@
 
 namespace App\Modules\Projects\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class ProjectsController extends \Admin_Controller
+class ProjectsController extends AdminController
 {
     /**
      * Projects constructor.
@@ -25,7 +27,7 @@ class ProjectsController extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('projects/projects');
+        $this->load->model('projects/project');
     }
 
     /**
@@ -33,8 +35,8 @@ class ProjectsController extends \Admin_Controller
      */
     public function index($page = 0)
     {
-        $this->projects->paginate(site_url('projects/index'), $page);
-        $projects = $this->projects->result();
+        $this->project->paginate(site_url('projects/index'), $page);
+        $projects = $this->project->result();
 
         $this->layout->set(
             [
@@ -56,21 +58,21 @@ class ProjectsController extends \Admin_Controller
 
         $this->filter_input();  // <<<--- filters _POST array for nastiness
 
-        if ($this->projects->run_validation()) {
-            $this->projects->save($id);
+        if ($this->project->run_validation()) {
+            $this->project->save($id);
             redirect('projects');
         }
 
-        if ($id && ! $this->input->post('btn_submit') && ! $this->projects->prep_form($id)) {
+        if ($id && ! $this->input->post('btn_submit') && ! $this->project->prep_form($id)) {
             show_404();
         }
 
-        $this->load->model('clients/clients');
+        $this->load->model('clients/client');
 
         $this->layout->set(
             [
-                'project' => $this->projects->get_by_id($id),
-                'clients' => $this->clients->where('client_active', 1)->get()->result(),
+                'project' => $this->project->get_by_id($id),
+                'clients' => $this->client->where('client_active', 1)->get()->result(),
             ]
         );
 
@@ -84,19 +86,19 @@ class ProjectsController extends \Admin_Controller
             redirect('projects');
         }
 
-        $this->load->model('projects/projects');
-        $project = $this->projects->get_by_id($project_id);
+        $this->load->model('projects/project');
+        $project = $this->project->get_by_id($project_id);
 
         if ( ! $project) {
             show_404();
         }
 
-        $this->load->model('tasks/tasks');
+        $this->load->model('tasks/task');
 
         $this->layout->set([
             'project'       => $project,
-            'tasks'         => $this->projects->get_tasks($project->project_id),
-            'task_statuses' => $this->tasks->statuses(),
+            'tasks'         => $this->project->get_tasks($project->project_id),
+            'task_statuses' => $this->task->statuses(),
         ]);
         $this->layout->buffer('content', 'projects/view');
         $this->layout->render();
@@ -107,10 +109,10 @@ class ProjectsController extends \Admin_Controller
      */
     public function delete($id)
     {
-        $this->load->model('tasks/tasks');
-        $this->tasks->update_on_project_delete($id);
+        $this->load->model('tasks/task');
+        $this->task->update_on_project_delete($id);
 
-        $this->projects->delete($id);
+        $this->project->delete($id);
         redirect('projects');
     }
 }

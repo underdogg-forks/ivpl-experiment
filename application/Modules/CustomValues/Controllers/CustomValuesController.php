@@ -2,6 +2,8 @@
 
 namespace App\Modules\CustomValues\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class Custom_Values extends \Admin_Controller
+class Custom_Values extends AdminController
 {
     /**
      * Custom_Values constructor.

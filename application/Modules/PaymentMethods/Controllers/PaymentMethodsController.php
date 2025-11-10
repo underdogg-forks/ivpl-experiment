@@ -2,6 +2,8 @@
 
 namespace App\Modules\PaymentMethods\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class Payment_Methods extends \Admin_Controller
+class Payment_Methods extends AdminController
 {
     /**
      * Payment_Methods constructor.

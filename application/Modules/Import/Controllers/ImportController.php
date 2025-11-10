@@ -2,6 +2,8 @@
 
 namespace App\Modules\Import\Controllers;
 
+use App\Core\AdminController;
+
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
@@ -16,7 +18,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class ImportController extends \Admin_Controller
+class ImportController extends AdminController
 {
     private array $allowed_files = [
         'clients.csv',
@@ -85,7 +87,7 @@ class ImportController extends \Admin_Controller
                             $this->import->record_import_details($import_id, 'ip_clients', 'clients', $ids);
                             break;
                         case 'invoices.csv':
-                            $this->load->model('invoices/invoices');
+                            $this->load->model('invoices/invoice');
                             $ids = $this->import->import_invoices();
                             $this->import->record_import_details($import_id, 'ip_invoices', 'invoices', $ids);
                             break;
@@ -95,7 +97,7 @@ class ImportController extends \Admin_Controller
                             $this->import->record_import_details($import_id, 'ip_invoice_items', 'invoice_items', $ids);
                             break;
                         case 'payments.csv':
-                            $this->load->model('payments/payments');
+                            $this->load->model('payments/payment');
                             $ids = $this->import->import_payments();
                             $this->import->record_import_details($import_id, 'ip_payments', 'payments', $ids);
                             break;

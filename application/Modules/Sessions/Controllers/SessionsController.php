@@ -63,11 +63,11 @@ class SessionsController extends \Base_Controller
      */
     public function authenticate($email_address, $password): bool
     {
-        $this->load->model('sessions/sessions');
+        $this->load->model('sessions/session');
         //check if user is banned
         $login_log = $this->_login_log_check($email_address);
         if (empty($login_log) || $login_log->log_count < 10) {
-            if ($this->sessions->auth($email_address, $password)) {
+            if ($this->session->auth($email_address, $password)) {
                 $this->_login_log_reset($email_address);
 
                 return true;
@@ -140,10 +140,10 @@ class SessionsController extends \Base_Controller
                 redirect($_SERVER['HTTP_REFERER']);
             }
 
-            $this->load->model('users/users');
+            $this->load->model('users/user');
 
             // Check for the reset token
-            $user = $this->users->get_by_id($user_id);
+            $user = $this->user->get_by_id($user_id);
 
             if (empty($user)) {
                 $this->session->set_flashdata('alert_error', trans('loginalert_user_not_found'));
@@ -156,7 +156,7 @@ class SessionsController extends \Base_Controller
             }
 
             // Call the save_change_password() function from users model
-            $this->users->save_change_password(
+            $this->user->save_change_password(
                 $user_id,
                 $new_password
             );
