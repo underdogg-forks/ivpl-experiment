@@ -264,6 +264,9 @@ if (is_dir($application_folder)) {
 
 define('APPPATH', $application_folder . DIRECTORY_SEPARATOR);
 
+// Define custom config path to use root config directory instead of application/config
+define('CONFIGPATH', dirname(FCPATH) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR);
+
 // The path to the "views" directory
 if ( ! isset($view_folder[0]) && is_dir(APPPATH . 'views' . DIRECTORY_SEPARATOR)) {
     $view_folder = APPPATH . 'views';

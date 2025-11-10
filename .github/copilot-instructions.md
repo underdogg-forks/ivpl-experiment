@@ -652,3 +652,55 @@ ivpl-experiment/
 - **Rector**: https://github.com/rectorphp/rector
 - **Grunt**: https://gruntjs.com/
 - **SASS**: https://sass-lang.com/
+
+## ⚠️ CRITICAL: File Integrity During Refactoring
+
+### Preventing Empty Files During Migration
+
+**NEVER create empty files during refactoring or migration operations!**
+
+When renaming, moving, or restructuring files:
+
+1. **ALWAYS verify file contents** after any move/copy operation
+2. **Check file sizes** - any 0-byte PHP file is a critical error
+3. **Use proper git operations** for file renames:
+   ```bash
+   git mv old_path new_path  # Preserves file content
+   ```
+4. **After bulk operations**, run:
+   ```bash
+   find application/Modules -name "*.php" -type f -size 0
+   ```
+   If this returns ANY files, **STOP immediately** and restore them!
+
+5. **Before committing**, verify no empty files:
+   ```bash
+   git diff --stat | grep "0 insertions"  # Should not show PHP files
+   ```
+
+### Common Causes of Empty Files
+
+- Using `touch` or `>` redirect to create placeholder files
+- Moving files with incorrect paths
+- Using `mv` instead of `git mv` in combination with git operations
+- Script errors during bulk file operations
+
+### Recovery Process
+
+If empty files are discovered:
+
+1. Find the last good commit: `git log --all --full-history -- path/to/file`
+2. Restore from git: `git show <commit>:path/to/file > path/to/file`
+3. Verify restoration: `wc -l path/to/file` (should show line count)
+4. Update any namespaces/class names if the file was renamed
+
+### Validation Checklist
+
+Before pushing any refactoring commits:
+
+- [ ] No empty PHP files in codebase
+- [ ] All moved files have original content
+- [ ] Namespaces updated in moved files
+- [ ] Class names updated to match filenames
+- [ ] Syntax check passes: `find . -name "*.php" -exec php -l {} \;`
+

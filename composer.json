@@ -28,22 +28,16 @@
         "laravel/pint": "^1.20",
         "squizlabs/php_codesniffer": "^3.13",
         "rector/rector": "^2.0",
-        "symfony/var-dumper": "^6.4"
+        "symfony/var-dumper": "^6.4",
+        "larastan/larastan": "^2.0"
     },
     "autoload": {
         "psr-4": {
             "App\\": "application/",
-            "App\\Modules\\": "application/modules/"
-        },
-        "files": [
-            "application/core/Admin_Controller.php",
-            "application/core/Base_Controller.php",
-            "application/core/User_Controller.php",
-            "application/core/Guest_Controller.php",
-            "application/core/MY_Model.php",
-            "application/core/Response_Model.php",
-            "application/core/Form_Validation_Model.php"
-        ]
+            "App\\Core\\": "application/Core/",
+            "App\\Modules\\": "application/Modules/",
+            "App\\Libraries\\": "application/Libraries/"
+        }
     },
     "scripts": {
         "check": [

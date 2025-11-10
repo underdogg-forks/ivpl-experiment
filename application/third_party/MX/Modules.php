@@ -11,7 +11,7 @@ global $CFG;
 // get module locations from config settings or use the default module location and offset
 if ( ! is_array(Modules::$locations = $CFG->item('modules_locations'))) {
     Modules::$locations = [
-        APPPATH . 'modules/' => '../modules/',
+        APPPATH . 'Modules/' => '../Modules/',
     ];
 }
 
