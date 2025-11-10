@@ -1,5 +1,30 @@
 # GitHub Copilot Instructions for InvoicePlane Modernization
 
+## Table of Contents
+
+1. [Project Overview](#project-overview)
+2. [Current Architecture](#current-architecture)
+3. [Modernization Goals](#modernization-goals)
+4. [Code Style and Standards](#code-style-and-standards)
+5. [Directory Structure](#directory-structure)
+6. [Module Structure](#module-structure)
+7. [HMVC and MX Extensions](#hmvc-and-mx-extensions)
+8. [Assets and Frontend](#assets-and-frontend)
+9. [Database and Models](#database-and-models)
+10. [Testing](#testing)
+11. [Security Best Practices](#security-best-practices)
+12. [Git Workflow](#git-workflow)
+13. [Common Pitfalls to Avoid](#common-pitfalls-to-avoid)
+14. [Local Development Setup](#local-development-setup)
+15. [Debugging](#debugging)
+16. [Performance Considerations](#performance-considerations)
+17. [When in Doubt](#when-in-doubt)
+18. [Helpful Commands](#helpful-commands)
+19. [Project File Structure Overview](#project-file-structure-overview)
+20. [References](#references)
+
+---
+
 ## Project Overview
 InvoicePlane is an ancient CodeIgniter 3 application being modernized to follow modern PHP standards while maintaining backward compatibility.
 
