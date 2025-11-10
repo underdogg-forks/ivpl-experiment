@@ -32,6 +32,10 @@ class Payment_Methods extends AdminController
 
     /**
      * @param int $page
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/payment_methods/controllers/PaymentMethods.php
+     * @legacy-function index()
      */
     public function index($page = 0)
     {
@@ -43,6 +47,11 @@ class Payment_Methods extends AdminController
         $this->layout->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/payment_methods/controllers/PaymentMethods.php
+     * @legacy-function form()
+     */
     public function form($id = null)
     {
         if ($this->input->post('btn_cancel')) {
@@ -78,6 +87,10 @@ class Payment_Methods extends AdminController
 
     /**
      * @param $id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/payment_methods/controllers/PaymentMethods.php
+     * @legacy-function delete()
      */
     public function delete($id)
     {

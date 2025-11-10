@@ -53,6 +53,11 @@ class InvoicesRecurring extends \Response_Model
         '5Y'  => 'calendar_year_5',
     ];
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoices_recurring.php
+     * @legacy-function default_select()
+     */
     public function default_select()
     {
         $this->db->select('SQL_CALC_FOUND_ROWS ip_invoices.*,
@@ -63,11 +68,21 @@ class InvoicesRecurring extends \Response_Model
             IF(recur_end_date > date(NOW()) OR recur_end_date IS NULL, "active", "inactive") AS recur_status', false);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoices_recurring.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by()
     {
       $this->db->order_by( 'recur_status ASC, recur_next_date ASC' );
     }
     
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoices_recurring.php
+     * @legacy-function default_join()
+     */
     public function default_join()
     {
         $this->db->join('ip_invoices', 'ip_invoices.invoice_id = ip_invoices_recurring.invoice_id');
@@ -76,6 +91,10 @@ class InvoicesRecurring extends \Response_Model
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoices_recurring.php
+     * @legacy-function validation_rules()
      */
     public function validation_rules()
     {
@@ -103,6 +122,10 @@ class InvoicesRecurring extends \Response_Model
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoices_recurring.php
+     * @legacy-function db_array()
      */
     public function db_array()
     {
@@ -118,6 +141,10 @@ class InvoicesRecurring extends \Response_Model
 
     /**
      * @param $invoice_recurring_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoices_recurring.php
+     * @legacy-function stop()
      */
     public function stop($invoice_recurring_id)
     {
@@ -134,6 +161,10 @@ class InvoicesRecurring extends \Response_Model
      * Sets filter to only recurring invoices which should be generated now.
      *
      * @return \Mdl_Invoices_Recurring
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoices_recurring.php
+     * @legacy-function active()
      */
     public function active()
     {
@@ -144,6 +175,10 @@ class InvoicesRecurring extends \Response_Model
 
     /**
      * @param $invoice_recurring_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoices_recurring.php
+     * @legacy-function set_next_recur_date()
      */
     public function set_next_recur_date($invoice_recurring_id)
     {

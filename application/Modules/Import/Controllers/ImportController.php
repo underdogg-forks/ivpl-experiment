@@ -39,6 +39,10 @@ class ImportController extends AdminController
 
     /**
      * @param int $page
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/import/controllers/Import.php
+     * @legacy-function index()
      */
     public function index($page = 0)
     {
@@ -50,6 +54,11 @@ class ImportController extends AdminController
         $this->layout->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/import/controllers/Import.php
+     * @legacy-function form()
+     */
     public function form()
     {
         if ( ! $this->input->post('btn_submit')) {
@@ -111,6 +120,10 @@ class ImportController extends AdminController
 
     /**
      * @param $id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/import/controllers/Import.php
+     * @legacy-function delete()
      */
     public function delete($id)
     {

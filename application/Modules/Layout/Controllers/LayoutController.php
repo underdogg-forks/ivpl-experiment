@@ -22,6 +22,10 @@ class LayoutController extends MX_Controller
 
     /**
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/layout/controllers/Layout.php
+     * @legacy-function buffer()
      */
     public function buffer(...$args): static
     {
@@ -46,6 +50,10 @@ class LayoutController extends MX_Controller
 
     /**
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/layout/controllers/Layout.php
+     * @legacy-function set()
      */
     public function set(...$args): static
     {
@@ -60,6 +68,11 @@ class LayoutController extends MX_Controller
         return $this;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/layout/controllers/Layout.php
+     * @legacy-function render()
+     */
     public function render(string $view = 'layout')
     {
         $this->load->view('layout/' . $view, $this->view_data);
@@ -71,6 +84,10 @@ class LayoutController extends MX_Controller
      *
      * @param string $view
      * @param array  $data
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/layout/controllers/Layout.php
+     * @legacy-function load_view()
      */
     public function load_view($view, $data = [])
     {

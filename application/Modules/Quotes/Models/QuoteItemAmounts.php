@@ -27,6 +27,10 @@ class QuoteItemAmounts extends CI_Model
      *
      * @param $item_id
      * @param $global_discount
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote_item_amounts.php
+     * @legacy-function calculate()
      */
     public function calculate($item_id, &$global_discount)
     {

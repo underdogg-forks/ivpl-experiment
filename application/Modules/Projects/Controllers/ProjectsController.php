@@ -32,6 +32,10 @@ class ProjectsController extends AdminController
 
     /**
      * @param int $page
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/projects/controllers/Projects.php
+     * @legacy-function index()
      */
     public function index($page = 0)
     {
@@ -50,6 +54,11 @@ class ProjectsController extends AdminController
         $this->layout->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/projects/controllers/Projects.php
+     * @legacy-function form()
+     */
     public function form($id = null)
     {
         if ($this->input->post('btn_cancel')) {
@@ -80,6 +89,11 @@ class ProjectsController extends AdminController
         $this->layout->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/projects/controllers/Projects.php
+     * @legacy-function view()
+     */
     public function view($project_id)
     {
         if ($this->input->post('btn_cancel')) {
@@ -106,6 +120,10 @@ class ProjectsController extends AdminController
 
     /**
      * @param $id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/projects/controllers/Projects.php
+     * @legacy-function delete()
      */
     public function delete($id)
     {

@@ -32,6 +32,10 @@ class PaymentsController extends AdminController
 
     /**
      * @param int $page
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/payments/controllers/Payments.php
+     * @legacy-function index()
      */
     public function index($page = 0)
     {
@@ -51,6 +55,11 @@ class PaymentsController extends AdminController
         $this->layout->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/payments/controllers/Payments.php
+     * @legacy-function form()
+     */
     public function form($id = null)
     {
         if ($this->input->post('btn_cancel')) {
@@ -156,6 +165,10 @@ class PaymentsController extends AdminController
 
     /**
      * @param int $page
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/payments/controllers/Payments.php
+     * @legacy-function online_logs()
      */
     public function online_logs($page = 0)
     {
@@ -179,6 +192,10 @@ class PaymentsController extends AdminController
 
     /**
      * @param $id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/payments/controllers/Payments.php
+     * @legacy-function delete()
      */
     public function delete($id)
     {

@@ -38,6 +38,11 @@ class UploadController extends AdminController
         $this->content_types = $this->upload->content_types;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/upload/controllers/Upload.php
+     * @legacy-function upload_file()
+     */
     public function upload_file(int $customerId, string $url_key): void
     {
         if (empty($_FILES['file']['name'])) {
@@ -69,6 +74,11 @@ class UploadController extends AdminController
         $this->respond_message(200, 'upload_file_uploaded_successfully', $fileName);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/upload/controllers/Upload.php
+     * @legacy-function create_dir()
+     */
     public function create_dir($path, $chmod = '0755'): bool
     {
         if ( ! is_dir($path) && ! is_link($path)) {
@@ -78,6 +88,11 @@ class UploadController extends AdminController
         return true;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/upload/controllers/Upload.php
+     * @legacy-function show_files()
+     */
     public function show_files($url_key = null): void
     {
         header('Content-Type: application/json; charset=utf-8');
@@ -88,6 +103,11 @@ class UploadController extends AdminController
         exit(json_encode($result));
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/upload/controllers/Upload.php
+     * @legacy-function delete_file()
+     */
     public function delete_file(string $url_key): void
     {
         $filename = urldecode($this->input->post('name'));
@@ -110,6 +130,11 @@ class UploadController extends AdminController
         $this->respond_message(410, 'upload_error_file_delete', $finalPath . $ref);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/upload/controllers/Upload.php
+     * @legacy-function get_file()
+     */
     public function get_file($filename): void
     {
         $filename = $this->sanitize_file_name(urldecode($filename));
@@ -139,6 +164,11 @@ class UploadController extends AdminController
         readfile($fullPath);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/upload/controllers/Upload.php
+     * @legacy-function sanitize_file_name()
+     */
     private function sanitize_file_name(string $filename): string
     {
         // Security: Remove any path components
@@ -162,11 +192,21 @@ class UploadController extends AdminController
         return $sanitizedFileName;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/upload/controllers/Upload.php
+     * @legacy-function get_target_file_path()
+     */
     private function get_target_file_path(string $url_key, string $filename): string
     {
         return $this->targetPath . $url_key . '_' . $filename;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/upload/controllers/Upload.php
+     * @legacy-function validate_mime_type()
+     */
     private function validate_mime_type(string $mimeType): void
     {
         $allowedTypes = array_values($this->content_types);
@@ -175,6 +215,11 @@ class UploadController extends AdminController
         }
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/upload/controllers/Upload.php
+     * @legacy-function save_file_metadata()
+     */
     private function save_file_metadata(int $customerId, string $url_key, string $filename): void
     {
         $data = [
@@ -189,6 +234,11 @@ class UploadController extends AdminController
         }
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/upload/controllers/Upload.php
+     * @legacy-function move_uploaded_file()
+     */
     private function move_uploaded_file(string $tempFile, string $filePath, string $filename): void
     {
         $this->create_dir(dirname($filePath));
@@ -200,6 +250,11 @@ class UploadController extends AdminController
         }
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/upload/controllers/Upload.php
+     * @legacy-function respond_message()
+     */
     private function respond_message(int $httpCode, string $messageKey, string $dynamicLogValue = ''): void
     {
         log_message('debug', trans($messageKey) . ': (status ' . $httpCode . ') ' . $dynamicLogValue);

@@ -30,6 +30,11 @@ class QuotesController extends AdminController
         $this->load->model('quotes/quote');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Quotes.php
+     * @legacy-function index()
+     */
     public function index()
     {
         // Display all quotes by default
@@ -38,6 +43,10 @@ class QuotesController extends AdminController
 
     /**
      * @param int $page
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Quotes.php
+     * @legacy-function status()
      */
     public function status(string $status = 'all', $page = 0)
     {
@@ -83,6 +92,10 @@ class QuotesController extends AdminController
 
     /**
      * @param $quote_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Quotes.php
+     * @legacy-function view()
      */
     public function view($quote_id)
     {
@@ -188,6 +201,10 @@ class QuotesController extends AdminController
 
     /**
      * @param $quote_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Quotes.php
+     * @legacy-function delete()
      */
     public function delete($quote_id)
     {
@@ -201,6 +218,10 @@ class QuotesController extends AdminController
     /**
      * @param      $quote_id
      * @param bool $stream
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Quotes.php
+     * @legacy-function generate_pdf()
      */
     public function generate_pdf($quote_id, $stream = true, $quote_template = null)
     {
@@ -217,6 +238,10 @@ class QuotesController extends AdminController
     /**
      * @param $quote_id
      * @param $quote_tax_rate_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Quotes.php
+     * @legacy-function delete_quote_tax()
      */
     public function delete_quote_tax(string $quote_id, $quote_tax_rate_id)
     {
@@ -231,6 +256,11 @@ class QuotesController extends AdminController
         redirect('quotes/view/' . $quote_id);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Quotes.php
+     * @legacy-function recalculate_all_quotes()
+     */
     public function recalculate_all_quotes()
     {
         $this->db->select('quote_id');

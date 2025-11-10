@@ -22,11 +22,21 @@ class ClientNotes extends \Response_Model
 
     public $primary_key = 'ip_client_notes.client_note_id';
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client_notes.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by()
     {
         $this->db->order_by('ip_client_notes.client_note_date DESC');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client_notes.php
+     * @legacy-function validation_rules()
+     */
     public function validation_rules()
     {
         return [
@@ -43,6 +53,11 @@ class ClientNotes extends \Response_Model
         ];
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client_notes.php
+     * @legacy-function db_array()
+     */
     public function db_array()
     {
         $db_array = parent::db_array();
@@ -54,6 +69,10 @@ class ClientNotes extends \Response_Model
 
     /**
      * @param int $id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client_notes.php
+     * @legacy-function delete()
      */
     public function delete($id): bool
     {

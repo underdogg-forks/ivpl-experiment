@@ -22,6 +22,11 @@ class InvoiceSumex extends \Response_Model
 
     public $primary_key = 'ip_invoice_sumex.sumex_id';
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_sumex.php
+     * @legacy-function default_select()
+     */
     public function default_select()
     {
         $this->db->select('ip_invoice_sumex.*');
@@ -29,6 +34,10 @@ class InvoiceSumex extends \Response_Model
 
     /**
      * @return void
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_sumex.php
+     * @legacy-function save()
      */
     public function save($id = null, $db_array = null)
     {
@@ -38,6 +47,10 @@ class InvoiceSumex extends \Response_Model
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_sumex.php
+     * @legacy-function validation_rules()
      */
     public function validation_rules()
     {

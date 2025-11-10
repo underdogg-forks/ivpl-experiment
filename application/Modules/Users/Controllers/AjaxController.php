@@ -22,6 +22,11 @@ class UsersAjaxController extends AdminController
 {
     public $ajax_controller = true;
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/users/controllers/Ajax.php
+     * @legacy-function name_query()
+     */
     public function name_query($type = 1)
     {
         // Load the model & helper
@@ -69,6 +74,10 @@ class UsersAjaxController extends AdminController
 
     /**
      * Get the latest users.
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/users/controllers/Ajax.php
+     * @legacy-function get_latest()
      */
     public function get_latest()
     {
@@ -95,6 +104,11 @@ class UsersAjaxController extends AdminController
         echo json_encode($response);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/users/controllers/Ajax.php
+     * @legacy-function save_preference_permissive_search_users()
+     */
     public function save_preference_permissive_search_users()
     {
         $this->load->model('settings/settings');
@@ -107,6 +121,11 @@ class UsersAjaxController extends AdminController
         $this->settings->save('enable_permissive_search_users', $permissiveSearchUsers);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/users/controllers/Ajax.php
+     * @legacy-function save_user_client()
+     */
     public function save_user_client()
     {
         $user_id   = $this->input->post('user_id');
@@ -139,6 +158,11 @@ class UsersAjaxController extends AdminController
         }
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/users/controllers/Ajax.php
+     * @legacy-function load_user_client_table()
+     */
     public function load_user_client_table()
     {
         $session_user_clients = $this->session->userdata('user_clients');
@@ -162,6 +186,11 @@ class UsersAjaxController extends AdminController
         $this->layout->load_view('users/partial_user_client_table', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/users/controllers/Ajax.php
+     * @legacy-function modal_add_user_client()
+     */
     public function modal_add_user_client($user_id = null)
     {
         $this->load->model('clients/client');

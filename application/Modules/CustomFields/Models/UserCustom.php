@@ -30,16 +30,31 @@ class UserCustom extends Validator
 
     public $primary_key = 'ip_user_custom.user_custom_id';
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_fields/models/Mdl_user_custom.php
+     * @legacy-function default_select()
+     */
     public function default_select()
     {
         $this->db->select('SQL_CALC_FOUND_ROWS ip_user_custom.*, ip_custom_fields.*', false);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_fields/models/Mdl_user_custom.php
+     * @legacy-function default_join()
+     */
     public function default_join()
     {
         $this->db->join('ip_custom_fields', 'ip_user_custom.user_custom_fieldid = ip_custom_fields.custom_field_id');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_fields/models/Mdl_user_custom.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by()
     {
         $this->db->order_by('custom_field_table ASC, custom_field_order ASC, custom_field_label ASC');
@@ -50,6 +65,10 @@ class UserCustom extends Validator
      * @param $db_array
      *
      * @return bool|string
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_fields/models/Mdl_user_custom.php
+     * @legacy-function save_custom()
      */
     public function save_custom($user_id, $db_array)
     {
@@ -90,6 +109,10 @@ class UserCustom extends Validator
      * @param int $user_id
      *
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_fields/models/Mdl_user_custom.php
+     * @legacy-function by_id()
      */
     public function by_id($user_id)
     {
@@ -102,6 +125,10 @@ class UserCustom extends Validator
      * @param int $user_id
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_fields/models/Mdl_user_custom.php
+     * @legacy-function get_by_useid()
      */
     public function get_by_useid($user_id)
     {

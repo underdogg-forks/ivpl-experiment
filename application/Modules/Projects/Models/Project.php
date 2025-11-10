@@ -24,21 +24,41 @@ class Project extends ResponseModel
 
     public $primary_key = 'ip_projects.project_id';
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/projects/models/Mdl_project.php
+     * @legacy-function default_select()
+     */
     public function default_select()
     {
         $this->db->select('SQL_CALC_FOUND_ROWS *', false);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/projects/models/Mdl_project.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by()
     {
         $this->db->order_by('ip_projects.project_id');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/projects/models/Mdl_project.php
+     * @legacy-function default_join()
+     */
     public function default_join()
     {
         $this->db->join('ip_clients', 'ip_clients.client_id = ip_projects.client_id', 'left');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/projects/models/Mdl_project.php
+     * @legacy-function get_latest()
+     */
     public function get_latest()
     {
         $this->db->order_by('ip_projects.project_id', 'DESC');
@@ -48,6 +68,10 @@ class Project extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/projects/models/Mdl_project.php
+     * @legacy-function validation_rules()
      */
     public function validation_rules()
     {
@@ -64,6 +88,11 @@ class Project extends ResponseModel
         ];
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/projects/models/Mdl_project.php
+     * @legacy-function get_tasks()
+     */
     public function get_tasks($project_id)
     {
         $result = [];

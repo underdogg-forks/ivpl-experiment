@@ -41,6 +41,10 @@ class MailerController extends AdminController
 
     /**
      * @param $invoice_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/mailer/controllers/Mailer.php
+     * @legacy-function invoice()
      */
     public function invoice($invoice_id)
     {
@@ -91,6 +95,10 @@ class MailerController extends AdminController
 
     /**
      * @param $quote_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/mailer/controllers/Mailer.php
+     * @legacy-function quote()
      */
     public function quote($quote_id)
     {
@@ -140,6 +148,10 @@ class MailerController extends AdminController
 
     /**
      * @param $invoice_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/mailer/controllers/Mailer.php
+     * @legacy-function send_invoice()
      */
     public function send_invoice(string $invoice_id)
     {
@@ -185,6 +197,10 @@ class MailerController extends AdminController
 
     /**
      * @param $quote_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/mailer/controllers/Mailer.php
+     * @legacy-function send_quote()
      */
     public function send_quote(string $quote_id)
     {

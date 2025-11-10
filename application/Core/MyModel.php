@@ -127,6 +127,10 @@ class MyModel extends \CI_Model
      * @param array  $arguments
      *
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/MY_Model.php
+     * @legacy-function __call()
      */
     public function __call($name, $arguments)
     {
@@ -147,6 +151,10 @@ class MyModel extends \CI_Model
      * @param bool $include_defaults
      *
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/MY_Model.php
+     * @legacy-function get()
      */
     public function get($include_defaults = true)
     {
@@ -170,6 +178,10 @@ class MyModel extends \CI_Model
      * @param     $base_url
      * @param int $offset
      * @param int $uri_segment
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/MY_Model.php
+     * @legacy-function paginate()
      */
     public function paginate($base_url, $offset = 0, $uri_segment = 3)
     {
@@ -210,6 +222,10 @@ class MyModel extends \CI_Model
 
     /**
      * Function to save an entry to the database.
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/MY_Model.php
+     * @legacy-function save()
      */
     public function save($id = null, $db_array = null)
     {
@@ -266,6 +282,10 @@ class MyModel extends \CI_Model
      * validate the form submission.
      *
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/MY_Model.php
+     * @legacy-function db_array()
      */
     public function db_array()
     {
@@ -287,6 +307,10 @@ class MyModel extends \CI_Model
      * $this->model_name->delete(5);.
      *
      * @param $id
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/MY_Model.php
+     * @legacy-function delete()
      */
     public function delete($id)
     {
@@ -299,6 +323,10 @@ class MyModel extends \CI_Model
      * $this->model_name->get()->result();.
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/MY_Model.php
+     * @legacy-function result()
      */
     public function result()
     {
@@ -310,6 +338,10 @@ class MyModel extends \CI_Model
      * $this->model_name->get()->row();.
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/MY_Model.php
+     * @legacy-function row()
      */
     public function row()
     {
@@ -321,6 +353,10 @@ class MyModel extends \CI_Model
      * $this->model_name->get()->result_array();.
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/MY_Model.php
+     * @legacy-function result_array()
      */
     public function result_array()
     {
@@ -332,6 +368,10 @@ class MyModel extends \CI_Model
      * $this->model_name->get()->row_array();.
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/MY_Model.php
+     * @legacy-function row_array()
      */
     public function row_array()
     {
@@ -343,6 +383,10 @@ class MyModel extends \CI_Model
      * $this->model_name->get()->num_rows();.
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/MY_Model.php
+     * @legacy-function num_rows()
      */
     public function num_rows()
     {
@@ -355,6 +399,10 @@ class MyModel extends \CI_Model
      * @param int $id
      *
      * @return bool|null
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/MY_Model.php
+     * @legacy-function prep_form()
      */
     public function prep_form($id = null)
     {
@@ -383,6 +431,10 @@ class MyModel extends \CI_Model
      * @param $id
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/MY_Model.php
+     * @legacy-function get_by_id()
      */
     public function get_by_id($id)
     {
@@ -397,6 +449,10 @@ class MyModel extends \CI_Model
      * @param null|string $validation_rules
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/MY_Model.php
+     * @legacy-function run_validation()
      */
     public function run_validation($validation_rules = null)
     {
@@ -430,6 +486,10 @@ class MyModel extends \CI_Model
      * @param bool   $escape
      *
      * @return mixed|string
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/MY_Model.php
+     * @legacy-function form_value()
      */
     public function form_value($key, $escape = false)
     {
@@ -441,6 +501,10 @@ class MyModel extends \CI_Model
     /**
      * @param string $key
      * @param        $value
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/MY_Model.php
+     * @legacy-function set_form_value()
      */
     public function set_form_value($key, $value)
     {
@@ -449,6 +513,10 @@ class MyModel extends \CI_Model
 
     /**
      * @param $id
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/MY_Model.php
+     * @legacy-function set_id()
      */
     public function set_id($id)
     {
@@ -459,6 +527,10 @@ class MyModel extends \CI_Model
      * Query builder which listens to methods in child model.
      *
      * @param array $exclude
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/MY_Model.php
+     * @legacy-function set_defaults()
      */
     private function set_defaults($exclude = [])
     {
@@ -477,6 +549,11 @@ class MyModel extends \CI_Model
         }
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/core/MY_Model.php
+     * @legacy-function run_filters()
+     */
     private function run_filters()
     {
         foreach ($this->filter as $filter) {

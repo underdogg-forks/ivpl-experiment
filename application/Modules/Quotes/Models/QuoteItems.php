@@ -24,6 +24,11 @@ class QuoteItems extends \Response_Model
 
     public $date_created_field = 'item_date_added';
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote_items.php
+     * @legacy-function default_select()
+     */
     public function default_select()
     {
         $this->db->select('ip_quote_item_amounts.*, ip_products.*, ip_quote_items.*,
@@ -31,11 +36,21 @@ class QuoteItems extends \Response_Model
             item_tax_rates.tax_rate_name AS item_tax_rate_name');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote_items.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by()
     {
         $this->db->order_by('ip_quote_items.item_order');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote_items.php
+     * @legacy-function default_join()
+     */
     public function default_join()
     {
         $this->db->join('ip_quote_item_amounts', 'ip_quote_item_amounts.item_id = ip_quote_items.item_id', 'left');
@@ -45,6 +60,10 @@ class QuoteItems extends \Response_Model
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote_items.php
+     * @legacy-function validation_rules()
      */
     public function validation_rules()
     {
@@ -91,6 +110,10 @@ class QuoteItems extends \Response_Model
      * @param []   $global_discount
      *
      * @return int|null
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote_items.php
+     * @legacy-function save()
      */
     public function save($id = null, $db_array = null, &$global_discount = [])
     {
@@ -113,6 +136,10 @@ class QuoteItems extends \Response_Model
 
     /**
      * @param int $item_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote_items.php
+     * @legacy-function delete()
      */
     public function delete($item_id): bool
     {
@@ -148,6 +175,10 @@ class QuoteItems extends \Response_Model
      * @param $quote_id
      *
      * return items_subtotal
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote_items.php
+     * @legacy-function get_items_subtotal()
      */
     public function get_items_subtotal($quote_id)
     {

@@ -22,6 +22,11 @@ class ProductsAjaxController extends AdminController
 {
     public $ajax_controller = true;
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/products/controllers/Ajax.php
+     * @legacy-function modal_product_lookups()
+     */
     public function modal_product_lookups()
     {
         $filter_product = $this->input->get('filter_product', true);
@@ -62,6 +67,11 @@ class ProductsAjaxController extends AdminController
         }
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/products/controllers/Ajax.php
+     * @legacy-function process_product_selections()
+     */
     public function process_product_selections()
     {
         $this->load->model('products/product');

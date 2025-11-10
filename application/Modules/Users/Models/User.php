@@ -30,6 +30,10 @@ class User extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/users/models/Mdl_user.php
+     * @legacy-function user_types()
      */
     public function user_types()
     {
@@ -39,11 +43,21 @@ class User extends ResponseModel
         ];
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/users/models/Mdl_user.php
+     * @legacy-function default_select()
+     */
     public function default_select(): void
     {
         $this->db->select('SQL_CALC_FOUND_ROWS ip_users.*', false);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/users/models/Mdl_user.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by(): void
     {
         $this->db->order_by('ip_users.user_name');
@@ -51,6 +65,10 @@ class User extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/users/models/Mdl_user.php
+     * @legacy-function validation_rules()
      */
     public function validation_rules()
     {
@@ -161,6 +179,10 @@ class User extends ResponseModel
      * @param int $amount
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/users/models/Mdl_user.php
+     * @legacy-function get_latest()
      */
     public function get_latest($amount = 20)
     {
@@ -174,6 +196,10 @@ class User extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/users/models/Mdl_user.php
+     * @legacy-function validation_rules_existing()
      */
     public function validation_rules_existing()
     {
@@ -268,6 +294,10 @@ class User extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/users/models/Mdl_user.php
+     * @legacy-function validation_rules_change_password()
      */
     public function validation_rules_change_password()
     {
@@ -287,6 +317,10 @@ class User extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/users/models/Mdl_user.php
+     * @legacy-function db_array()
      */
     public function db_array()
     {
@@ -309,6 +343,10 @@ class User extends ResponseModel
     /**
      * @param $user_id
      * @param $password
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/users/models/Mdl_user.php
+     * @legacy-function save_change_password()
      */
     public function save_change_password($user_id, $password): void
     {
@@ -330,6 +368,10 @@ class User extends ResponseModel
 
     /**
      * @return int|null
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/users/models/Mdl_user.php
+     * @legacy-function save()
      */
     public function save($id = null, $db_array = null)
     {
@@ -350,6 +392,10 @@ class User extends ResponseModel
 
     /**
      * @param int $id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/users/models/Mdl_user.php
+     * @legacy-function delete()
      */
     public function delete($id): void
     {

@@ -32,11 +32,21 @@ class User_Clients extends AdminController
         $this->load->model('user_clients/userclients');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/user_clients/controllers/UserClients.php
+     * @legacy-function index()
+     */
     public function index()
     {
         redirect('users');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/user_clients/controllers/UserClients.php
+     * @legacy-function user()
+     */
     public function user($id = null)
     {
         if ($this->input->post('btn_cancel')) {
@@ -62,6 +72,11 @@ class User_Clients extends AdminController
         $this->layout->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/user_clients/controllers/UserClients.php
+     * @legacy-function create()
+     */
     public function create($user_id = null)
     {
         if ( ! $user_id) {
@@ -105,6 +120,10 @@ class User_Clients extends AdminController
 
     /**
      * @param int $user_client_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/user_clients/controllers/UserClients.php
+     * @legacy-function delete()
      */
     public function delete($user_client_id)
     {

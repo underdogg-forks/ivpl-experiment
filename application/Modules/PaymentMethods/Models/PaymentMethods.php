@@ -22,11 +22,21 @@ class PaymentMethods extends \Response_Model
 
     public $primary_key = 'ip_payment_methods.payment_method_id';
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/payment_methods/models/Mdl_payment_methods.php
+     * @legacy-function default_select()
+     */
     public function default_select()
     {
         $this->db->select('SQL_CALC_FOUND_ROWS *', false);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/payment_methods/models/Mdl_payment_methods.php
+     * @legacy-function order_by()
+     */
     public function order_by()
     {
         $this->db->order_by('ip_payment_methods.payment_method_name');
@@ -34,6 +44,10 @@ class PaymentMethods extends \Response_Model
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/payment_methods/models/Mdl_payment_methods.php
+     * @legacy-function validation_rules()
      */
     public function validation_rules()
     {

@@ -26,6 +26,11 @@ class Payment extends ResponseModel
 
     public $validation_rules = 'validation_rules';
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/payments/models/Mdl_payment.php
+     * @legacy-function default_select()
+     */
     public function default_select()
     {
         $this->db->select('
@@ -41,11 +46,21 @@ class Payment extends ResponseModel
             ip_payments.*', false);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/payments/models/Mdl_payment.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by()
     {
         $this->db->order_by('ip_payments.payment_date DESC, ip_payments.payment_id DESC');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/payments/models/Mdl_payment.php
+     * @legacy-function default_join()
+     */
     public function default_join()
     {
         $this->db->join('ip_invoices', 'ip_invoices.invoice_id = ip_payments.invoice_id');
@@ -56,6 +71,10 @@ class Payment extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/payments/models/Mdl_payment.php
+     * @legacy-function validation_rules()
      */
     public function validation_rules()
     {
@@ -90,6 +109,10 @@ class Payment extends ResponseModel
      * @param $amount
      *
      * @return bool
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/payments/models/Mdl_payment.php
+     * @legacy-function validate_payment_amount()
      */
     public function validate_payment_amount($amount)
     {
@@ -122,6 +145,10 @@ class Payment extends ResponseModel
 
     /**
      * @return bool|int|null
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/payments/models/Mdl_payment.php
+     * @legacy-function save()
      */
     public function save($id = null, $db_array = null)
     {
@@ -161,6 +188,10 @@ class Payment extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/payments/models/Mdl_payment.php
+     * @legacy-function db_array()
      */
     public function db_array()
     {
@@ -172,6 +203,11 @@ class Payment extends ResponseModel
         return $db_array;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/payments/models/Mdl_payment.php
+     * @legacy-function delete()
+     */
     public function delete($id = null)
     {
         // Get the invoice id before deleting payment
@@ -204,6 +240,11 @@ class Payment extends ResponseModel
         delete_orphans();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/payments/models/Mdl_payment.php
+     * @legacy-function prep_form()
+     */
     public function prep_form($id = null): bool
     {
         if ( ! parent::prep_form($id)) {
@@ -221,6 +262,10 @@ class Payment extends ResponseModel
      * @param $client_id
      *
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/payments/models/Mdl_payment.php
+     * @legacy-function by_client()
      */
     public function by_client($client_id)
     {

@@ -30,6 +30,11 @@ class Custom_Fields extends AdminController
         $this->load->model('custom_fields/customfields');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_fields/controllers/CustomFields.php
+     * @legacy-function index()
+     */
     public function index(): void
     {
         // Display all custom_fields tables by default
@@ -39,6 +44,10 @@ class Custom_Fields extends AdminController
     /**
      * @param string $name of table (simple) NAME (more comprehensive) & why not a filter by type??? like I/Q payment & todo for product ;)
      * @param int    $page
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_fields/controllers/CustomFields.php
+     * @legacy-function table()
      */
     public function table(string $name = 'all', $page = 0): void
     {
@@ -69,6 +78,11 @@ class Custom_Fields extends AdminController
         $this->layout->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_fields/controllers/CustomFields.php
+     * @legacy-function form()
+     */
     public function form($id = null)
     {
         if ($this->input->post('btn_cancel')) {
@@ -102,6 +116,10 @@ class Custom_Fields extends AdminController
 
     /**
      * @param $id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_fields/controllers/CustomFields.php
+     * @legacy-function delete()
      */
     public function delete($id)
     {

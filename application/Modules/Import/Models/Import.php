@@ -78,6 +78,11 @@ class Import extends \Response_Model
      */
     public function __construct() {}
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/import/models/Mdl_import.php
+     * @legacy-function default_select()
+     */
     public function default_select()
     {
         $this->db->select("SQL_CALC_FOUND_ROWS ip_imports.*,
@@ -87,11 +92,21 @@ class Import extends \Response_Model
             (SELECT COUNT(*) FROM ip_import_details WHERE import_table_name = 'ip_payments' AND ip_import_details.import_id = ip_imports.import_id) AS num_payments", false);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/import/models/Mdl_import.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by()
     {
         $this->db->order_by('ip_imports.import_date DESC');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/import/models/Mdl_import.php
+     * @legacy-function start_import()
+     */
     public function start_import()
     {
         $db_array = ['import_date' => date('Y-m-d H:i:s')];
@@ -105,6 +120,10 @@ class Import extends \Response_Model
      * @param $table
      *
      * @return array|bool
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/import/models/Mdl_import.php
+     * @legacy-function import_data()
      */
     public function import_data($file, $table)
     {
@@ -161,6 +180,10 @@ class Import extends \Response_Model
 
     /**
      * @return array|bool
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/import/models/Mdl_import.php
+     * @legacy-function import_invoices()
      */
     public function import_invoices()
     {
@@ -246,6 +269,10 @@ class Import extends \Response_Model
 
     /**
      * @return array|bool
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/import/models/Mdl_import.php
+     * @legacy-function import_invoice_items()
      */
     public function import_invoice_items()
     {
@@ -330,6 +357,10 @@ class Import extends \Response_Model
 
     /**
      * @return array|bool
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/import/models/Mdl_import.php
+     * @legacy-function import_payments()
      */
     public function import_payments()
     {
@@ -398,6 +429,10 @@ class Import extends \Response_Model
      * @param $table_name
      * @param $import_lang_key
      * @param $ids
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/import/models/Mdl_import.php
+     * @legacy-function record_import_details()
      */
     public function record_import_details($import_id, $table_name, $import_lang_key, $ids)
     {
@@ -415,6 +450,10 @@ class Import extends \Response_Model
 
     /**
      * @param int $import_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/import/models/Mdl_import.php
+     * @legacy-function delete()
      */
     public function delete($import_id)
     {

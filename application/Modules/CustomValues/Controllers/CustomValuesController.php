@@ -32,6 +32,10 @@ class Custom_Values extends AdminController
 
     /**
      * @param int $page
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/controllers/CustomValues.php
+     * @legacy-function index()
      */
     public function index($page = 0)
     {
@@ -58,6 +62,11 @@ class Custom_Values extends AdminController
         $this->layout->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/controllers/CustomValues.php
+     * @legacy-function field()
+     */
     public function field($id = null)
     {
         if ($this->input->post('btn_cancel')) {
@@ -91,6 +100,11 @@ class Custom_Values extends AdminController
         $this->layout->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/controllers/CustomValues.php
+     * @legacy-function edit()
+     */
     public function edit($id = null)
     {
         $value = $this->customvalues->get_by_id($id)->row();
@@ -123,6 +137,11 @@ class Custom_Values extends AdminController
         $this->layout->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/controllers/CustomValues.php
+     * @legacy-function create()
+     */
     public function create($id = null)
     {
         if ( ! $id) {
@@ -166,6 +185,10 @@ class Custom_Values extends AdminController
 
     /**
      * @param $id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/controllers/CustomValues.php
+     * @legacy-function delete()
      */
     public function delete($id)
     {

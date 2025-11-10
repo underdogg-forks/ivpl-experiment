@@ -22,11 +22,21 @@ class InvoiceGroups extends \Response_Model
 
     public $primary_key = 'ip_invoice_groups.invoice_group_id';
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoice_groups/models/Mdl_invoice_groups.php
+     * @legacy-function default_select()
+     */
     public function default_select()
     {
         $this->db->select('SQL_CALC_FOUND_ROWS *', false);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoice_groups/models/Mdl_invoice_groups.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by()
     {
         $this->db->order_by('ip_invoice_groups.invoice_group_name');
@@ -34,6 +44,10 @@ class InvoiceGroups extends \Response_Model
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoice_groups/models/Mdl_invoice_groups.php
+     * @legacy-function validation_rules()
      */
     public function validation_rules()
     {
@@ -66,6 +80,10 @@ class InvoiceGroups extends \Response_Model
      * @param bool $set_next
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoice_groups/models/Mdl_invoice_groups.php
+     * @legacy-function generate_invoice_number()
      */
     public function generate_invoice_number($invoice_group_id, $set_next = true)
     {
@@ -86,6 +104,10 @@ class InvoiceGroups extends \Response_Model
 
     /**
      * @param $invoice_group_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoice_groups/models/Mdl_invoice_groups.php
+     * @legacy-function set_next_invoice_number()
      */
     public function set_next_invoice_number($invoice_group_id)
     {
@@ -100,6 +122,10 @@ class InvoiceGroups extends \Response_Model
      * @param $left_pad
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoice_groups/models/Mdl_invoice_groups.php
+     * @legacy-function parse_identifier_format()
      */
     private function parse_identifier_format($identifier_format, string $next_id, int $left_pad)
     {

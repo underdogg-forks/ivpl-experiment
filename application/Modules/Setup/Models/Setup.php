@@ -22,6 +22,10 @@ class Setup extends CI_Model
 
     /**
      * @return bool
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/models/Mdl_setup.php
+     * @legacy-function install_tables()
      */
     public function install_tables()
     {
@@ -42,6 +46,11 @@ class Setup extends CI_Model
         return true;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/models/Mdl_setup.php
+     * @legacy-function install_default_data()
+     */
     public function install_default_data()
     {
         $this->db->insert('ip_invoice_groups', [
@@ -66,6 +75,10 @@ class Setup extends CI_Model
 
     /**
      * @return bool
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/models/Mdl_setup.php
+     * @legacy-function upgrade_tables()
      */
     public function upgrade_tables()
     {
@@ -118,6 +131,10 @@ class Setup extends CI_Model
      * Place upgrade functions here
      * e.g. if table rows have to be converted
      * public function upgrade_010_1_0_1() { ... }.
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/models/Mdl_setup.php
+     * @legacy-function upgrade_006_1_2_0()
      */
     public function upgrade_006_1_2_0()
     {
@@ -139,6 +156,11 @@ class Setup extends CI_Model
         }
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/models/Mdl_setup.php
+     * @legacy-function upgrade_019_1_4_7()
+     */
     public function upgrade_019_1_4_7()
     {
         /* Update alert to set the session configuration $config['sess_use_database'] = false to true
@@ -158,6 +180,11 @@ class Setup extends CI_Model
         }
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/models/Mdl_setup.php
+     * @legacy-function upgrade_023_1_5_0()
+     */
     public function upgrade_023_1_5_0()
     {
         $res          = $this->db->query('SELECT * FROM ip_custom_fields');
@@ -262,6 +289,11 @@ class Setup extends CI_Model
         $this->db->query('ALTER TABLE ip_custom_fields DROP COLUMN custom_field_column');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/models/Mdl_setup.php
+     * @legacy-function upgrade_029_1_5_6()
+     */
     public function upgrade_029_1_5_6()
     {
         // The following code will determine if the ip_users table has an existing user_all_clients column
@@ -283,6 +315,11 @@ class Setup extends CI_Model
         $this->mdl_settings->save('pdf_quote_footer', get_setting('pdf_invoice_footer'));
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/models/Mdl_setup.php
+     * @legacy-function upgrade_036_1_6()
+     */
     public function upgrade_036_1_6()
     {
         //upgrade the recurring invoices data and replace 0000-00-00 invalid date with null in order to be compliant
@@ -311,6 +348,11 @@ class Setup extends CI_Model
         }
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/models/Mdl_setup.php
+     * @legacy-function upgrade_039_1_6_3()
+     */
     public function upgrade_039_1_6_3()
     {
         //**Set languages to lowercase & replace include_zugferd setting to einvoicing**
@@ -369,6 +411,10 @@ class Setup extends CI_Model
 
     /**
      * @param string $contents
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/models/Mdl_setup.php
+     * @legacy-function execute_contents()
      */
     private function execute_contents(string|bool $contents)
     {
@@ -392,6 +438,10 @@ class Setup extends CI_Model
 
     /**
      * @param $sql_file
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/models/Mdl_setup.php
+     * @legacy-function save_version()
      */
     private function save_version($sql_file)
     {
@@ -404,6 +454,11 @@ class Setup extends CI_Model
         $this->db->insert('ip_versions', $version_db_array);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/models/Mdl_setup.php
+     * @legacy-function install_default_settings()
+     */
     private function install_default_settings()
     {
         $this->load->helper('string');

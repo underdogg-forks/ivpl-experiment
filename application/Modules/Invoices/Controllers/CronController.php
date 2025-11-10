@@ -20,6 +20,10 @@ class CronController extends \Base_Controller
 {
     /**
      * @param string|null $cron_key
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Cron.php
+     * @legacy-function recur()
      */
     public function recur($cron_key = null)
     {

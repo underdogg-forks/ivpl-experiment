@@ -23,6 +23,10 @@ class Settings extends CI_Model
     /**
      * @param $key
      * @param $value
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/settings/models/Mdl_settings.php
+     * @legacy-function save()
      */
     public function save($key, $value)
     {
@@ -41,6 +45,10 @@ class Settings extends CI_Model
 
     /**
      * @param $key
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/settings/models/Mdl_settings.php
+     * @legacy-function get()
      */
     public function get($key)
     {
@@ -56,6 +64,10 @@ class Settings extends CI_Model
 
     /**
      * @param $key
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/settings/models/Mdl_settings.php
+     * @legacy-function delete()
      */
     public function delete($key)
     {
@@ -66,6 +78,10 @@ class Settings extends CI_Model
     /**
      * Loads all settings from the database so they are available
      * without additional queries.
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/settings/models/Mdl_settings.php
+     * @legacy-function load_settings()
      */
     public function load_settings()
     {
@@ -86,6 +102,10 @@ class Settings extends CI_Model
      * @param string $default
      *
      * @return mixed|string
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/settings/models/Mdl_settings.php
+     * @legacy-function setting()
      */
     public function setting($key, $default = '')
     {
@@ -96,6 +116,10 @@ class Settings extends CI_Model
      * @param string $key
      *
      * @return mixed|string
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/settings/models/Mdl_settings.php
+     * @legacy-function gateway_settings()
      */
     public function gateway_settings($key)
     {
@@ -105,6 +129,10 @@ class Settings extends CI_Model
     /**
      * @param $key
      * @param $value
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/settings/models/Mdl_settings.php
+     * @legacy-function set_setting()
      */
     public function set_setting($key, $value)
     {
@@ -115,6 +143,10 @@ class Settings extends CI_Model
      * Returns all available themes.
      *
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/settings/models/Mdl_settings.php
+     * @legacy-function get_themes()
      */
     public function get_themes()
     {

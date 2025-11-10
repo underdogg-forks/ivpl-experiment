@@ -24,6 +24,10 @@ class CustomValues extends \MY_Model
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/models/Mdl_custom_values.php
+     * @legacy-function custom_types()
      */
     public static function custom_types()
     {
@@ -32,6 +36,10 @@ class CustomValues extends \MY_Model
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/models/Mdl_custom_values.php
+     * @legacy-function user_input_types()
      */
     public static function user_input_types()
     {
@@ -44,6 +52,10 @@ class CustomValues extends \MY_Model
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/models/Mdl_custom_values.php
+     * @legacy-function custom_value_fields()
      */
     public static function custom_value_fields()
     {
@@ -55,6 +67,10 @@ class CustomValues extends \MY_Model
 
     /**
      * @param $fid
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/models/Mdl_custom_values.php
+     * @legacy-function save_custom()
      */
     public function save_custom($fid)
     {
@@ -73,6 +89,10 @@ class CustomValues extends \MY_Model
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/models/Mdl_custom_values.php
+     * @legacy-function validation_rules()
      */
     public function validation_rules()
     {
@@ -87,6 +107,10 @@ class CustomValues extends \MY_Model
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/models/Mdl_custom_values.php
+     * @legacy-function custom_tables()
      */
     public function custom_tables()
     {
@@ -104,6 +128,10 @@ class CustomValues extends \MY_Model
      * @param bool $get
      *
      * @return null|object
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/models/Mdl_custom_values.php
+     * @legacy-function used()
      */
     public function used($id = null, $get = true)
     {
@@ -132,6 +160,10 @@ class CustomValues extends \MY_Model
 
     /**
      * @param $id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/models/Mdl_custom_values.php
+     * @legacy-function delete()
      */
     public function delete($id): bool
     {
@@ -146,6 +178,10 @@ class CustomValues extends \MY_Model
 
     /**
      * @param $id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/models/Mdl_custom_values.php
+     * @legacy-function delete_all_fid()
      */
     public function delete_all_fid($id)
     {
@@ -156,6 +192,10 @@ class CustomValues extends \MY_Model
      * @param $id
      *
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/models/Mdl_custom_values.php
+     * @legacy-function get_by_fid()
      */
     public function get_by_fid($id)
     {
@@ -166,6 +206,10 @@ class CustomValues extends \MY_Model
      * @param $id
      *
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/models/Mdl_custom_values.php
+     * @legacy-function get_by_column()
      */
     public function get_by_column($id)
     {
@@ -176,6 +220,10 @@ class CustomValues extends \MY_Model
      * @param $id
      *
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/models/Mdl_custom_values.php
+     * @legacy-function get_by_id()
      */
     public function get_by_id($id)
     {
@@ -186,6 +234,10 @@ class CustomValues extends \MY_Model
      * @param $ids
      *
      * @return null|object
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/models/Mdl_custom_values.php
+     * @legacy-function get_by_ids()
      */
     public function get_by_ids($ids)
     {
@@ -203,6 +255,10 @@ class CustomValues extends \MY_Model
      * @param $id
      *
      * @return bool
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/models/Mdl_custom_values.php
+     * @legacy-function column_has_value()
      */
     public function column_has_value($fid, $id)
     {
@@ -215,6 +271,10 @@ class CustomValues extends \MY_Model
 
     /**
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/models/Mdl_custom_values.php
+     * @legacy-function grouped()
      */
     public function grouped()
     {
@@ -225,21 +285,41 @@ class CustomValues extends \MY_Model
         return $this;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/models/Mdl_custom_values.php
+     * @legacy-function default_select()
+     */
     public function default_select()
     {
         $this->db->select('ip_custom_fields.*,ip_custom_values.*', false);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/models/Mdl_custom_values.php
+     * @legacy-function default_join()
+     */
     public function default_join()
     {
         $this->db->join('ip_custom_fields', 'ip_custom_values.custom_values_field = ip_custom_fields.custom_field_id', 'inner');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/models/Mdl_custom_values.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by()
     {
         $this->db->order_by('ip_custom_values.custom_values_value');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/custom_values/models/Mdl_custom_values.php
+     * @legacy-function default_group_by()
+     */
     public function default_group_by()
     {
         //$this->db->group_by('ip_custom_values.custom_values_field');

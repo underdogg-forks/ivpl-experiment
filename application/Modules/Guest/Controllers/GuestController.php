@@ -20,6 +20,10 @@ class GuestController extends \Base_Controller
 {
     /**
      * @param $invoice_url_key
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/guest/controllers/Guest.php
+     * @legacy-function invoice()
      */
     public function invoice($invoice_url_key = '')
     {
@@ -91,6 +95,10 @@ class GuestController extends \Base_Controller
     /**
      * @param      $invoice_url_key
      * @param bool $stream
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/guest/controllers/Guest.php
+     * @legacy-function generate_invoice_pdf()
      */
     public function generate_invoice_pdf($invoice_url_key, $stream = true, $invoice_template = null)
     {
@@ -115,6 +123,10 @@ class GuestController extends \Base_Controller
     /**
      * @param      $invoice_url_key
      * @param bool $stream
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/guest/controllers/Guest.php
+     * @legacy-function generate_sumex_pdf()
      */
     public function generate_sumex_pdf($invoice_url_key, $stream = true, $invoice_template = null)
     {
@@ -141,6 +153,10 @@ class GuestController extends \Base_Controller
 
     /**
      * @param $quote_url_key
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/guest/controllers/Guest.php
+     * @legacy-function quote()
      */
     public function quote($quote_url_key = '')
     {
@@ -197,6 +213,10 @@ class GuestController extends \Base_Controller
     /**
      * @param      $quote_url_key
      * @param bool $stream
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/guest/controllers/Guest.php
+     * @legacy-function generate_quote_pdf()
      */
     public function generate_quote_pdf($quote_url_key, $stream = true, $quote_template = null)
     {
@@ -219,6 +239,10 @@ class GuestController extends \Base_Controller
 
     /**
      * @param $quote_url_key
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/guest/controllers/Guest.php
+     * @legacy-function approve_quote()
      */
     public function approve_quote(string $quote_url_key)
     {
@@ -233,6 +257,10 @@ class GuestController extends \Base_Controller
 
     /**
      * @param $quote_url_key
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/guest/controllers/Guest.php
+     * @legacy-function reject_quote()
      */
     public function reject_quote(string $quote_url_key)
     {
@@ -249,6 +277,10 @@ class GuestController extends \Base_Controller
      * Retail since 1.6.3.
      *
      * @param $url_key
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/guest/controllers/Guest.php
+     * @legacy-function get_attachments()
      */
     private function get_attachments(string $url_key): array
     {
@@ -277,6 +309,10 @@ class GuestController extends \Base_Controller
      *
      * @param array $items
      * @return boolean
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/guest/controllers/Guest.php
+     * @legacy-function has_discounts()
      */
     private function has_discounts(array $items) : bool {
         foreach ($items as $item) {

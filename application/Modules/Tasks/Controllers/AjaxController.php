@@ -22,6 +22,10 @@ class TasksAjaxController extends AdminController
 {
     /**
      * @param null|int $invoice_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/tasks/controllers/Ajax.php
+     * @legacy-function modal_task_lookups()
      */
     public function modal_task_lookups($invoice_id = null)
     {
@@ -39,6 +43,11 @@ class TasksAjaxController extends AdminController
         $this->layout->load_view('tasks/modal_task_lookups', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/tasks/controllers/Ajax.php
+     * @legacy-function process_task_selections()
+     */
     public function process_task_selections()
     {
         $this->load->model('tasks/task');

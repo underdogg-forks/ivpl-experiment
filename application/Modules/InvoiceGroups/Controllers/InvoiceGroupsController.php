@@ -32,6 +32,10 @@ class Invoice_Groups extends AdminController
 
     /**
      * @param int $page
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoice_groups/controllers/InvoiceGroups.php
+     * @legacy-function index()
      */
     public function index($page = 0)
     {
@@ -43,6 +47,11 @@ class Invoice_Groups extends AdminController
         $this->layout->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoice_groups/controllers/InvoiceGroups.php
+     * @legacy-function form()
+     */
     public function form($id = null)
     {
         if ($this->input->post('btn_cancel')) {
@@ -71,6 +80,10 @@ class Invoice_Groups extends AdminController
 
     /**
      * @param $id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoice_groups/controllers/InvoiceGroups.php
+     * @legacy-function delete()
      */
     public function delete($id)
     {

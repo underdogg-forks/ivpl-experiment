@@ -22,17 +22,32 @@ class UserClients extends \MY_Model
 
     public $primary_key = 'ip_user_clients.user_client_id';
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/user_clients/models/Mdl_user_clients.php
+     * @legacy-function default_select()
+     */
     public function default_select()
     {
         $this->db->select('ip_user_clients.*, ip_users.user_name, ip_clients.client_name, ip_clients.client_surname');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/user_clients/models/Mdl_user_clients.php
+     * @legacy-function default_join()
+     */
     public function default_join()
     {
         $this->db->join('ip_users', 'ip_users.user_id = ip_user_clients.user_id');
         $this->db->join('ip_clients', 'ip_clients.client_id = ip_user_clients.client_id');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/user_clients/models/Mdl_user_clients.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by()
     {
         $this->db->order_by('ip_clients.client_name', 'ACS');
@@ -40,6 +55,10 @@ class UserClients extends \MY_Model
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/user_clients/models/Mdl_user_clients.php
+     * @legacy-function validation_rules()
      */
     public function validation_rules()
     {
@@ -61,6 +80,10 @@ class UserClients extends \MY_Model
      * @param $user_id
      *
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/user_clients/models/Mdl_user_clients.php
+     * @legacy-function assigned_to()
      */
     public function assigned_to($user_id)
     {
@@ -71,6 +94,10 @@ class UserClients extends \MY_Model
 
     /**
      * @param array $users_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/user_clients/models/Mdl_user_clients.php
+     * @legacy-function set_all_clients_user()
      */
     public function set_all_clients_user($users_id)
     {
@@ -91,6 +118,11 @@ class UserClients extends \MY_Model
         }
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/user_clients/models/Mdl_user_clients.php
+     * @legacy-function get_users_all_clients()
+     */
     public function get_users_all_clients()
     {
         $this->load->model('users/mdl_users');

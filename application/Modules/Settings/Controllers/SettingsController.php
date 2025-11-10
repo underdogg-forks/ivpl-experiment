@@ -32,6 +32,10 @@ class SettingsController extends AdminController
 
     /**
      * @param int $page
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/settings/controllers/Settings.php
+     * @legacy-function index()
      */
     public function index($page = 0)
     {

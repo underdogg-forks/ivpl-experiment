@@ -47,6 +47,10 @@ class QuoteAmounts extends CI_Model
      *
      * @param $quote_id
      * @param $global_discount
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote_amounts.php
+     * @legacy-function calculate()
      */
     public function calculate($quote_id, $global_discount)
     {
@@ -100,6 +104,10 @@ class QuoteAmounts extends CI_Model
      * @param $quote_total
      *
      * @return float
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote_amounts.php
+     * @legacy-function calculate_discount()
      */
     public function calculate_discount($quote_id, $quote_total)
     {
@@ -122,6 +130,10 @@ class QuoteAmounts extends CI_Model
      * @param $quote_id
      *
      * return global_discount
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote_amounts.php
+     * @legacy-function get_global_discount()
      */
     public function get_global_discount($quote_id)
     {
@@ -138,6 +150,10 @@ class QuoteAmounts extends CI_Model
 
     /**
      * @param $quote_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote_amounts.php
+     * @legacy-function calculate_quote_taxes()
      */
     public function calculate_quote_taxes($quote_id)
     {
@@ -211,6 +227,10 @@ class QuoteAmounts extends CI_Model
 
     /**
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote_amounts.php
+     * @legacy-function get_total_quoted()
      */
     public function get_total_quoted($period = null)
     {
@@ -252,6 +272,10 @@ class QuoteAmounts extends CI_Model
      * @param string $period
      *
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote_amounts.php
+     * @legacy-function get_status_totals()
      */
     public function get_status_totals($period = '')
     {

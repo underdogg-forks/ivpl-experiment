@@ -22,11 +22,21 @@ class EmailTemplates extends \Response_Model
 
     public $primary_key = 'ip_email_templates.email_template_id';
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/email_templates/models/Mdl_email_templates.php
+     * @legacy-function default_select()
+     */
     public function default_select()
     {
         $this->db->select('SQL_CALC_FOUND_ROWS *', false);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/email_templates/models/Mdl_email_templates.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by()
     {
         $this->db->order_by('email_template_title');
@@ -34,6 +44,10 @@ class EmailTemplates extends \Response_Model
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/email_templates/models/Mdl_email_templates.php
+     * @legacy-function validation_rules()
      */
     public function validation_rules()
     {

@@ -22,11 +22,21 @@ class Versions extends \Response_Model
 
     public $primary_key = 'ip_versions.version_id';
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/settings/models/Mdl_versions.php
+     * @legacy-function default_select()
+     */
     public function default_select()
     {
         $this->db->select('SQL_CALC_FOUND_ROWS *', false);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/settings/models/Mdl_versions.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by()
     {
         $this->db->order_by('ip_versions.version_date_applied DESC, ip_versions.version_file DESC');
@@ -36,6 +46,10 @@ class Versions extends \Response_Model
      * Returns the latest version from the database.
      *
      * @return string
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/settings/models/Mdl_versions.php
+     * @legacy-function get_current_version()
      */
     public function get_current_version()
     {

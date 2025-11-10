@@ -28,16 +28,31 @@ class Client extends ResponseModel
 
     public $date_modified_field = 'client_date_modified';
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client.php
+     * @legacy-function default_select()
+     */
     public function default_select(): void
     {
         $this->db->select('SQL_CALC_FOUND_ROWS ' . $this->table . '.*, CONCAT(' . $this->table . '.client_name, " ", ' . $this->table . '.client_surname) as client_fullname', false);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by(): void
     {
         $this->db->order_by('ip_clients.client_name');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client.php
+     * @legacy-function validation_rules()
+     */
     public function validation_rules()
     {
         return [
@@ -144,6 +159,10 @@ class Client extends ResponseModel
      * @param int $amount
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client.php
+     * @legacy-function get_latest()
      */
     public function get_latest($amount = 10)
     {
@@ -157,6 +176,10 @@ class Client extends ResponseModel
 
     /**
      * @return string
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client.php
+     * @legacy-function fix_avs()
      */
     public function fix_avs($input)
     {
@@ -173,6 +196,11 @@ class Client extends ResponseModel
         return '';
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client.php
+     * @legacy-function convert_date()
+     */
     public function convert_date($input)
     {
         $this->load->helper('date_helper');
@@ -189,6 +217,10 @@ class Client extends ResponseModel
      *
      * @param string $version The e-invoicing version to validate
      * @return bool
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client.php
+     * @legacy-function validate_einvoicing_version()
      */
     public function validate_einvoicing_version($version)
     {
@@ -209,6 +241,11 @@ class Client extends ResponseModel
         return true;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client.php
+     * @legacy-function db_array()
+     */
     public function db_array()
     {
         $db_array = parent::db_array();
@@ -222,6 +259,10 @@ class Client extends ResponseModel
 
     /**
      * @param int $id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client.php
+     * @legacy-function delete()
      */
     public function delete($id): void
     {
@@ -237,6 +278,10 @@ class Client extends ResponseModel
      * @param $client_name
      *
      * @return int|null
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client.php
+     * @legacy-function client_lookup()
      */
     public function client_lookup($client_name)
     {
@@ -255,6 +300,11 @@ class Client extends ResponseModel
         return $client_id;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client.php
+     * @legacy-function with_total()
+     */
     public function with_total()
     {
         $this->filter_select('IFnull((SELECT SUM(invoice_total) FROM ip_invoice_amounts WHERE invoice_id IN (SELECT invoice_id FROM ip_invoices WHERE ip_invoices.client_id = ip_clients.client_id)), 0) AS client_invoice_total', false);
@@ -262,6 +312,11 @@ class Client extends ResponseModel
         return $this;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client.php
+     * @legacy-function with_total_paid()
+     */
     public function with_total_paid()
     {
         $this->filter_select('IFnull((SELECT SUM(invoice_paid) FROM ip_invoice_amounts WHERE invoice_id IN (SELECT invoice_id FROM ip_invoices WHERE ip_invoices.client_id = ip_clients.client_id)), 0) AS client_invoice_paid', false);
@@ -269,6 +324,11 @@ class Client extends ResponseModel
         return $this;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client.php
+     * @legacy-function with_total_balance()
+     */
     public function with_total_balance()
     {
         $this->filter_select('IFnull((SELECT SUM(invoice_balance) FROM ip_invoice_amounts WHERE invoice_id IN (SELECT invoice_id FROM ip_invoices WHERE ip_invoices.client_id = ip_clients.client_id)), 0) AS client_invoice_balance', false);
@@ -276,6 +336,11 @@ class Client extends ResponseModel
         return $this;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client.php
+     * @legacy-function is_inactive()
+     */
     public function is_inactive()
     {
         $this->filter_where('client_active', 0);
@@ -287,6 +352,10 @@ class Client extends ResponseModel
      * @param $user_id
      *
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client.php
+     * @legacy-function get_not_assigned_to_user()
      */
     public function get_not_assigned_to_user($user_id)
     {
@@ -308,6 +377,11 @@ class Client extends ResponseModel
         return $this->get()->result();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/models/Mdl_client.php
+     * @legacy-function is_active()
+     */
     public function is_active()
     {
         $this->filter_where('client_active', 1);

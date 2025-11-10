@@ -22,6 +22,11 @@ class PaymentsAjaxController extends AdminController
 {
     public $ajax_controller = true;
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/payments/controllers/Ajax.php
+     * @legacy-function add()
+     */
     public function add()
     {
         $this->load->model('payments/payment');
@@ -44,6 +49,11 @@ class PaymentsAjaxController extends AdminController
         echo json_encode($response);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/payments/controllers/Ajax.php
+     * @legacy-function modal_add_payment()
+     */
     public function modal_add_payment()
     {
         $this->load->module('layout');

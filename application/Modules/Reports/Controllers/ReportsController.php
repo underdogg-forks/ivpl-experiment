@@ -30,6 +30,11 @@ class ReportsController extends AdminController
         $this->load->model('reports/report');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/reports/controllers/Reports.php
+     * @legacy-function sales_by_client()
+     */
     public function sales_by_client()
     {
         if ($this->input->post('btn_submit')) {
@@ -49,6 +54,11 @@ class ReportsController extends AdminController
         $this->layout->buffer('content', 'reports/sales_by_client_index')->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/reports/controllers/Reports.php
+     * @legacy-function invoices_per_client()
+     */
     public function invoices_per_client()
     {
         if ($this->input->post('btn_submit')) {
@@ -68,6 +78,11 @@ class ReportsController extends AdminController
         $this->layout->buffer('content', 'reports/invoices_per_client_index')->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/reports/controllers/Reports.php
+     * @legacy-function payment_history()
+     */
     public function payment_history()
     {
         if ($this->input->post('btn_submit')) {
@@ -87,6 +102,11 @@ class ReportsController extends AdminController
         $this->layout->buffer('content', 'reports/payment_history_index')->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/reports/controllers/Reports.php
+     * @legacy-function invoice_aging()
+     */
     public function invoice_aging()
     {
         if ($this->input->post('btn_submit')) {
@@ -104,6 +124,11 @@ class ReportsController extends AdminController
         $this->layout->buffer('content', 'reports/invoice_aging_index')->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/reports/controllers/Reports.php
+     * @legacy-function sales_by_year()
+     */
     public function sales_by_year()
     {
         if ($this->input->post('btn_submit')) {

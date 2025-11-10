@@ -32,6 +32,10 @@ class RecurringController extends AdminController
 
     /**
      * @param int $page
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Recurring.php
+     * @legacy-function index()
      */
     public function index($page = 0)
     {
@@ -51,6 +55,10 @@ class RecurringController extends AdminController
 
     /**
      * @param $invoice_recurring_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Recurring.php
+     * @legacy-function stop()
      */
     public function stop($invoice_recurring_id)
     {
@@ -60,6 +68,10 @@ class RecurringController extends AdminController
 
     /**
      * @param $invoice_recurring_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Recurring.php
+     * @legacy-function delete()
      */
     public function delete($invoice_recurring_id)
     {

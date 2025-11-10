@@ -22,6 +22,11 @@ class FilterAjaxController extends AdminController
 {
     public $ajax_controller = true;
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/filter/controllers/Ajax.php
+     * @legacy-function filter_invoices()
+     */
     public function filter_invoices()
     {
         $this->load->model('invoices/invoice');
@@ -44,6 +49,11 @@ class FilterAjaxController extends AdminController
         $this->layout->load_view('invoices/partial_invoice_table', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/filter/controllers/Ajax.php
+     * @legacy-function filter_quotes()
+     */
     public function filter_quotes()
     {
         $this->load->model('quotes/quote');
@@ -66,6 +76,11 @@ class FilterAjaxController extends AdminController
         $this->layout->load_view('quotes/partial_quote_table', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/filter/controllers/Ajax.php
+     * @legacy-function filter_clients()
+     */
     public function filter_clients()
     {
         $this->load->model('clients/client');
@@ -88,6 +103,11 @@ class FilterAjaxController extends AdminController
         $this->layout->load_view('clients/partial_client_table', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/filter/controllers/Ajax.php
+     * @legacy-function filter_custom_fields()
+     */
     public function filter_custom_fields()
     {
         // custom table option name Normaly always here (it's ajax). Old school but work.
@@ -125,6 +145,11 @@ class FilterAjaxController extends AdminController
         $this->layout->load_view('custom_fields/partial_custom_fields_table', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/filter/controllers/Ajax.php
+     * @legacy-function filter_custom_values()
+     */
     public function filter_custom_values()
     {
         // custom values id Normaly always here (it's ajax). Old school but work.
@@ -159,6 +184,11 @@ class FilterAjaxController extends AdminController
         $this->layout->load_view('custom_values/partial_custom_values_table', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/filter/controllers/Ajax.php
+     * @legacy-function filter_custom_values_field()
+     */
     public function filter_custom_values_field()
     {
         $this->load->model('custom_values/customvalues');
@@ -184,6 +214,11 @@ class FilterAjaxController extends AdminController
         $this->layout->load_view('custom_values/partial_custom_values_field', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/filter/controllers/Ajax.php
+     * @legacy-function filter_projects()
+     */
     public function filter_projects()
     {
         $this->load->model('projects/project');
@@ -207,6 +242,11 @@ class FilterAjaxController extends AdminController
         $this->layout->load_view('projects/partial_projects_table', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/filter/controllers/Ajax.php
+     * @legacy-function filter_tasks()
+     */
     public function filter_tasks()
     {
         $this->load->model('tasks/task');
@@ -231,6 +271,11 @@ class FilterAjaxController extends AdminController
         $this->layout->load_view('tasks/partial_tasks_table', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/filter/controllers/Ajax.php
+     * @legacy-function filter_products()
+     */
     public function filter_products()
     {
         $this->load->model('products/product');
@@ -255,6 +300,11 @@ class FilterAjaxController extends AdminController
         $this->layout->load_view('products/partial_products_table', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/filter/controllers/Ajax.php
+     * @legacy-function filter_users()
+     */
     public function filter_users()
     {
         $this->load->model('users/user');
@@ -283,6 +333,11 @@ class FilterAjaxController extends AdminController
         $this->layout->load_view('users/partial_users_table', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/filter/controllers/Ajax.php
+     * @legacy-function filter_families()
+     */
     public function filter_families()
     {
         $this->load->model('families/family');
@@ -305,6 +360,11 @@ class FilterAjaxController extends AdminController
         $this->layout->load_view('families/partial_families_table', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/filter/controllers/Ajax.php
+     * @legacy-function filter_invoices_recuring()
+     */
     public function filter_invoices_recuring()
     {
         $this->load->model('invoices/invoicesrecurring');
@@ -328,6 +388,11 @@ class FilterAjaxController extends AdminController
         $this->layout->load_view('invoices/partial_invoices_recurring_table', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/filter/controllers/Ajax.php
+     * @legacy-function filter_online_logs()
+     */
     public function filter_online_logs()
     {
         $this->load->model('payments/paymentlogs');
@@ -349,6 +414,11 @@ class FilterAjaxController extends AdminController
         $this->layout->load_view('payments/partial_online_logs_table', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/filter/controllers/Ajax.php
+     * @legacy-function filter_archives()
+     */
     public function filter_archives()
     {
         $this->load->model('invoices/invoice');
@@ -360,6 +430,11 @@ class FilterAjaxController extends AdminController
         $this->layout->load_view('invoices/partial_invoice_archive', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/filter/controllers/Ajax.php
+     * @legacy-function filter_payments()
+     */
     public function filter_payments()
     {
         $this->load->model('payments/payment');

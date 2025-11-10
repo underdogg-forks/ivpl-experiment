@@ -24,16 +24,31 @@ class Product extends ResponseModel
 
     public $primary_key = 'ip_products.product_id';
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/products/models/Mdl_product.php
+     * @legacy-function default_select()
+     */
     public function default_select()
     {
         $this->db->select('SQL_CALC_FOUND_ROWS *', false);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/products/models/Mdl_product.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by()
     {
         $this->db->order_by('ip_families.family_name, ip_products.product_name');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/products/models/Mdl_product.php
+     * @legacy-function default_join()
+     */
     public function default_join()
     {
         $this->db->join('ip_families', 'ip_families.family_id = ip_products.family_id', 'left');
@@ -41,6 +56,11 @@ class Product extends ResponseModel
         $this->db->join('ip_tax_rates', 'ip_tax_rates.tax_rate_id = ip_products.tax_rate_id', 'left');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/products/models/Mdl_product.php
+     * @legacy-function by_product()
+     */
     public function by_product($match)
     {
         $this->db->group_start();
@@ -50,6 +70,11 @@ class Product extends ResponseModel
         $this->db->group_end();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/products/models/Mdl_product.php
+     * @legacy-function by_family()
+     */
     public function by_family($match)
     {
         $this->db->where('ip_products.family_id', $match);
@@ -57,6 +82,10 @@ class Product extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/products/models/Mdl_product.php
+     * @legacy-function validation_rules()
      */
     public function validation_rules()
     {
@@ -112,6 +141,10 @@ class Product extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/products/models/Mdl_product.php
+     * @legacy-function db_array()
      */
     public function db_array()
     {

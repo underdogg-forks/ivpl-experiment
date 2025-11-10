@@ -22,6 +22,11 @@ class PaymentLogs extends \Response_Model
 
     public $primary_key = 'ip_merchant_responses.merchant_response_id';
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/payments/models/Mdl_payment_logs.php
+     * @legacy-function default_select()
+     */
     public function default_select()
     {
         $this->db->select('
@@ -30,11 +35,21 @@ class PaymentLogs extends \Response_Model
             ip_merchant_responses.*', false);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/payments/models/Mdl_payment_logs.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by()
     {
         $this->db->order_by('ip_merchant_responses.merchant_response_id DESC');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/payments/models/Mdl_payment_logs.php
+     * @legacy-function default_join()
+     */
     public function default_join()
     {
         $this->db->join('ip_invoices', 'ip_invoices.invoice_id = ip_merchant_responses.invoice_id');

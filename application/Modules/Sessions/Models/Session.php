@@ -23,6 +23,10 @@ class Session extends CI_Model
      * @param $password
      *
      * @return bool
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/sessions/models/Mdl_session.php
+     * @legacy-function auth()
      */
     public function auth($email, $password)
     {

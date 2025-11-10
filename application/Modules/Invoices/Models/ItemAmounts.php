@@ -27,6 +27,10 @@ class ItemAmounts extends CI_Model
      *
      * @param $item_id
      * @param $global_discount
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_item_amounts.php
+     * @legacy-function calculate()
      */
     public function calculate($item_id, &$global_discount)
     {

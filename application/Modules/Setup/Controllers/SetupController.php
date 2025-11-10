@@ -55,11 +55,21 @@ class SetupController extends MX_Controller
         $this->lang->load('ip', $this->session->userdata('ip_lang'));
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/controllers/Setup.php
+     * @legacy-function index()
+     */
     public function index(): void
     {
         redirect('setup/language');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/controllers/Setup.php
+     * @legacy-function language()
+     */
     public function language(): void
     {
         if ($this->input->post('btn_continue')) {
@@ -80,6 +90,11 @@ class SetupController extends MX_Controller
         $this->layout->render('setup');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/controllers/Setup.php
+     * @legacy-function prerequisites()
+     */
     public function prerequisites(): void
     {
         if ($this->session->userdata('install_step') != 'prerequisites') {
@@ -103,6 +118,11 @@ class SetupController extends MX_Controller
         $this->layout->render('setup');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/controllers/Setup.php
+     * @legacy-function configure_database()
+     */
     public function configure_database(): void
     {
         if ($this->session->userdata('install_step') != 'configure_database') {
@@ -145,6 +165,11 @@ class SetupController extends MX_Controller
         $this->layout->render('setup');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/controllers/Setup.php
+     * @legacy-function install_tables()
+     */
     public function install_tables(): void
     {
         if ($this->session->userdata('install_step') != 'install_tables') {
@@ -169,6 +194,11 @@ class SetupController extends MX_Controller
         $this->layout->render('setup');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/controllers/Setup.php
+     * @legacy-function upgrade_tables()
+     */
     public function upgrade_tables(): void
     {
         if ($this->session->userdata('install_step') != 'upgrade_tables') {
@@ -207,6 +237,11 @@ class SetupController extends MX_Controller
         $this->layout->render('setup');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/controllers/Setup.php
+     * @legacy-function create_user()
+     */
     public function create_user(): void
     {
         if ($this->session->userdata('install_step') != 'create_user') {
@@ -239,6 +274,11 @@ class SetupController extends MX_Controller
         $this->layout->render('setup');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/controllers/Setup.php
+     * @legacy-function calculation_info()
+     */
     public function calculation_info(): void
     {
         if ($this->session->userdata('install_step') != 'calculation_info') {
@@ -266,6 +306,11 @@ class SetupController extends MX_Controller
         $this->layout->render('setup');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/controllers/Setup.php
+     * @legacy-function complete()
+     */
     public function complete(): void
     {
         if ($this->session->userdata('install_step') != 'complete') {
@@ -305,6 +350,11 @@ class SetupController extends MX_Controller
         $this->session->sess_destroy();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/controllers/Setup.php
+     * @legacy-function check_basics()
+     */
     private function check_basics(): array
     {
         $checks = [];
@@ -342,6 +392,11 @@ class SetupController extends MX_Controller
         return $checks;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/controllers/Setup.php
+     * @legacy-function check_writables()
+     */
     private function check_writables(): array
     {
         $checks = [];
@@ -379,6 +434,10 @@ class SetupController extends MX_Controller
 
     /**
      * Load the database connection trough CodeIgniter.
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/controllers/Setup.php
+     * @legacy-function load_ci_database()
      */
     private function load_ci_database()
     {
@@ -387,6 +446,10 @@ class SetupController extends MX_Controller
 
     /**
      * @param int $port
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/controllers/Setup.php
+     * @legacy-function write_database_config()
      */
     private function write_database_config(string $hostname, string $username, string $password, string $database, $port = 3306)
     {
@@ -401,6 +464,11 @@ class SetupController extends MX_Controller
         write_file(IPCONFIG_FILE, $config);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/controllers/Setup.php
+     * @legacy-function check_database()
+     */
     private function check_database(): array
     {
         // Reload the ipconfig.php file
@@ -447,6 +515,10 @@ class SetupController extends MX_Controller
 
     /**
      * Set a new encryption key in the ipconfig.php file.
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/controllers/Setup.php
+     * @legacy-function set_encryption_key()
      */
     private function set_encryption_key()
     {
@@ -463,6 +535,11 @@ class SetupController extends MX_Controller
         write_file(IPCONFIG_FILE, $config);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/controllers/Setup.php
+     * @legacy-function post_setup_tasks()
+     */
     private function post_setup_tasks()
     {
         // Set SETUP_COMPLETED to true
@@ -471,6 +548,11 @@ class SetupController extends MX_Controller
         write_file(IPCONFIG_FILE, $config);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/controllers/Setup.php
+     * @legacy-function check_calculation_config()
+     */
     private function check_calculation_config(): array
     {
         $this->load_ci_database();
@@ -508,6 +590,11 @@ class SetupController extends MX_Controller
         return ['needs_config' => false];
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/setup/controllers/Setup.php
+     * @legacy-function write_calculation_config()
+     */
     private function write_calculation_config()
     {
         $config = file_get_contents(IPCONFIG_FILE);

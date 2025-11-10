@@ -20,6 +20,11 @@ if ( ! defined('BASEPATH')) {
 #[AllowDynamicProperties]
 class DashboardController extends AdminController
 {
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/dashboard/controllers/Dashboard.php
+     * @legacy-function index()
+     */
     public function index()
     {
         $this->load->model('invoices/invoiceamounts');

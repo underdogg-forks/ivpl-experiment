@@ -22,6 +22,11 @@ class SettingsAjaxController extends AdminController
 {
     public $ajax_controller = true;
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/settings/controllers/Ajax.php
+     * @legacy-function get_cron_key()
+     */
     public function get_cron_key()
     {
         $this->load->helper('string');

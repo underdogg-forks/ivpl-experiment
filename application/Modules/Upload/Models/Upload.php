@@ -57,6 +57,11 @@ class Upload extends ResponseModel
         'odp'  => 'application/vnd.oasis.opendocument.presentation',
     ];
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/upload/models/Mdl_upload.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by()
     {
         $this->db->order_by('ip_uploads.upload_id ASC');
@@ -64,6 +69,10 @@ class Upload extends ResponseModel
 
     /**
      * @return int|null
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/upload/models/Mdl_upload.php
+     * @legacy-function create()
      */
     public function create($db_array = null)
     {
@@ -74,6 +83,10 @@ class Upload extends ResponseModel
      * @param $id
      *
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/upload/models/Mdl_upload.php
+     * @legacy-function get_quote_uploads()
      */
     public function get_quote_uploads($id)
     {
@@ -99,6 +112,10 @@ class Upload extends ResponseModel
      * @param $id
      *
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/upload/models/Mdl_upload.php
+     * @legacy-function get_invoice_uploads()
      */
     public function get_invoice_uploads($id)
     {
@@ -124,6 +141,10 @@ class Upload extends ResponseModel
      * @param $url_key
      *
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/upload/models/Mdl_upload.php
+     * @legacy-function get_files()
      */
     public function get_files($url_key)
     {
@@ -150,6 +171,10 @@ class Upload extends ResponseModel
     /**
      * @param $url_key
      * @param $filename
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/upload/models/Mdl_upload.php
+     * @legacy-function delete_file()
      */
     public function delete_file($url_key, $filename)
     {
@@ -160,6 +185,10 @@ class Upload extends ResponseModel
      * @param $client_id
      *
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/upload/models/Mdl_upload.php
+     * @legacy-function by_client()
      */
     public function by_client($client_id)
     {

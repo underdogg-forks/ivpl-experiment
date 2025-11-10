@@ -22,6 +22,11 @@ class ClientsAjaxController extends AdminController
 {
     public $ajax_controller = true;
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/controllers/Ajax.php
+     * @legacy-function name_query()
+     */
     public function name_query()
     {
         // Load the model & helper
@@ -67,6 +72,10 @@ class ClientsAjaxController extends AdminController
 
     /**
      * Get the latest clients.
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/controllers/Ajax.php
+     * @legacy-function get_latest()
      */
     public function get_latest()
     {
@@ -93,6 +102,11 @@ class ClientsAjaxController extends AdminController
         echo json_encode($response);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/controllers/Ajax.php
+     * @legacy-function save_preference_permissive_search_clients()
+     */
     public function save_preference_permissive_search_clients()
     {
         $this->load->model('settings/settings');
@@ -107,6 +121,10 @@ class ClientsAjaxController extends AdminController
 
     /**
      * Delete client note id.
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/controllers/Ajax.php
+     * @legacy-function delete_client_note()
      */
     public function delete_client_note()
     {
@@ -132,6 +150,11 @@ class ClientsAjaxController extends AdminController
         ]);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/controllers/Ajax.php
+     * @legacy-function save_client_note()
+     */
     public function save_client_note()
     {
         $this->load->model('clients/clientnotes');
@@ -155,6 +178,11 @@ class ClientsAjaxController extends AdminController
         echo json_encode($response);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/controllers/Ajax.php
+     * @legacy-function load_client_notes()
+     */
     public function load_client_notes()
     {
         $this->load->model('clients/clientnotes');

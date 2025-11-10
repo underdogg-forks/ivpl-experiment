@@ -22,6 +22,11 @@ class EmailTemplatesAjaxController extends AdminController
 {
     public $ajax_controller = true;
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/email_templates/controllers/Ajax.php
+     * @legacy-function get_content()
+     */
     public function get_content()
     {
         $this->load->model('email_templates/emailtemplates');

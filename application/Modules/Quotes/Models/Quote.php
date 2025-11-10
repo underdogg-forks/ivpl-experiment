@@ -28,6 +28,10 @@ class Quote extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function statuses()
      */
     public function statuses()
     {
@@ -65,6 +69,11 @@ class Quote extends ResponseModel
         ];
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function default_select()
+     */
     public function default_select()
     {
         $this->db->select("
@@ -80,11 +89,21 @@ class Quote extends ResponseModel
             ip_quotes.*", false);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by()
     {
         $this->db->order_by('ip_quotes.quote_date_created DESC, ip_quotes.quote_number DESC, ip_quotes.quote_id DESC');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function default_join()
+     */
     public function default_join()
     {
         $this->db->join('ip_clients', 'ip_clients.client_id = ip_quotes.client_id');
@@ -95,6 +114,10 @@ class Quote extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function validation_rules()
      */
     public function validation_rules()
     {
@@ -128,6 +151,10 @@ class Quote extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function validation_rules_save_quote()
      */
     public function validation_rules_save_quote()
     {
@@ -156,6 +183,10 @@ class Quote extends ResponseModel
 
     /**
      * @return int|null
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function create()
      */
     public function create($db_array = null)
     {
@@ -188,6 +219,10 @@ class Quote extends ResponseModel
      *
      * @param int $source_id
      * @param int $target_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function copy_quote()
      */
     public function copy_quote($source_id, $target_id)
     {
@@ -255,6 +290,10 @@ class Quote extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function db_array()
      */
     public function db_array()
     {
@@ -292,6 +331,10 @@ class Quote extends ResponseModel
 
     /**
      * @param string $quote_date_created
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function get_date_due()
      */
     public function get_date_due($quote_date_created)
     {
@@ -305,6 +348,10 @@ class Quote extends ResponseModel
      * @param $invoice_group_id
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function get_quote_number()
      */
     public function get_quote_number($invoice_group_id)
     {
@@ -315,6 +362,10 @@ class Quote extends ResponseModel
 
     /**
      * @return string
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function get_url_key()
      */
     public function get_url_key()
     {
@@ -327,6 +378,10 @@ class Quote extends ResponseModel
      * @param $invoice_id
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function get_invoice_group_id()
      */
     public function get_invoice_group_id($invoice_id)
     {
@@ -337,6 +392,10 @@ class Quote extends ResponseModel
 
     /**
      * @param int $quote_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function delete()
      */
     public function delete($quote_id)
     {
@@ -348,6 +407,10 @@ class Quote extends ResponseModel
 
     /**
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function is_draft()
      */
     public function is_draft()
     {
@@ -358,6 +421,10 @@ class Quote extends ResponseModel
 
     /**
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function is_sent()
      */
     public function is_sent()
     {
@@ -368,6 +435,10 @@ class Quote extends ResponseModel
 
     /**
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function is_viewed()
      */
     public function is_viewed()
     {
@@ -378,6 +449,10 @@ class Quote extends ResponseModel
 
     /**
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function is_approved()
      */
     public function is_approved()
     {
@@ -388,6 +463,10 @@ class Quote extends ResponseModel
 
     /**
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function is_rejected()
      */
     public function is_rejected()
     {
@@ -398,6 +477,10 @@ class Quote extends ResponseModel
 
     /**
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function is_canceled()
      */
     public function is_canceled()
     {
@@ -410,6 +493,10 @@ class Quote extends ResponseModel
      * Used by guest module; includes only sent and viewed.
      *
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function is_open()
      */
     public function is_open()
     {
@@ -420,6 +507,10 @@ class Quote extends ResponseModel
 
     /**
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function guest_visible()
      */
     public function guest_visible()
     {
@@ -432,6 +523,10 @@ class Quote extends ResponseModel
      * @param $client_id
      *
      * @return $this
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function by_client()
      */
     public function by_client($client_id)
     {
@@ -442,6 +537,10 @@ class Quote extends ResponseModel
 
     /**
      * @param $quote_url_key
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function approve_quote_by_key()
      */
     public function approve_quote_by_key($quote_url_key)
     {
@@ -453,6 +552,10 @@ class Quote extends ResponseModel
 
     /**
      * @param $quote_url_key
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function reject_quote_by_key()
      */
     public function reject_quote_by_key($quote_url_key)
     {
@@ -464,6 +567,10 @@ class Quote extends ResponseModel
 
     /**
      * @param $quote_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function approve_quote_by_id()
      */
     public function approve_quote_by_id($quote_id)
     {
@@ -475,6 +582,10 @@ class Quote extends ResponseModel
 
     /**
      * @param $quote_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function reject_quote_by_id()
      */
     public function reject_quote_by_id($quote_id)
     {
@@ -486,6 +597,10 @@ class Quote extends ResponseModel
 
     /**
      * @param $quote_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function mark_viewed()
      */
     public function mark_viewed($quote_id)
     {
@@ -503,6 +618,10 @@ class Quote extends ResponseModel
 
     /**
      * @param $quote_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function mark_sent()
      */
     public function mark_sent($quote_id)
     {
@@ -520,6 +639,10 @@ class Quote extends ResponseModel
 
     /**
      * @param $quote_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/models/Mdl_quote.php
+     * @legacy-function generate_quote_number_if_applicable()
      */
     public function generate_quote_number_if_applicable($quote_id)
     {

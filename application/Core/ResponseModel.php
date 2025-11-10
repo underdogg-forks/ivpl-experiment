@@ -23,6 +23,10 @@ class ResponseModel extends FormValidationModel
      * @param null|array $db_array
      *
      * @return null|int
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/Response_Model.php
+     * @legacy-function save()
      */
     public function save($id = null, $db_array = null)
     {
@@ -39,6 +43,10 @@ class ResponseModel extends FormValidationModel
 
     /**
      * @param int $id
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/Response_Model.php
+     * @legacy-function delete()
      */
     public function delete($id)
     {

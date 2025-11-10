@@ -20,6 +20,10 @@ class Report extends CI_Model
 {
     /**
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/reports/models/Mdl_report.php
+     * @legacy-function sales_by_client()
      */
     public function sales_by_client($from_date = null, $to_date = null)
     {
@@ -105,6 +109,10 @@ class Report extends CI_Model
 
     /**
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/reports/models/Mdl_report.php
+     * @legacy-function payment_history()
      */
     public function payment_history($from_date = null, $to_date = null)
     {
@@ -123,6 +131,10 @@ class Report extends CI_Model
 
     /**
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/reports/models/Mdl_report.php
+     * @legacy-function invoice_aging()
      */
     public function invoice_aging()
     {
@@ -182,6 +194,11 @@ class Report extends CI_Model
         return $this->db->get('ip_clients')->result();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/reports/models/Mdl_report.php
+     * @legacy-function invoices_per_client()
+     */
     public function invoices_per_client($from_date = null, $to_date = null)
     {
         $from_date = date_to_mysql($from_date);
@@ -205,6 +222,10 @@ class Report extends CI_Model
      * @param bool $taxChecked
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/reports/models/Mdl_report.php
+     * @legacy-function sales_by_year()
      */
     public function sales_by_year(
         $from_date = null,

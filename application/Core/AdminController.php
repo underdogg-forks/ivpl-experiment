@@ -24,6 +24,11 @@ class AdminController extends UserController
         $this->setCacheHeaders();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/core/Admin_Controller.php
+     * @legacy-function filter_input()
+     */
     protected function filter_input(): void
     {
         $input = $this->input->post();
@@ -40,6 +45,11 @@ class AdminController extends UserController
         );
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/core/Admin_Controller.php
+     * @legacy-function setCacheHeaders()
+     */
     protected function setCacheHeaders()
     {
         $this->output

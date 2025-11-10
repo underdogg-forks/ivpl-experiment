@@ -28,6 +28,10 @@ class Invoice extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function statuses()
      */
     public function statuses()
     {
@@ -55,6 +59,11 @@ class Invoice extends ResponseModel
         ];
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function default_select()
+     */
     public function default_select()
     {
         $this->db->select("
@@ -77,11 +86,21 @@ class Invoice extends ResponseModel
             ip_invoices.*", false);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by()
     {
         $this->db->order_by('ip_invoices.invoice_date_created DESC, ip_invoices.invoice_number DESC, ip_invoices.invoice_id DESC');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function default_join()
+     */
     public function default_join()
     {
         $this->db->join('ip_clients', 'ip_clients.client_id = ip_invoices.client_id');
@@ -93,6 +112,10 @@ class Invoice extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function validation_rules()
      */
     public function validation_rules()
     {
@@ -133,6 +156,10 @@ class Invoice extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function validation_rules_save_invoice()
      */
     public function validation_rules_save_invoice()
     {
@@ -166,6 +193,10 @@ class Invoice extends ResponseModel
      * @param bool $include_invoice_tax_rates
      *
      * @return int|null
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function create()
      */
     public function create($db_array = null, $include_invoice_tax_rates = true)
     {
@@ -213,6 +244,10 @@ class Invoice extends ResponseModel
      * @param int  $source_id
      * @param int  $target_id
      * @param bool $copy_recurring_items_only
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function copy_invoice()
      */
     public function copy_invoice($source_id, $target_id, $copy_recurring_items_only = false): void
     {
@@ -291,6 +326,10 @@ class Invoice extends ResponseModel
      *
      * @param int $source_id
      * @param int $target_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function copy_credit_invoice()
      */
     public function copy_credit_invoice($source_id, $target_id)
     {
@@ -363,6 +402,10 @@ class Invoice extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function db_array()
      */
     public function db_array()
     {
@@ -405,6 +448,10 @@ class Invoice extends ResponseModel
      * @param $invoice
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function get_payments()
      */
     public function get_payments($invoice)
     {
@@ -422,6 +469,10 @@ class Invoice extends ResponseModel
      * @param string $invoice_date_created
      *
      * @return string
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function get_date_due()
      */
     public function get_date_due($invoice_date_created)
     {
@@ -435,6 +486,10 @@ class Invoice extends ResponseModel
      * @param $invoice_group_id
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function get_invoice_number()
      */
     public function get_invoice_number($invoice_group_id)
     {
@@ -445,6 +500,10 @@ class Invoice extends ResponseModel
 
     /**
      * @return string
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function get_url_key()
      */
     public function get_url_key()
     {
@@ -457,6 +516,10 @@ class Invoice extends ResponseModel
      * @param $invoice_id
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function get_invoice_group_id()
      */
     public function get_invoice_group_id($invoice_id)
     {
@@ -469,6 +532,10 @@ class Invoice extends ResponseModel
      * @param int $parent_invoice_id
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function get_parent_invoice_number()
      */
     public function get_parent_invoice_number($parent_invoice_id)
     {
@@ -479,6 +546,10 @@ class Invoice extends ResponseModel
 
     /**
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function get_custom_values()
      */
     public function get_custom_values($id)
     {
@@ -487,6 +558,11 @@ class Invoice extends ResponseModel
         return $this->invoice_custom->get_by_invid($id);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function get_archives()
+     */
     public function get_archives($invoice_number): array
     {
         $invoice_array = [];
@@ -506,6 +582,10 @@ class Invoice extends ResponseModel
 
     /**
      * @param int $invoice_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function delete()
      */
     public function delete($invoice_id)
     {
@@ -516,6 +596,11 @@ class Invoice extends ResponseModel
     }
 
     // Excludes draft and paid invoices, i.e. keeps unpaid invoices.
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function is_open()
+     */
     public function is_open()
     {
         $this->filter_where_in('invoice_status_id', [2, 3]);
@@ -525,6 +610,11 @@ class Invoice extends ResponseModel
     }
 
     // Used to check if the invoice is Sumex
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function is_sumex()
+     */
     public function is_sumex()
     {
         $this->where('sumex_id is NOT NULL', null, false);
@@ -532,6 +622,11 @@ class Invoice extends ResponseModel
         return $this;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function guest_visible()
+     */
     public function guest_visible()
     {
         $this->filter_where_in('invoice_status_id', [2, 3, 4]);
@@ -539,6 +634,11 @@ class Invoice extends ResponseModel
         return $this;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function is_draft()
+     */
     public function is_draft()
     {
         $this->filter_where('invoice_status_id', 1);
@@ -546,6 +646,11 @@ class Invoice extends ResponseModel
         return $this;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function is_sent()
+     */
     public function is_sent()
     {
         $this->filter_where('invoice_status_id', 2);
@@ -553,6 +658,11 @@ class Invoice extends ResponseModel
         return $this;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function is_viewed()
+     */
     public function is_viewed()
     {
         $this->filter_where('invoice_status_id', 3);
@@ -560,6 +670,11 @@ class Invoice extends ResponseModel
         return $this;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function is_paid()
+     */
     public function is_paid()
     {
         $this->filter_where('invoice_status_id', 4);
@@ -568,6 +683,11 @@ class Invoice extends ResponseModel
         return $this;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function is_overdue()
+     */
     public function is_overdue()
     {
         $this->filter_having('is_overdue', 1);
@@ -575,6 +695,11 @@ class Invoice extends ResponseModel
         return $this;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function by_client()
+     */
     public function by_client($client_id)
     {
         $this->filter_where('ip_invoices.client_id', $client_id);
@@ -584,6 +709,10 @@ class Invoice extends ResponseModel
 
     /**
      * @param $invoice_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function mark_viewed()
      */
     public function mark_viewed($invoice_id)
     {
@@ -612,6 +741,10 @@ class Invoice extends ResponseModel
 
     /**
      * @param $invoice_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function mark_sent()
      */
     public function mark_sent($invoice_id)
     {
@@ -642,6 +775,10 @@ class Invoice extends ResponseModel
 
     /**
      * @param $invoice_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function generate_invoice_number_if_applicable()
      */
     public function generate_invoice_number_if_applicable($invoice_id)
     {
@@ -661,6 +798,10 @@ class Invoice extends ResponseModel
      * Update the invoice due date.
      *
      * @param $invoice_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice.php
+     * @legacy-function update_invoice_due_date()
      */
     public function update_invoice_due_date($invoice_id)
     {

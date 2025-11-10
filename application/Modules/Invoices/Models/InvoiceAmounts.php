@@ -49,6 +49,10 @@ class InvoiceAmounts extends CI_Model
      *
      * @param $invoice_id
      * @param $global_discount
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_amounts.php
+     * @legacy-function calculate()
      */
     public function calculate($invoice_id, $global_discount)
     {
@@ -140,6 +144,10 @@ class InvoiceAmounts extends CI_Model
      * @param $invoice_total
      *
      * @return float
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_amounts.php
+     * @legacy-function calculate_discount()
      */
     public function calculate_discount($invoice_id, $invoice_total)
     {
@@ -161,6 +169,10 @@ class InvoiceAmounts extends CI_Model
      * @param $invoice_id
      *
      * return global_discount
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_amounts.php
+     * @legacy-function get_global_discount()
      */
     public function get_global_discount($invoice_id)
     {
@@ -177,6 +189,10 @@ class InvoiceAmounts extends CI_Model
 
     /**
      * @param $invoice_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_amounts.php
+     * @legacy-function calculate_invoice_taxes()
      */
     public function calculate_invoice_taxes($invoice_id)
     {
@@ -252,6 +268,10 @@ class InvoiceAmounts extends CI_Model
 
     /**
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_amounts.php
+     * @legacy-function get_total_invoiced()
      */
     public function get_total_invoiced($period = null)
     {
@@ -291,6 +311,10 @@ class InvoiceAmounts extends CI_Model
 
     /**
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_amounts.php
+     * @legacy-function get_total_paid()
      */
     public function get_total_paid($period = null)
     {
@@ -327,6 +351,10 @@ class InvoiceAmounts extends CI_Model
 
     /**
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_amounts.php
+     * @legacy-function get_total_balance()
      */
     public function get_total_balance($period = null)
     {
@@ -364,6 +392,10 @@ class InvoiceAmounts extends CI_Model
      * @param string $period
      *
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_amounts.php
+     * @legacy-function get_status_totals()
      */
     public function get_status_totals($period = '')
     {

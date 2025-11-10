@@ -18,6 +18,11 @@ if ( ! defined('BASEPATH')) {
 #[AllowDynamicProperties]
 class WelcomeController extends CI_Controller
 {
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/welcome/controllers/Welcome.php
+     * @legacy-function index()
+     */
     public function index()
     {
         $this->load->model('settings/settings');

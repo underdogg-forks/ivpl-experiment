@@ -32,6 +32,10 @@ class UnitsController extends AdminController
 
     /**
      * @param int $page
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/units/controllers/Units.php
+     * @legacy-function index()
      */
     public function index($page = 0)
     {
@@ -43,6 +47,11 @@ class UnitsController extends AdminController
         $this->layout->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/units/controllers/Units.php
+     * @legacy-function form()
+     */
     public function form($id = null)
     {
         if ($this->input->post('btn_cancel')) {
@@ -83,6 +92,10 @@ class UnitsController extends AdminController
 
     /**
      * @param $id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/units/controllers/Units.php
+     * @legacy-function delete()
      */
     public function delete($id)
     {

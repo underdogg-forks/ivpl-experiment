@@ -22,6 +22,11 @@ class InvoiceTaxRates extends \Response_Model
 
     public $primary_key = 'ip_invoice_tax_rates.invoice_tax_rate_id';
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_tax_rates.php
+     * @legacy-function default_select()
+     */
     public function default_select()
     {
         $this->db->select('ip_tax_rates.tax_rate_name AS invoice_tax_rate_name');
@@ -29,6 +34,11 @@ class InvoiceTaxRates extends \Response_Model
         $this->db->select('ip_invoice_tax_rates.*');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_tax_rates.php
+     * @legacy-function default_join()
+     */
     public function default_join()
     {
         $this->db->join('ip_tax_rates', 'ip_tax_rates.tax_rate_id = ip_invoice_tax_rates.tax_rate_id');
@@ -36,6 +46,10 @@ class InvoiceTaxRates extends \Response_Model
 
     /**
      * @return void
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_tax_rates.php
+     * @legacy-function save()
      */
     public function save($id = null, $db_array = null)
     {
@@ -55,6 +69,10 @@ class InvoiceTaxRates extends \Response_Model
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_tax_rates.php
+     * @legacy-function validation_rules()
      */
     public function validation_rules()
     {

@@ -22,6 +22,10 @@ class Templates extends CI_Model
      * @param string $type
      *
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_templates.php
+     * @legacy-function get_invoice_templates()
      */
     public function get_invoice_templates($type = 'pdf')
     {
@@ -40,6 +44,10 @@ class Templates extends CI_Model
      * @param string $type
      *
      * @return array|mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_templates.php
+     * @legacy-function get_quote_templates()
      */
     public function get_quote_templates($type = 'pdf')
     {
@@ -56,6 +64,10 @@ class Templates extends CI_Model
 
     /**
      * @param $files
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/models/Mdl_templates.php
+     * @legacy-function remove_extension()
      */
     private function remove_extension(array $files): array
     {

@@ -22,6 +22,11 @@ class QuotesAjaxController extends AdminController
 {
     public $ajax_controller = true;
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Ajax.php
+     * @legacy-function save()
+     */
     public function save()
     {
         $this->load->model([
@@ -184,6 +189,11 @@ class QuotesAjaxController extends AdminController
         exit(json_encode($response));
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Ajax.php
+     * @legacy-function save_quote_tax_rate()
+     */
     public function save_quote_tax_rate()
     {
         $this->load->model('quotes/quotetaxrates');
@@ -207,6 +217,10 @@ class QuotesAjaxController extends AdminController
 
     /**
      * @param $quote_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Ajax.php
+     * @legacy-function delete_item()
      */
     public function delete_item($quote_id)
     {
@@ -230,6 +244,11 @@ class QuotesAjaxController extends AdminController
         exit(json_encode(['success' => $success]));
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Ajax.php
+     * @legacy-function get_item()
+     */
     public function get_item()
     {
         $this->load->model('quotes/quoteitems');
@@ -239,6 +258,11 @@ class QuotesAjaxController extends AdminController
         exit(json_encode($item));
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Ajax.php
+     * @legacy-function modal_copy_quote()
+     */
     public function modal_copy_quote()
     {
         $this->load->module('layout');
@@ -260,6 +284,11 @@ class QuotesAjaxController extends AdminController
         $this->layout->load_view('quotes/modal_copy_quote', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Ajax.php
+     * @legacy-function copy_quote()
+     */
     public function copy_quote()
     {
         $this->load->model([
@@ -295,6 +324,11 @@ class QuotesAjaxController extends AdminController
         exit(json_encode($response));
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Ajax.php
+     * @legacy-function modal_change_user()
+     */
     public function modal_change_user()
     {
         $this->load->module('layout');
@@ -309,6 +343,11 @@ class QuotesAjaxController extends AdminController
         $this->layout->load_view('layout/ajax/modal_change_user_client', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Ajax.php
+     * @legacy-function change_user()
+     */
     public function change_user()
     {
         $this->load->model([
@@ -344,6 +383,11 @@ class QuotesAjaxController extends AdminController
         exit(json_encode($response));
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Ajax.php
+     * @legacy-function modal_change_client()
+     */
     public function modal_change_client()
     {
         $this->load->module('layout');
@@ -358,6 +402,11 @@ class QuotesAjaxController extends AdminController
         $this->layout->load_view('layout/ajax/modal_change_user_client', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Ajax.php
+     * @legacy-function change_client()
+     */
     public function change_client()
     {
         $this->load->model([
@@ -393,6 +442,11 @@ class QuotesAjaxController extends AdminController
         exit(json_encode($response));
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Ajax.php
+     * @legacy-function modal_create_quote()
+     */
     public function modal_create_quote()
     {
         $this->load->module('layout');
@@ -412,6 +466,11 @@ class QuotesAjaxController extends AdminController
         $this->layout->load_view('quotes/modal_create_quote', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Ajax.php
+     * @legacy-function create()
+     */
     public function create()
     {
         $this->load->model('quotes/quote');
@@ -434,6 +493,11 @@ class QuotesAjaxController extends AdminController
         exit(json_encode($response));
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Ajax.php
+     * @legacy-function modal_quote_to_invoice()
+     */
     public function modal_quote_to_invoice($quote_id)
     {
         $this->load->model([
@@ -450,6 +514,11 @@ class QuotesAjaxController extends AdminController
         $this->load->view('quotes/modal_quote_to_invoice', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/quotes/controllers/Ajax.php
+     * @legacy-function quote_to_invoice()
+     */
     public function quote_to_invoice()
     {
         $this->load->model([

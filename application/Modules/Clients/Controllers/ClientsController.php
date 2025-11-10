@@ -32,6 +32,11 @@ class ClientsController extends AdminController
         $this->load->model('clients/client');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/controllers/Clients.php
+     * @legacy-function index()
+     */
     public function index(): void
     {
         // Display active clients by default
@@ -40,6 +45,10 @@ class ClientsController extends AdminController
 
     /**
      * @param int $page
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/controllers/Clients.php
+     * @legacy-function status()
      */
     public function status(string $status = 'active', $page = 0): void
     {
@@ -78,6 +87,11 @@ class ClientsController extends AdminController
         $this->layout->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/controllers/Clients.php
+     * @legacy-function form()
+     */
     public function form($id = null): void
     {
         if ($this->input->post('btn_cancel')) {
@@ -222,6 +236,10 @@ class ClientsController extends AdminController
 
     /**
      * @param int $client_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/controllers/Clients.php
+     * @legacy-function view()
      */
     public function view($client_id, $activeTab = 'detail', $page = 0): void
     {
@@ -333,6 +351,10 @@ class ClientsController extends AdminController
 
     /**
      * @param int $client_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/controllers/Clients.php
+     * @legacy-function delete()
      */
     public function delete($client_id): void
     {
@@ -340,6 +362,11 @@ class ClientsController extends AdminController
         redirect('clients');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/controllers/Clients.php
+     * @legacy-function get_client_title_choices()
+     */
     private function get_client_title_choices(): array
     {
         return array_map(
@@ -348,6 +375,11 @@ class ClientsController extends AdminController
         );
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/clients/controllers/Clients.php
+     * @legacy-function check_client_einvoice_active()
+     */
     private function check_client_einvoice_active($client, $req_einvoicing) {
         // Update active eInvoicing client
         $o = $client->client_einvoicing_active;

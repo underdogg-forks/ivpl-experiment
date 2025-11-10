@@ -22,6 +22,11 @@ class InvoicesAjaxController extends AdminController
 {
     public $ajax_controller = true;
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Ajax.php
+     * @legacy-function save()
+     */
     public function save()
     {
         $this->load->model([
@@ -221,6 +226,11 @@ class InvoicesAjaxController extends AdminController
         exit(json_encode($response));
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Ajax.php
+     * @legacy-function save_invoice_tax_rate()
+     */
     public function save_invoice_tax_rate()
     {
         $this->load->model('invoices/invoicetaxrates');
@@ -244,6 +254,10 @@ class InvoicesAjaxController extends AdminController
 
     /**
      * @param $invoice_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Ajax.php
+     * @legacy-function delete_item()
      */
     public function delete_item($invoice_id)
     {
@@ -272,6 +286,11 @@ class InvoicesAjaxController extends AdminController
         exit(json_encode(['success' => $success]));
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Ajax.php
+     * @legacy-function get_item()
+     */
     public function get_item()
     {
         $this->load->model('invoices/items');
@@ -281,6 +300,11 @@ class InvoicesAjaxController extends AdminController
         echo json_encode($item);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Ajax.php
+     * @legacy-function modal_copy_invoice()
+     */
     public function modal_copy_invoice()
     {
         $this->load->module('layout');
@@ -303,6 +327,11 @@ class InvoicesAjaxController extends AdminController
         $this->layout->load_view('invoices/modal_copy_invoice', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Ajax.php
+     * @legacy-function copy_invoice()
+     */
     public function copy_invoice()
     {
         $this->load->model([
@@ -338,6 +367,11 @@ class InvoicesAjaxController extends AdminController
         exit(json_encode($response));
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Ajax.php
+     * @legacy-function modal_change_user()
+     */
     public function modal_change_user()
     {
         $this->load->module('layout');
@@ -352,6 +386,11 @@ class InvoicesAjaxController extends AdminController
         $this->layout->load_view('layout/ajax/modal_change_user_client', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Ajax.php
+     * @legacy-function change_user()
+     */
     public function change_user()
     {
         $this->load->model([
@@ -387,6 +426,11 @@ class InvoicesAjaxController extends AdminController
         exit(json_encode($response));
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Ajax.php
+     * @legacy-function modal_change_client()
+     */
     public function modal_change_client()
     {
         $this->load->module('layout');
@@ -401,6 +445,11 @@ class InvoicesAjaxController extends AdminController
         $this->layout->load_view('layout/ajax/modal_change_user_client', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Ajax.php
+     * @legacy-function change_client()
+     */
     public function change_client()
     {
         $this->load->model([
@@ -436,6 +485,11 @@ class InvoicesAjaxController extends AdminController
         exit(json_encode($response));
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Ajax.php
+     * @legacy-function modal_create_invoice()
+     */
     public function modal_create_invoice()
     {
         $this->load->module('layout');
@@ -455,6 +509,11 @@ class InvoicesAjaxController extends AdminController
         $this->layout->load_view('invoices/modal_create_invoice', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Ajax.php
+     * @legacy-function create()
+     */
     public function create()
     {
         $this->load->model('invoices/invoice');
@@ -477,6 +536,11 @@ class InvoicesAjaxController extends AdminController
         exit(json_encode($response));
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Ajax.php
+     * @legacy-function create_recurring()
+     */
     public function create_recurring()
     {
         $this->load->model('invoices/invoicesrecurring');
@@ -498,6 +562,11 @@ class InvoicesAjaxController extends AdminController
         exit(json_encode($response));
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Ajax.php
+     * @legacy-function modal_create_recurring()
+     */
     public function modal_create_recurring()
     {
         $this->load->module('layout');
@@ -512,6 +581,11 @@ class InvoicesAjaxController extends AdminController
         $this->layout->load_view('invoices/modal_create_recurring', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Ajax.php
+     * @legacy-function get_recur_start_date()
+     */
     public function get_recur_start_date()
     {
         $invoice_date    = $this->input->post('invoice_date');
@@ -520,6 +594,11 @@ class InvoicesAjaxController extends AdminController
         echo increment_user_date($invoice_date, $recur_frequency);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Ajax.php
+     * @legacy-function modal_create_credit()
+     */
     public function modal_create_credit()
     {
         $this->load->module('layout');
@@ -539,6 +618,11 @@ class InvoicesAjaxController extends AdminController
         $this->layout->load_view('invoices/modal_create_credit', $data);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Ajax.php
+     * @legacy-function create_credit()
+     */
     public function create_credit()
     {
         $this->load->model([

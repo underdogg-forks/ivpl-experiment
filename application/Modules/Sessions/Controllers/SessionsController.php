@@ -18,11 +18,21 @@ if ( ! defined('BASEPATH')) {
 #[AllowDynamicProperties]
 class SessionsController extends \Base_Controller
 {
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/sessions/controllers/Sessions.php
+     * @legacy-function index()
+     */
     public function index()
     {
         redirect('sessions/login');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/sessions/controllers/Sessions.php
+     * @legacy-function login()
+     */
     public function login()
     {
         $view_data = [
@@ -60,6 +70,10 @@ class SessionsController extends \Base_Controller
     /**
      * @param $email_address
      * @param $password
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/sessions/controllers/Sessions.php
+     * @legacy-function authenticate()
      */
     public function authenticate($email_address, $password): bool
     {
@@ -80,6 +94,11 @@ class SessionsController extends \Base_Controller
         return false;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/sessions/controllers/Sessions.php
+     * @legacy-function logout()
+     */
     public function logout()
     {
         $this->session->sess_destroy();
@@ -89,6 +108,10 @@ class SessionsController extends \Base_Controller
 
     /**
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/sessions/controllers/Sessions.php
+     * @legacy-function passwordreset()
      */
     public function passwordreset($token = null)
     {
@@ -301,6 +324,10 @@ class SessionsController extends \Base_Controller
      * @param string $username
      *
      * @return object
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/sessions/controllers/Sessions.php
+     * @legacy-function _login_log_check()
      */
     private function _login_log_check($username)
     {
@@ -329,6 +356,10 @@ class SessionsController extends \Base_Controller
      * @param int $window_minutes Time window in minutes
      *
      * @return bool True if rate limited, false otherwise
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/sessions/controllers/Sessions.php
+     * @legacy-function _is_ip_rate_limited_password_reset()
      */
     private function _is_ip_rate_limited_password_reset($max_attempts, $window_minutes)
     {
@@ -356,6 +387,10 @@ class SessionsController extends \Base_Controller
 
     /**
      * Record a password reset attempt for the current IP in database
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/sessions/controllers/Sessions.php
+     * @legacy-function _record_password_reset_attempt()
      */
     private function _record_password_reset_attempt()
     {
@@ -377,6 +412,10 @@ class SessionsController extends \Base_Controller
      * @param int $window_hours Time window in hours
      *
      * @return bool True if rate limited, false otherwise
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/sessions/controllers/Sessions.php
+     * @legacy-function _is_email_rate_limited_password_reset()
      */
     private function _is_email_rate_limited_password_reset($email, $max_attempts, $window_hours)
     {
@@ -405,6 +444,10 @@ class SessionsController extends \Base_Controller
      * Record a password reset attempt for a specific email in database
      *
      * @param string $email Email address
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/sessions/controllers/Sessions.php
+     * @legacy-function _record_email_password_reset_attempt()
      */
     private function _record_email_password_reset_attempt($email)
     {
@@ -425,6 +468,10 @@ class SessionsController extends \Base_Controller
      * a record for the given user is created.
      *
      * @param string $username
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/sessions/controllers/Sessions.php
+     * @legacy-function _login_log_addfailure()
      */
     private function _login_log_addfailure($username)
     {
@@ -451,6 +498,10 @@ class SessionsController extends \Base_Controller
      * login_log table.
      *
      * @param string $username
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/sessions/controllers/Sessions.php
+     * @legacy-function _login_log_reset()
      */
     private function _login_log_reset($username)
     {

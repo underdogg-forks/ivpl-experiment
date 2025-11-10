@@ -30,6 +30,11 @@ class InvoicesController extends AdminController
         $this->load->model('invoices/invoice');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Invoices.php
+     * @legacy-function index()
+     */
     public function index(): void
     {
         // Display all invoices by default
@@ -38,6 +43,10 @@ class InvoicesController extends AdminController
 
     /**
      * @param int $page
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Invoices.php
+     * @legacy-function status()
      */
     public function status(string $status = 'all', $page = 0): void
     {
@@ -78,6 +87,11 @@ class InvoicesController extends AdminController
         $this->layout->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Invoices.php
+     * @legacy-function archive()
+     */
     public function archive(): void
     {
         $invoice_array = $this->invoice->get_archives(0);
@@ -93,6 +107,11 @@ class InvoicesController extends AdminController
         $this->layout->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Invoices.php
+     * @legacy-function download()
+     */
     public function download($invoice): void
     {
         $safeBaseDir = realpath(UPLOADS_ARCHIVE_FOLDER);
@@ -121,6 +140,11 @@ class InvoicesController extends AdminController
         exit;
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Invoices.php
+     * @legacy-function view()
+     */
     public function view($invoice_id): void
     {
         $this->load->model(
@@ -229,6 +253,11 @@ class InvoicesController extends AdminController
         $this->layout->render();
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Invoices.php
+     * @legacy-function delete()
+     */
     public function delete($invoice_id): void
     {
         // Get the status of the invoice
@@ -254,6 +283,10 @@ class InvoicesController extends AdminController
     /**
      * @param      $invoice_id
      * @param bool $stream
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Invoices.php
+     * @legacy-function generate_pdf()
      */
     public function generate_pdf($invoice_id, $stream = true, $invoice_template = null): void
     {
@@ -267,6 +300,11 @@ class InvoicesController extends AdminController
         generate_invoice_pdf($invoice_id, $stream, $invoice_template, null);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Invoices.php
+     * @legacy-function generate_xml()
+     */
     public function generate_xml($invoice_id): void
     {
         $invoice = $this->invoice->get_by_id($invoice_id);
@@ -302,6 +340,11 @@ class InvoicesController extends AdminController
         unlink($path);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Invoices.php
+     * @legacy-function generate_sumex_pdf()
+     */
     public function generate_sumex_pdf($invoice_id): void
     {
         $this->load->helper('pdf');
@@ -309,6 +352,11 @@ class InvoicesController extends AdminController
         generate_invoice_sumex($invoice_id);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Invoices.php
+     * @legacy-function generate_sumex_copy()
+     */
     public function generate_sumex_copy($invoice_id): void
     {
         $this->load->model('invoices/items');
@@ -325,6 +373,11 @@ class InvoicesController extends AdminController
         $this->output->set_output($this->sumex->pdf());
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Invoices.php
+     * @legacy-function delete_invoice_tax()
+     */
     public function delete_invoice_tax(string $invoice_id, $invoice_tax_rate_id): void
     {
         $this->load->model('invoices/invoicetaxrates');
@@ -338,6 +391,11 @@ class InvoicesController extends AdminController
         redirect('invoices/view/' . $invoice_id);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/invoices/controllers/Invoices.php
+     * @legacy-function recalculate_all_invoices()
+     */
     public function recalculate_all_invoices(): void
     {
         $this->db->select('invoice_id');

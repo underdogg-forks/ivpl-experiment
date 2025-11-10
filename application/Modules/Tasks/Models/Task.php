@@ -24,6 +24,11 @@ class Task extends ResponseModel
 
     public $primary_key = 'ip_tasks.task_id';
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/tasks/models/Mdl_task.php
+     * @legacy-function default_select()
+     */
     public function default_select()
     {
         $this->db->select('SQL_CALC_FOUND_ROWS *,
@@ -31,16 +36,31 @@ class Task extends ResponseModel
         ', false);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/tasks/models/Mdl_task.php
+     * @legacy-function default_order_by()
+     */
     public function default_order_by()
     {
         $this->db->order_by('ip_projects.project_name, ip_tasks.task_name');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/tasks/models/Mdl_task.php
+     * @legacy-function default_join()
+     */
     public function default_join()
     {
         $this->db->join('ip_projects', 'ip_projects.project_id = ip_tasks.project_id', 'left');
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/tasks/models/Mdl_task.php
+     * @legacy-function get_latest()
+     */
     public function get_latest()
     {
         $this->db->order_by('ip_tasks.task_id', 'DESC');
@@ -50,6 +70,10 @@ class Task extends ResponseModel
 
     /**
      * @param string $match
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/tasks/models/Mdl_task.php
+     * @legacy-function by_task()
      */
     public function by_task($match)
     {
@@ -59,6 +83,10 @@ class Task extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/tasks/models/Mdl_task.php
+     * @legacy-function validation_rules()
      */
     public function validation_rules()
     {
@@ -100,6 +128,10 @@ class Task extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/tasks/models/Mdl_task.php
+     * @legacy-function db_array()
      */
     public function db_array()
     {
@@ -113,6 +145,10 @@ class Task extends ResponseModel
 
     /**
      * @param null|int $id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/tasks/models/Mdl_task.php
+     * @legacy-function prep_form()
      */
     public function prep_form($id = null): bool
     {
@@ -132,6 +168,10 @@ class Task extends ResponseModel
      * @param int $task_id
      *
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/tasks/models/Mdl_task.php
+     * @legacy-function get_invoice_for_task()
      */
     public function get_invoice_for_task($task_id)
     {
@@ -157,6 +197,10 @@ class Task extends ResponseModel
      * @param int $invoice_id
      *
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/tasks/models/Mdl_task.php
+     * @legacy-function get_tasks_to_invoice()
      */
     public function get_tasks_to_invoice($invoice_id)
     {
@@ -200,6 +244,10 @@ class Task extends ResponseModel
 
     /**
      * @param int $invoice_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/tasks/models/Mdl_task.php
+     * @legacy-function update_on_invoice_delete()
      */
     public function update_on_invoice_delete($invoice_id)
     {
@@ -221,6 +269,10 @@ class Task extends ResponseModel
     /**
      * @param int $new_status
      * @param int $task_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/tasks/models/Mdl_task.php
+     * @legacy-function update_status()
      */
     public function update_status($new_status, $task_id)
     {
@@ -232,6 +284,10 @@ class Task extends ResponseModel
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/tasks/models/Mdl_task.php
+     * @legacy-function statuses()
      */
     public function statuses()
     {
@@ -257,6 +313,10 @@ class Task extends ResponseModel
 
     /**
      * @param int $project_id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/tasks/models/Mdl_task.php
+     * @legacy-function update_on_project_delete()
      */
     public function update_on_project_delete($project_id)
     {

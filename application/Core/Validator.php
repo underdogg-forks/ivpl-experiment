@@ -20,6 +20,10 @@ class Validator extends MY_Model
 {
     /**
      * @return bool
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/Validator.php
+     * @legacy-function validate_text()
      */
     public function validate_text()
     {
@@ -30,6 +34,10 @@ class Validator extends MY_Model
      * @param $value
      *
      * @return bool|null
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/Validator.php
+     * @legacy-function validate_date()
      */
     public function validate_date($value)
     {
@@ -50,6 +58,10 @@ class Validator extends MY_Model
      * @param $value
      *
      * @return bool|null
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/Validator.php
+     * @legacy-function validate_boolean()
      */
     public function validate_boolean($value)
     {
@@ -69,6 +81,10 @@ class Validator extends MY_Model
      * @param int    $key
      *
      * @return bool|null
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/Validator.php
+     * @legacy-function validate_singlechoice()
      */
     public function validate_singlechoice($value, $key)
     {
@@ -86,6 +102,10 @@ class Validator extends MY_Model
      * @param int   $id
      *
      * @return bool|null
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/Validator.php
+     * @legacy-function validate_multiplechoice()
      */
     public function validate_multiplechoice($values, $id)
     {
@@ -103,6 +123,10 @@ class Validator extends MY_Model
 
     /**
      * @return array
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/Validator.php
+     * @legacy-function validation_rules()
      */
     public function validation_rules()
     {
@@ -127,6 +151,10 @@ class Validator extends MY_Model
 
     /**
      * @param $column
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/Validator.php
+     * @legacy-function get_field_type()
      */
     public function get_field_type($column)
     {
@@ -144,6 +172,10 @@ class Validator extends MY_Model
      * @param $array
      *
      * @return bool|string
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/Validator.php
+     * @legacy-function validate()
      */
     public function validate($array)
     {
@@ -204,6 +236,10 @@ class Validator extends MY_Model
      * @param $key
      *
      * @return mixed
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/Validator.php
+     * @legacy-function validate_type()
      */
     public function validate_type($type, $value, $key)
     {
@@ -213,6 +249,11 @@ class Validator extends MY_Model
         return $this->{$validation_rule}($value, $key);
     }
 
+    /**
+     * Legacy migration info:
+     * @legacy-file application/core/Validator.php
+     * @legacy-function fixinput()
+     */
     public function fixinput()
     {
         foreach ($this->_formdata as $key => $value) {
@@ -249,6 +290,10 @@ class Validator extends MY_Model
      * @param $errors
      *
      * @return string
+     *
+     * Legacy migration info:
+     * @legacy-file application/core/Validator.php
+     * @legacy-function create_error_text()
      */
     public function create_error_text($errors)
     {
