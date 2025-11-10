@@ -23,27 +23,45 @@ if (! defined('BASEPATH')) {
 
 // Load all PSR-4 core classes in dependency order
 $coreClasses = [
-    'MY_Model',
-    'Form_Validation_Model',
-    'Response_Model',
+    'MyModel',
+    'FormValidationModel',
+    'ResponseModel',
     'Validator',
-    'Base_Controller',
-    'User_Controller',
-    'Admin_Controller',
-    'Guest_Controller',
+    'BaseController',
+    'UserController',
+    'AdminController',
+    'GuestController',
 ];
 
 foreach ($coreClasses as $class) {
     $psr4Class = "App\\Core\\$class";
-    $filePath = __DIR__ . "/Core/$class.php";
+    $filePath = __DIR__ . "/../Core/$class.php";
     
     // Load the PSR-4 class file
     if (file_exists($filePath)) {
         require_once $filePath;
         
-        // Create global alias for backward compatibility
-        if (class_exists($psr4Class) && !class_exists($class, false)) {
-            class_alias($psr4Class, $class);
+        // Create global alias for backward compatibility (convert to old names with underscores)
+        $legacyClass = $class;
+        // Convert PascalCase to Snake_Case for legacy compatibility
+        if ($class === 'MyModel') {
+            $legacyClass = 'MY_Model';
+        } elseif ($class === 'FormValidationModel') {
+            $legacyClass = 'Form_Validation_Model';
+        } elseif ($class === 'ResponseModel') {
+            $legacyClass = 'Response_Model';
+        } elseif ($class === 'BaseController') {
+            $legacyClass = 'Base_Controller';
+        } elseif ($class === 'UserController') {
+            $legacyClass = 'User_Controller';
+        } elseif ($class === 'AdminController') {
+            $legacyClass = 'Admin_Controller';
+        } elseif ($class === 'GuestController') {
+            $legacyClass = 'Guest_Controller';
+        }
+        
+        if (class_exists($psr4Class) && !class_exists($legacyClass, false)) {
+            class_alias($psr4Class, $legacyClass);
         }
     }
 }

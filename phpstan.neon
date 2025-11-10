@@ -1,0 +1,15 @@
+parameters:
+    level: 0
+    paths:
+        - application/Core
+        - application/Modules
+        - application/libraries
+    excludePaths:
+        - vendor
+    
+    # Include baseline to ignore existing issues
+    baseline: phpstan-baseline.neon
+    
+    # Additional options
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
