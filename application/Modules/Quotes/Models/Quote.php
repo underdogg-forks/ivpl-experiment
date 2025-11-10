@@ -226,7 +226,7 @@ class Quote extends ResponseModel
      */
     public function copy_quote($source_id, $target_id)
     {
-        $this->load->model('quotes/mdl_quote_item');
+        $this->load->model('quotes/quote_item');
 
         // Discounts calculation - since v1.6.3 Need if taxes applied after discounts
         $quote           = $this->get_by_id($source_id); // This is the original quote
@@ -278,7 +278,7 @@ class Quote extends ResponseModel
         }
 
         // Copy the custom fields
-        $this->load->model('custom_fields/mdl_quote_custom');
+        $this->load->model('custom_fields/quote_custom');
         $db_array = $this->mdl_quote_custom->where('quote_id', $source_id)->get()->row_array() ?? [];
 
         if (count($db_array) > 2) {
@@ -300,7 +300,7 @@ class Quote extends ResponseModel
         $db_array = parent::db_array();
 
         // Get the client id for the submitted quote
-        $this->load->model('clients/mdl_clients');
+        $this->load->model('clients/client');
         $cid                   = $this->mdl_clients->where('ip_clients.client_id', $db_array['client_id'])->get()->row()->client_id;
         $db_array['client_id'] = $cid;
 
@@ -355,7 +355,7 @@ class Quote extends ResponseModel
      */
     public function get_quote_number($invoice_group_id)
     {
-        $this->load->model('invoice_groups/mdl_invoice_group');
+        $this->load->model('invoice_groups/invoice_group');
 
         return $this->mdl_invoice_groups->generate_invoice_number($invoice_group_id);
     }

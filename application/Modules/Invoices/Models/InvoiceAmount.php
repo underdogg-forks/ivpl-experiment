@@ -113,7 +113,7 @@ class InvoiceAmount extends CI_Model
         $this->calculate_invoice_taxes($invoice_id);
 
         // Get invoice status
-        $this->load->model('invoices/mdl_invoices');
+        $this->load->model('invoices/invoice');
         $invoice           = $this->mdl_invoices->get_by_id($invoice_id);
         $invoice_is_credit = ($invoice->creditinvoice_parent_id > 0);
 
@@ -197,7 +197,7 @@ class InvoiceAmount extends CI_Model
     public function calculate_invoice_taxes($invoice_id)
     {
         // First check to see if there are any invoice taxes applied
-        $this->load->model('invoices/mdl_invoice_tax_rate');
+        $this->load->model('invoices/invoice_tax_rate');
         // Only appliable in legacy calculation - since 1.6.3
         $invoice_tax_rates = config_item('legacy_calculation') ? $this->mdl_invoice_tax_rates->where('invoice_id', $invoice_id)->get()->result() : null;
 

@@ -308,7 +308,7 @@ class Setup extends CI_Model
         }
 
         // Copy the invoice pdf footer to the new quote pdf footer setting
-        $this->load->model('settings/mdl_setting');
+        $this->load->model('settings/setting');
         $this->mdl_settings->load_settings();
         $this->load->helper('settings');
 

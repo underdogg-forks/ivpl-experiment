@@ -28,7 +28,7 @@ class GuestController extends UserController
     {
         parent::__construct('user_type', 2);
 
-        $this->load->model('user_clients/mdl_user_client');
+        $this->load->model('user_clients/user_client');
 
         $user_clients = $this->mdl_user_clients->assigned_to($this->session->userdata('user_id'))->get()->result();
 

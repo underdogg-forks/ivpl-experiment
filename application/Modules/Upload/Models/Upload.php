@@ -90,7 +90,7 @@ class Upload extends ResponseModel
      */
     public function get_quote_uploads($id)
     {
-        $this->load->model('quotes/mdl_quotes');
+        $this->load->model('quotes/quote');
         $quote = $this->mdl_quotes->get_by_id($id);
         $query = $this->db->query("SELECT file_name_new,file_name_original FROM ip_uploads WHERE url_key = '" . $quote->quote_url_key . "'");
 
@@ -119,7 +119,7 @@ class Upload extends ResponseModel
      */
     public function get_invoice_uploads($id)
     {
-        $this->load->model('invoices/mdl_invoices');
+        $this->load->model('invoices/invoice');
         $invoice = $this->mdl_invoices->get_by_id($id);
         $query   = $this->db->query("SELECT file_name_new,file_name_original FROM ip_uploads WHERE url_key = '" . $invoice->invoice_url_key . "'");
 

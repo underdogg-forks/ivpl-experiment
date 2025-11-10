@@ -101,7 +101,7 @@ class UserClient extends \MY_Model
      */
     public function set_all_clients_user($users_id)
     {
-        $this->load->model('clients/mdl_clients');
+        $this->load->model('clients/client');
 
         $nbUsers = count($users_id);
         for ($x = 0; $x < $nbUsers; $x++) {
@@ -125,7 +125,7 @@ class UserClient extends \MY_Model
      */
     public function get_users_all_clients()
     {
-        $this->load->model('users/mdl_users');
+        $this->load->model('users/user');
         $users = $this->mdl_users->where('user_all_clients', 1)->get()->result();
 
         $new_users = [];

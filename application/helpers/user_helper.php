@@ -21,7 +21,7 @@ function format_user($user): string
     if ($user && is_numeric($user)) {
         $CI = & get_instance();
         if ( ! property_exists($CI, 'mdl_users')) {
-            $CI->load->model('users/mdl_users');
+            $CI->load->model('users/user');
         }
 
         $user = $CI->mdl_users->get_by_id($user);

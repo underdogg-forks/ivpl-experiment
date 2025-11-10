@@ -92,7 +92,7 @@ class Validator extends MY_Model
             return;
         }
 
-        $this->load->model('custom_values/mdl_custom_value', 'custom_value');
+        $this->load->model('custom_values/custom_value', 'custom_value');
 
         return $this->custom_value->column_has_value($key, $value);
     }
@@ -114,7 +114,7 @@ class Validator extends MY_Model
             return;
         }
 
-        $this->load->model('custom_values/mdl_custom_value', 'custom_value');
+        $this->load->model('custom_values/custom_value', 'custom_value');
         $this->custom_value->where('custom_field_id', $id);
         $dbvals = $this->custom_value->where_in('custom_values_id', $values)->get();
 
@@ -158,7 +158,7 @@ class Validator extends MY_Model
      */
     public function get_field_type($column)
     {
-        $this->load->model('custom_values/mdl_custom_fields', 'cf');
+        $this->load->model('custom_values/custom_field', 'cf');
         $el = $this->cf->get_by_column($column)->row();
 
         if ($el == null) {
@@ -179,8 +179,8 @@ class Validator extends MY_Model
      */
     public function validate($array)
     {
-        $this->load->model('custom_fields/mdl_custom_field');
-        $this->load->model('custom_values/mdl_custom_value');
+        $this->load->model('custom_fields/custom_field');
+        $this->load->model('custom_values/custom_value');
 
         $db_array = $array;
         $errors   = [];

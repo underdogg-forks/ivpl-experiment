@@ -116,7 +116,7 @@ class Report extends CI_Model
      */
     public function payment_history($from_date = null, $to_date = null)
     {
-        $this->load->model('payments/mdl_payments');
+        $this->load->model('payments/payment');
 
         if ($from_date && $to_date) {
             $from_date = date_to_mysql($from_date);

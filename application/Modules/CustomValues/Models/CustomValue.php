@@ -139,7 +139,7 @@ class CustomValue extends \MY_Model
             return;
         }
 
-        $this->load->model('custom_fields/mdl_custom_field');
+        $this->load->model('custom_fields/custom_field');
         $cv = $this->get_by_id($id)->row();
         $cf = $this->mdl_custom_fields->get_by_id($cv->custom_values_field);
         unset($cv);

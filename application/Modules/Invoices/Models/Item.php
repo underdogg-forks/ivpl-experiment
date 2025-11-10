@@ -172,7 +172,7 @@ class Item extends \Response_Model
         $this->db->where('item_id', $item_id);
         $this->db->delete('ip_invoice_item_amounts');
 
-        $this->load->model('invoices/mdl_invoice_amount');
+        $this->load->model('invoices/invoice_amount');
         $global_discount['item'] = $this->mdl_invoice_amounts->get_global_discount($invoice_id);
         // Recalculate invoice amounts
         $this->mdl_invoice_amounts->calculate($invoice_id, $global_discount);

@@ -56,7 +56,7 @@ class InvoiceTaxRate extends \Response_Model
         // Only appliable in legacy calculation - since 1.6.3
         config_item('legacy_calculation') && parent::save($id, $db_array);
 
-        $this->load->model('invoices/mdl_invoice_amount');
+        $this->load->model('invoices/invoice_amount');
 
         $invoice_id = $db_array['invoice_id'] ?? $this->input->post('invoice_id');
 

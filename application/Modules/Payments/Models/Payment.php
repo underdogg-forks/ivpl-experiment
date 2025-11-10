@@ -153,7 +153,7 @@ class Payment extends ResponseModel
     public function save($id = null, $db_array = null)
     {
         $db_array = ($db_array) ? $db_array : $this->db_array();
-        $this->load->model('invoices/mdl_invoice_amount');
+        $this->load->model('invoices/invoice_amount');
 
         // Save the payment
         $id = parent::save($id, $db_array);
@@ -219,7 +219,7 @@ class Payment extends ResponseModel
         // Delete the payment
         parent::delete($id);
 
-        $this->load->model('invoices/mdl_invoice_amount');
+        $this->load->model('invoices/invoice_amount');
         $global_discount['item'] = $this->mdl_invoice_amounts->get_global_discount($invoice_id);
         // Recalculate invoice amounts
         $this->mdl_invoice_amounts->calculate($invoice_id, $global_discount);

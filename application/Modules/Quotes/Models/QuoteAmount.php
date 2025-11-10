@@ -158,7 +158,7 @@ class QuoteAmount extends CI_Model
     public function calculate_quote_taxes($quote_id)
     {
         // First check to see if there are any quote taxes applied
-        $this->load->model('quotes/mdl_quote_tax_rate');
+        $this->load->model('quotes/quote_tax_rate');
         // Only appliable in legacy calculation - since 1.6.3
         $quote_tax_rates = config_item('legacy_calculation') ? $this->mdl_quote_tax_rates->where('quote_id', $quote_id)->get()->result() : null;
 

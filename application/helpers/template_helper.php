@@ -86,7 +86,7 @@ function parse_template($object, $body)
                     if (preg_match('/ip_cf_(\d.*)/', $var, $cf_id)) {
                         // Get the custom field
                         $CI = & get_instance();
-                        $CI->load->model('custom_fields/mdl_custom_fields');
+                        $CI->load->model('custom_fields/custom_field');
                         $cf = $CI->mdl_custom_fields->get_by_id($cf_id[1]);
 
                         if ($cf) {
@@ -94,7 +94,7 @@ function parse_template($object, $body)
                             $cf_model = str_replace('ip_', 'mdl_', $cf->custom_field_table);
                             $replace  = $CI->mdl_custom_fields->get_value_for_field($cf_id[1], $cf_model, $object);
                             if ($cf->custom_field_type == 'SINGLE-CHOICE') {
-                                $CI->load->model('custom_values/mdl_custom_values', 'cv');
+                                $CI->load->model('custom_values/custom_value', 'cv');
                                 $el      = $CI->cv->get_by_id($replace)->row();
                                 $replace = $el->custom_values_value;
                             }
@@ -125,7 +125,7 @@ function get_invoice_status($id)
     $CI = & get_instance();
 
     if (empty($CI->mdl_invoices)) {
-        $CI->load->model('invoices/mdl_invoices');
+        $CI->load->model('invoices/invoice');
     }
 
     $statuses = $CI->mdl_invoices->statuses();

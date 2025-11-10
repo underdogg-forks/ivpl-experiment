@@ -125,7 +125,7 @@ function _dropzone_script($url_key = null, $client_id = 1, $site_url = '', $acce
     if ($acceptedExts === null) {
         // Default
         $CI = & get_instance();
-        $CI->load->model('upload/mdl_uploads');
+        $CI->load->model('upload/upload');
         $content_types = array_keys($CI->mdl_uploads->content_types);
     } elseif (is_array($acceptedExts)) {
         // User Overide

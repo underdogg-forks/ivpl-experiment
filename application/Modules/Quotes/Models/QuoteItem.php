@@ -161,7 +161,7 @@ class QuoteItem extends \Response_Model
         $this->db->where('item_id', $item_id);
         $this->db->delete('ip_quote_item_amounts');
 
-        $this->load->model('quotes/mdl_quote_amount');
+        $this->load->model('quotes/quote_amount');
         $global_discount['item'] = $this->mdl_quote_amounts->get_global_discount($quote_id);
         // Recalculate quote amounts
         $this->mdl_quote_amounts->calculate($quote_id, $global_discount);

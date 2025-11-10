@@ -34,7 +34,7 @@ class ItemAmount extends CI_Model
      */
     public function calculate($item_id, &$global_discount)
     {
-        $this->load->model('invoices/mdl_item');
+        $this->load->model('invoices/item');
         $item = $this->mdl_items->get_by_id($item_id);
 
         $item_subtotal = $item->item_quantity * $item->item_price;

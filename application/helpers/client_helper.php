@@ -23,7 +23,7 @@ function format_client($client, $show_title = true): string
     if ($client && is_numeric($client)) {
         $CI = & get_instance();
         if ( ! property_exists($CI, 'mdl_clients')) {
-            $CI->load->model('clients/mdl_clients');
+            $CI->load->model('clients/client');
         }
 
         $client = $CI->mdl_clients->get_by_id($client);

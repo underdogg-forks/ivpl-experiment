@@ -93,7 +93,7 @@ class Setting extends CI_Model
         }
 
         // Append current version to the settings
-        $this->load->model('settings/mdl_version');
+        $this->load->model('settings/version');
         $this->setting['current_version'] = $this->mdl_versions->get_current_version();
     }
 

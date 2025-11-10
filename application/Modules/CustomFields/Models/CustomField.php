@@ -50,7 +50,7 @@ class CustomField extends \MY_Model
     public static function custom_types()
     {
         $CI = &get_instance();
-        $CI->load->model('custom_values/mdl_custom_value');
+        $CI->load->model('custom_values/custom_value');
 
         return Mdl_Custom_Values::custom_types();
     }
@@ -298,7 +298,7 @@ class CustomField extends \MY_Model
             $custom_field = $this->get_by_id($id);
             // Remove MULTIPLE|SINGLE CHOICE values
             if (preg_match('/CHOICE/', $custom_field->custom_field_type)) {
-                $this->load->model('custom_values/mdl_custom_value');
+                $this->load->model('custom_values/custom_value');
                 $this->mdl_custom_values->delete_all_fid($id);
             }
 
@@ -393,7 +393,7 @@ class CustomField extends \MY_Model
     public function get_values_for_fields($custom_field_model, $model_id)
     {
         $this->load->model('custom_fields/' . $custom_field_model);
-        $this->load->model('custom_values/mdl_custom_value');
+        $this->load->model('custom_values/custom_value');
 
         $fields = $this->{$custom_field_model}->by_id($model_id)->get()->result();
 

@@ -126,7 +126,7 @@ function phpmail_send(
 
     if (get_setting('bcc_mails_to_admin') == 1) {
         // Get email address of admin account and push it to the array
-        $CI->load->model('users/mdl_users');
+        $CI->load->model('users/user');
         $CI->db->where('user_id', 1);
         $admin = $CI->db->get('ip_users')->row();
         $mail->addBCC($admin->user_email);

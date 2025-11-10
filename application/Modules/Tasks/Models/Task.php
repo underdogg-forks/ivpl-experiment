@@ -188,7 +188,7 @@ class Task extends ResponseModel
             return;
         }
 
-        $this->load->model('invoices/mdl_invoices');
+        $this->load->model('invoices/invoice');
 
         return $this->mdl_invoices->get_by_id($invoice_item->invoice_id);
     }

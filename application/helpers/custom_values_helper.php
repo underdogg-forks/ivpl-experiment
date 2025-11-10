@@ -53,7 +53,7 @@ function format_singlechoice($txt)
     }
 
     $CI = get_instance();
-    $CI->load->model('custom_values/mdl_custom_values', 'cv');
+    $CI->load->model('custom_values/custom_value', 'cv');
     $el = $CI->cv->get_by_id($txt)->row();
 
     return $el->custom_values_value;
@@ -69,7 +69,7 @@ function format_multiplechoice($txt): string
     }
 
     $CI = get_instance();
-    $CI->load->model('custom_values/mdl_custom_values', 'cv');
+    $CI->load->model('custom_values/custom_value', 'cv');
 
     $values      = explode(',', $txt);
     $values      = $CI->cv->where_in('custom_values_id', $values)->get()->result();

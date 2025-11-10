@@ -56,7 +56,7 @@ class QuoteTaxRate extends \Response_Model
         // Only appliable in legacy calculation - since 1.6.3
         config_item('legacy_calculation') && parent::save($id, $db_array);
 
-        $this->load->model('quotes/mdl_quote_amount');
+        $this->load->model('quotes/quote_amount');
 
         $quote_id = $db_array['quote_id'] ?? $this->input->post('quote_id');
 

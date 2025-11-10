@@ -378,7 +378,7 @@ class User extends ResponseModel
         $id = parent::save($id, $db_array);
 
         if ($user_clients = $this->session->userdata('user_clients')) {
-            $this->load->model('users/mdl_user_clients');
+            $this->load->model('users/user_client');
 
             foreach ($user_clients as $user_client) {
                 $this->mdl_user_clients->save(null, ['user_id' => $id, 'client_id' => $user_client]);

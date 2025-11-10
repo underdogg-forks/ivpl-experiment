@@ -224,7 +224,7 @@ class Invoice extends ResponseModel
         }
 
         if ($invoice_group !== '0') {
-            $this->load->model('invoice_groups/mdl_invoice_group');
+            $this->load->model('invoice_groups/invoice_group');
             $invgroup = $this->mdl_invoice_groups->where('invoice_group_id', $invoice_group)->get()->row();
             if (preg_match('/sumex/i', $invgroup->invoice_group_name)) {
                 // If the Invoice Group includes "Sumex", make the invoice a Sumex one
@@ -251,8 +251,8 @@ class Invoice extends ResponseModel
      */
     public function copy_invoice($source_id, $target_id, $copy_recurring_items_only = false): void
     {
-        $this->load->model('invoices/mdl_item');
-        $this->load->model('invoices/mdl_invoice_tax_rate');
+        $this->load->model('invoices/item');
+        $this->load->model('invoices/invoice_tax_rate');
 
         // Discounts calculation - since v1.6.3 Need if taxes applied after discounts
         $invoice         = $this->get_by_id($source_id); // This is the original invoice
@@ -310,7 +310,7 @@ class Invoice extends ResponseModel
         }
 
         // Copy the custom fields
-        $this->load->model('custom_fields/mdl_invoice_custom');
+        $this->load->model('custom_fields/invoice_custom');
         $custom_fields = $this->mdl_invoice_custom->where('invoice_id', $source_id)->get()->result();
 
         $form_data = [];
@@ -333,8 +333,8 @@ class Invoice extends ResponseModel
      */
     public function copy_credit_invoice($source_id, $target_id)
     {
-        $this->load->model('invoices/mdl_item');
-        $this->load->model('invoices/mdl_invoice_tax_rate');
+        $this->load->model('invoices/item');
+        $this->load->model('invoices/invoice_tax_rate');
 
         // Discounts calculation - since v1.6.3 Need if taxes applied after discounts
         $invoice         = $this->get_by_id($source_id); // This is the original invoice
@@ -389,7 +389,7 @@ class Invoice extends ResponseModel
         }
 
         // Copy the custom fields
-        $this->load->model('custom_fields/mdl_invoice_custom');
+        $this->load->model('custom_fields/invoice_custom');
         $custom_fields = $this->mdl_invoice_custom->where('invoice_id', $source_id)->get()->result();
 
         $form_data = [];
@@ -412,10 +412,10 @@ class Invoice extends ResponseModel
         $db_array = parent::db_array();
 
         // Get the client id for the submitted invoice
-        $this->load->model('clients/mdl_clients');
+        $this->load->model('clients/client');
 
         // Check if is SUMEX
-        $this->load->model('invoice_groups/mdl_invoice_group');
+        $this->load->model('invoice_groups/invoice_group');
 
         $db_array['invoice_date_created'] = date_to_mysql($db_array['invoice_date_created']);
         $db_array['invoice_date_due']     = $this->get_date_due($db_array['invoice_date_created']);
@@ -455,7 +455,7 @@ class Invoice extends ResponseModel
      */
     public function get_payments($invoice)
     {
-        $this->load->model('payments/mdl_payments');
+        $this->load->model('payments/payment');
 
         $this->db->where('invoice_id', $invoice->invoice_id);
         $payment_results = $this->db->get('ip_payments');
@@ -493,7 +493,7 @@ class Invoice extends ResponseModel
      */
     public function get_invoice_number($invoice_group_id)
     {
-        $this->load->model('invoice_groups/mdl_invoice_group');
+        $this->load->model('invoice_groups/invoice_group');
 
         return $this->mdl_invoice_groups->generate_invoice_number($invoice_group_id);
     }

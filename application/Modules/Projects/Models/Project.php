@@ -101,7 +101,7 @@ class Project extends ResponseModel
             return $result;
         }
 
-        $this->load->model('tasks/mdl_tasks');
+        $this->load->model('tasks/task');
         $query = $this->mdl_tasks->where('ip_tasks.project_id', $project_id)->get();
 
         foreach ($query->result() as $row) {

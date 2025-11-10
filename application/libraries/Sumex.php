@@ -269,7 +269,7 @@ class Sumex
 
         $payment_method = false;
         if ($this->invoice->payment_method != 0) {
-            $CI->load->model('payment_methods/mdl_payment_methods');
+            $CI->load->model('payment_methods/payment_method');
             $payment_method = $CI->mdl_payment_methods->where('payment_method_id', $this->invoice->payment_method)->get()->row();
         }
 

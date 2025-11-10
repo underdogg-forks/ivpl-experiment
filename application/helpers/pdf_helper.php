@@ -205,7 +205,7 @@ function generate_invoice_sumex($invoice_id, $stream = true, $invoice_template =
 {
     $CI = & get_instance();
 
-    $CI->load->model('invoices/mdl_items');
+    $CI->load->model('invoices/item');
     $invoice = $CI->mdl_invoices->get_by_id($invoice_id);
     $CI->load->library('Sumex', [
         'invoice' => $invoice,
