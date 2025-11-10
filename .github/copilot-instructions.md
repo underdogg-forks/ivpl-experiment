@@ -1,5 +1,30 @@
 # GitHub Copilot Instructions for InvoicePlane Modernization
 
+## Table of Contents
+
+1. [Project Overview](#project-overview)
+2. [Current Architecture](#current-architecture)
+3. [Modernization Goals](#modernization-goals)
+4. [Code Style and Standards](#code-style-and-standards)
+5. [Directory Structure](#directory-structure)
+6. [Module Structure](#module-structure)
+7. [HMVC and MX Extensions](#hmvc-and-mx-extensions)
+8. [Assets and Frontend](#assets-and-frontend)
+9. [Database and Models](#database-and-models)
+10. [Testing](#testing)
+11. [Security Best Practices](#security-best-practices)
+12. [Git Workflow](#git-workflow)
+13. [Common Pitfalls to Avoid](#common-pitfalls-to-avoid)
+14. [Local Development Setup](#local-development-setup)
+15. [Debugging](#debugging)
+16. [Performance Considerations](#performance-considerations)
+17. [When in Doubt](#when-in-doubt)
+18. [Helpful Commands](#helpful-commands)
+19. [Project File Structure Overview](#project-file-structure-overview)
+20. [References](#references)
+
+---
+
 ## Project Overview
 InvoicePlane is an ancient CodeIgniter 3 application being modernized to follow modern PHP standards while maintaining backward compatibility.
 
@@ -327,6 +352,108 @@ $this->db->query('SELECT * FROM ip_invoices WHERE invoice_id = ?', [$invoice_id]
 ❌ `$id = $_GET['id']`
 ✅ `$id = $this->input->get('id'); /* + validation */`
 
+## Local Development Setup
+
+### Using Docker (Recommended for Development)
+
+```bash
+# Clone the repository
+git clone https://github.com/InvoicePlane/InvoicePlane.git
+cd InvoicePlane
+
+# Start Docker containers
+docker-compose up --build -d
+
+# Install PHP dependencies
+docker-compose exec php composer install
+
+# Install Node dependencies and build assets
+docker-compose exec php npm install
+docker-compose exec php npm run build
+```
+
+Access the application at `http://localhost/index.php/setup`
+
+**Available Services:**
+- Application: `http://localhost` (nginx on port 80)
+- phpMyAdmin: `http://localhost:8081` (database admin)
+- MariaDB: `localhost:3306` (user/password: `ipdevdb`)
+
+**Container Names:**
+- `invoiceplane-php` - PHP 8.1 FPM
+- `invoiceplane-nginx` - nginx web server
+- `invoiceplane-db` - MariaDB 10.9 database
+- `invoiceplane-dbadmin` - phpMyAdmin
+
+### Traditional Setup (Without Docker)
+
+**Prerequisites:**
+- PHP 8.1 or higher
+- MariaDB or MySQL
+- Composer
+- Node.js and npm
+
+**Setup Steps:**
+```bash
+# Clone and enter directory
+git clone https://github.com/InvoicePlane/InvoicePlane.git
+cd InvoicePlane
+
+# Install dependencies
+composer install
+npm install
+
+# Build assets
+npm run build
+
+# Configure the application
+cp ipconfig.php.example ipconfig.php
+# Edit ipconfig.php and set your base URL
+
+# Set up web server to point to public/ directory
+# Visit http://your-domain.com/index.php/setup
+```
+
+For detailed installation instructions, see [INSTALLATION.md](../INSTALLATION.md).
+
+## Debugging
+
+### PHP Debugging
+- **Whoops** is included in dev dependencies for better error pages
+- Set `ENVIRONMENT` to `development` in `index.php` for detailed errors
+- Use `var_dump()` or Symfony VarDumper: `dump($variable)`
+- Check logs in `application/logs/`
+
+### Frontend Debugging
+- Use browser DevTools console
+- Check `public/assets/core/js/scripts.js` for custom JavaScript
+- Source maps available with `npm run dev-build`
+
+### Common Issues
+- **White screen**: Check PHP error logs, ensure all dependencies installed
+- **Assets not loading**: Run `npm run build` and clear browser cache
+- **Database errors**: Verify database credentials in `ipconfig.php`
+- **Permission errors**: Ensure `uploads/` and `application/logs/` are writable
+
+## Performance Considerations
+
+### Database
+- Index frequently queried columns
+- Use `SQL_CALC_FOUND_ROWS` sparingly (already used in models)
+- Consider pagination for large datasets
+- Avoid N+1 queries in controllers
+
+### Assets
+- Always minify for production: `npm run build`
+- Use `npm run dev` only in development
+- Don't commit compiled assets to Git (already in `.gitignore`)
+- Leverage browser caching (configured in web server)
+
+### PHP
+- Enable OPcache in production
+- Use appropriate CodeIgniter caching where beneficial
+- Avoid loading unnecessary libraries in controllers
+
 ## When in Doubt
 
 1. Check existing code for patterns
@@ -334,35 +461,125 @@ $this->db->query('SELECT * FROM ip_invoices WHERE invoice_id = ?', [$invoice_id]
 3. Consult CodeIgniter 3 documentation
 4. Ask for clarification rather than guessing
 5. Maintain backward compatibility unless explicitly told otherwise
+6. Review INSTALLATION.md for setup questions
+7. Check CONTRIBUTING.md for workflow guidance
 
 ## Helpful Commands
 
 ```bash
-# Install dependencies
-npm install
-composer install
+# Installation & Dependencies
+composer install                    # Install PHP dependencies
+npm install                        # Install Node.js dependencies
+yarn install                       # Alternative to npm install
 
-# Build assets
-npm run build        # Production
-npm run dev-build    # Development
-npm run dev          # Watch mode
+# Asset Building
+npm run build                      # Production build (minified, no source maps)
+npm run dev-build                  # Development build (expanded, with source maps)
+npm run dev                        # Watch mode (auto-rebuild on changes)
+grunt build                        # Alternative build command
+grunt watch                        # Alternative watch command
 
-# Code quality
-composer check       # Run all checks
-composer pint        # Fix code style
-composer phpcs       # Check code style
-composer rector      # Automated refactoring
+# Code Quality & Linting
+composer check                     # Run all checks (rector, phpcs, pint)
+composer pint                      # Fix PHP code style with Laravel Pint
+composer phpcs                     # Check and fix code style with PHP_CodeSniffer
+composer rector                    # Run automated refactoring with Rector
 
-# Git
-git status
-git add .
-git commit -m "type: description"
-git push
+# Docker Commands
+docker-compose up -d               # Start containers in background
+docker-compose down                # Stop containers
+docker-compose logs -f php         # View PHP container logs
+docker-compose logs -f nginx       # View nginx logs
+docker-compose exec php bash       # Access PHP container shell
+docker-compose exec php composer install  # Run composer in container
+docker-compose exec php npm install        # Run npm in container
+docker-compose restart             # Restart all containers
+docker-compose ps                  # List running containers
+
+# Database
+# (Run these inside your database container or locally)
+mysql -u root -p                   # Access MariaDB/MySQL
+mysqldump -u root -p database > backup.sql  # Backup database
+
+# Git Workflow
+git status                         # Check working tree status
+git diff                          # Show changes
+git add .                         # Stage all changes
+git commit -m "type: description" # Commit with conventional commit message
+git push                          # Push to remote
+git pull origin development       # Pull latest development branch
+
+# Useful Development Commands
+tail -f application/logs/log-*.php  # Watch application logs
+find . -name "*.php" -type f       # Find all PHP files
+grep -r "search_term" application/ # Search in application directory
+```
+
+## Project File Structure Overview
+
+```
+ivpl-experiment/
+├── .github/
+│   ├── copilot-instructions.md    # This file - AI coding assistant guide
+│   ├── workflows/                 # GitHub Actions CI/CD
+│   └── ISSUE_TEMPLATE/
+├── application/
+│   ├── modules/                   # HMVC modules (controllers, models, views)
+│   │   ├── invoices/
+│   │   ├── clients/
+│   │   └── [30+ modules]
+│   ├── core/                      # Extended core classes
+│   ├── helpers/                   # Helper functions
+│   ├── libraries/                 # Custom libraries
+│   ├── third_party/              # MX (HMVC) and other libraries
+│   │   └── MX/                   # Modular Extensions - DO NOT MODIFY
+│   ├── views/                    # Global views
+│   └── config/                   # Configuration files
+├── public/                        # Web root (NEW structure)
+│   ├── index.php                 # Application entry point
+│   └── assets/                   # BUILT assets (don't edit directly)
+│       ├── core/
+│       ├── invoiceplane/
+│       └── invoiceplane_blue/
+├── resources/
+│   └── assets/                   # SOURCE assets (edit these)
+│       ├── core_scss/
+│       ├── invoiceplane_sass/
+│       └── invoiceplane_blue_sass/
+├── uploads/                       # User uploaded files
+├── storage/                       # Application storage
+├── vendor/                        # Composer dependencies (ignored)
+├── node_modules/                  # NPM dependencies (ignored)
+├── composer.json                  # PHP dependencies
+├── package.json                   # Node.js dependencies
+├── Gruntfile.js                  # Asset build configuration
+├── TODO.md                       # PSR-4 migration roadmap
+├── CONTRIBUTING.md               # Contribution guidelines
+├── INSTALLATION.md               # Installation instructions
+└── README.md                     # Project overview
 ```
 
 ## References
 
-- CodeIgniter 3 Docs: https://codeigniter.com/userguide3/
-- PSR-12 Style Guide: https://www.php-fig.org/psr/psr-12/
-- PSR-4 Autoloading: https://www.php-fig.org/psr/psr-4/
-- TODO.md: PSR-4 migration strategy and checklist
+### Official Documentation
+- **CodeIgniter 3 Docs**: https://codeigniter.com/userguide3/
+- **InvoicePlane Wiki**: https://wiki.invoiceplane.com/
+- **Community Forums**: https://community.invoiceplane.com/
+- **Discord**: https://discord.gg/PPzD2hTrXt
+
+### PHP Standards
+- **PSR-12 Style Guide**: https://www.php-fig.org/psr/psr-12/
+- **PSR-4 Autoloading**: https://www.php-fig.org/psr/psr-4/
+
+### Project Documentation
+- **TODO.md**: PSR-4 migration strategy and checklist
+- **CONTRIBUTING.md**: How to contribute to the project
+- **INSTALLATION.md**: Detailed installation instructions
+- **MODERNIZATION_SUMMARY.md**: Summary of modernization changes
+
+### Tools & Libraries
+- **Laravel Pint**: https://laravel.com/docs/pint
+- **PHP_CodeSniffer**: https://github.com/squizlabs/PHP_CodeSniffer
+- **Rector**: https://github.com/rectorphp/rector
+- **Grunt**: https://gruntjs.com/
+- **SASS**: https://sass-lang.com/
