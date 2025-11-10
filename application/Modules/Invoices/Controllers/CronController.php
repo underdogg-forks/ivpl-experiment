@@ -35,14 +35,14 @@ class CronController extends \Base_Controller
         }
 
         $this->load->model([
-            'invoices/mdl_invoices_recurring',
+            'invoices/mdl_invoice_recurring',
             'invoices/mdl_invoices',
-            'invoices/mdl_invoice_amounts',
+            'invoices/mdl_invoice_amount',
         ]);
         $this->load->helper('mailer');
 
         // Gather a list of recurring invoices to generate
-        $invoices_recurring = $this->invoices_recurring->active()->get()->result();
+        $invoices_recurring = $this->invoice_recurring->active()->get()->result();
         $recurInfo          = [];
         foreach ($invoices_recurring as $invoice_recurring) {
             $recurInfo = [
@@ -104,7 +104,7 @@ class CronController extends \Base_Controller
             }
 
             // Update the next recur date for the recurring invoice
-            $this->invoices_recurring->set_next_recur_date($invoice_recurring->invoice_recurring_id);
+            $this->invoice_recurring->set_next_recur_date($invoice_recurring->invoice_recurring_id);
             if (IP_DEBUG) {
                 log_message('debug', '[Cron Recurring Invoices] Next Recurring date was set');
             }
@@ -114,7 +114,7 @@ class CronController extends \Base_Controller
                 $new_invoice = $this->invoice->get_by_id($target_id);
 
                 // Set the email body, use default email template if available
-                $this->load->model('email_templates/emailtemplates');
+                $this->load->model('email_templates/emailtemplate');
 
                 $email_template_id = get_setting('email_invoice_template');
                 if ( ! $email_template_id) {

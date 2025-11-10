@@ -27,7 +27,7 @@ class Custom_Fields extends AdminController
     {
         parent::__construct();
 
-        $this->load->model('custom_fields/customfields');
+        $this->load->model('custom_fields/customfield');
     }
 
     /**
@@ -61,7 +61,7 @@ class Custom_Fields extends AdminController
         $this->customfields->paginate(site_url('custom_fields/name/' . $name), $page);
         $custom_fields = $this->customfields->result();
 
-        $this->load->model('custom_values/customvalues');
+        $this->load->model('custom_values/customvalue');
         $this->layout->set(
             [
                 'filter_display'     => true,

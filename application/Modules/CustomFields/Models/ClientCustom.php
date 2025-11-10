@@ -118,7 +118,7 @@ class ClientCustom extends Validator
         if ($id) {
             $values = $this->get_by_client($id)->result();
             $this->load->helper('custom_values_helper');
-            $this->load->module('custom_fields/mdl_custom_fields');
+            $this->load->module('custom_fields/mdl_custom_field');
 
             if ($values != null) {
                 foreach ($values as $value) {
@@ -191,7 +191,7 @@ class ClientCustom extends Validator
     public function db_array()
     {
         $db_array = parent::db_array();
-        $this->load->module('custom_fields/mdl_custom_fields');
+        $this->load->module('custom_fields/mdl_custom_field');
         $fields = $this->mdl_custom_fields->result();
 
         foreach ($fields as $field) {

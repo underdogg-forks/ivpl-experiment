@@ -84,7 +84,7 @@ class PaymentsController extends AdminController
                 show_404();
             }
 
-            $this->load->model('custom_values/customvalues');
+            $this->load->model('custom_values/customvalue');
             $payment_custom = $this->paymentcustom->where('payment_id', $id)->get();
             if ($payment_custom->num_rows()) {
                 $payment_custom = $payment_custom->row();
@@ -104,9 +104,9 @@ class PaymentsController extends AdminController
         $this->load->helper('custom_values');
         $this->load->model([
             'invoices/mdl_invoices',
-            'payment_methods/mdl_payment_methods',
-            'custom_fields/mdl_custom_fields',
-            'custom_values/mdl_custom_values',
+            'payment_methods/mdl_payment_method',
+            'custom_fields/mdl_custom_field',
+            'custom_values/mdl_custom_value',
         ]);
 
         $open_invoices = $this->invoice->is_open()->get()->result();
@@ -172,7 +172,7 @@ class PaymentsController extends AdminController
      */
     public function online_logs($page = 0)
     {
-        $this->load->model('payments/paymentlogs');
+        $this->load->model('payments/paymentlog');
 
         $this->paymentlogs->paginate(site_url('payments/online_logs'), $page);
         $payment_logs = $this->paymentlogs->result();

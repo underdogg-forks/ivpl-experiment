@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class InvoiceGroups extends \Response_Model
+class InvoiceGroup extends \Response_Model
 {
     public $table = 'ip_invoice_groups';
 
@@ -24,7 +24,7 @@ class InvoiceGroups extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/invoice_groups/models/Mdl_invoice_groups.php
+     * @legacy-file application/modules/invoice_groups/models/Mdl_invoice_group.php
      * @legacy-function default_select()
      */
     public function default_select()
@@ -34,7 +34,7 @@ class InvoiceGroups extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/invoice_groups/models/Mdl_invoice_groups.php
+     * @legacy-file application/modules/invoice_groups/models/Mdl_invoice_group.php
      * @legacy-function default_order_by()
      */
     public function default_order_by()
@@ -46,7 +46,7 @@ class InvoiceGroups extends \Response_Model
      * @return array
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoice_groups/models/Mdl_invoice_groups.php
+     * @legacy-file application/modules/invoice_groups/models/Mdl_invoice_group.php
      * @legacy-function validation_rules()
      */
     public function validation_rules()
@@ -82,7 +82,7 @@ class InvoiceGroups extends \Response_Model
      * @return mixed
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoice_groups/models/Mdl_invoice_groups.php
+     * @legacy-file application/modules/invoice_groups/models/Mdl_invoice_group.php
      * @legacy-function generate_invoice_number()
      */
     public function generate_invoice_number($invoice_group_id, $set_next = true)
@@ -106,7 +106,7 @@ class InvoiceGroups extends \Response_Model
      * @param $invoice_group_id
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoice_groups/models/Mdl_invoice_groups.php
+     * @legacy-file application/modules/invoice_groups/models/Mdl_invoice_group.php
      * @legacy-function set_next_invoice_number()
      */
     public function set_next_invoice_number($invoice_group_id)
@@ -124,7 +124,7 @@ class InvoiceGroups extends \Response_Model
      * @return mixed
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoice_groups/models/Mdl_invoice_groups.php
+     * @legacy-file application/modules/invoice_groups/models/Mdl_invoice_group.php
      * @legacy-function parse_identifier_format()
      */
     private function parse_identifier_format($identifier_format, string $next_id, int $left_pad)

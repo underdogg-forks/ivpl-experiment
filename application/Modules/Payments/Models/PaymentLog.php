@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class PaymentLogs extends \Response_Model
+class PaymentLog extends \Response_Model
 {
     public $table = 'ip_merchant_responses';
 
@@ -24,7 +24,7 @@ class PaymentLogs extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/payments/models/Mdl_payment_logs.php
+     * @legacy-file application/modules/payments/models/Mdl_payment_log.php
      * @legacy-function default_select()
      */
     public function default_select()
@@ -37,7 +37,7 @@ class PaymentLogs extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/payments/models/Mdl_payment_logs.php
+     * @legacy-file application/modules/payments/models/Mdl_payment_log.php
      * @legacy-function default_order_by()
      */
     public function default_order_by()
@@ -47,7 +47,7 @@ class PaymentLogs extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/payments/models/Mdl_payment_logs.php
+     * @legacy-file application/modules/payments/models/Mdl_payment_log.php
      * @legacy-function default_join()
      */
     public function default_join()

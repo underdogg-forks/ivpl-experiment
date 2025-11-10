@@ -41,10 +41,10 @@ class GuestController extends \Base_Controller
 
         $this->load->model(
             [
-                'invoices/mdl_items',
-                'invoices/mdl_invoice_tax_rates',
-                'payment_methods/mdl_payment_methods',
-                'custom_fields/mdl_custom_fields',
+                'invoices/mdl_item',
+                'invoices/mdl_invoice_tax_rate',
+                'payment_methods/mdl_payment_method',
+                'custom_fields/mdl_custom_field',
                 'upload/mdl_uploads',
             ]
         );
@@ -75,7 +75,7 @@ class GuestController extends \Base_Controller
 
         $data = [
             'invoice'             => $invoice,
-            'items'               => $this->items->where('invoice_id', $invoice->invoice_id)->get()->result(),
+            'items'               => $this->item->where('invoice_id', $invoice->invoice_id)->get()->result(),
             'invoice_tax_rates'   => $this->invoicetaxrates->where('invoice_id', $invoice->invoice_id)->get()->result(),
             'invoice_url_key'     => $invoice_url_key,
             'flash_message'       => $this->session->flashdata('flash_message'),
@@ -172,9 +172,9 @@ class GuestController extends \Base_Controller
             show_404();
         }
 
-        $this->load->model('quotes/quoteitems');
-        $this->load->model('quotes/quotetaxrates');
-        $this->load->model('custom_fields/customfields');
+        $this->load->model('quotes/quoteitem');
+        $this->load->model('quotes/quotetaxrate');
+        $this->load->model('custom_fields/customfield');
 
         $quote = $quote->row();
 

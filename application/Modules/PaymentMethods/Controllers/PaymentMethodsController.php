@@ -27,7 +27,7 @@ class Payment_Methods extends AdminController
     {
         parent::__construct();
 
-        $this->load->model('payment_methods/paymentmethods');
+        $this->load->model('payment_methods/paymentmethod');
     }
 
     /**

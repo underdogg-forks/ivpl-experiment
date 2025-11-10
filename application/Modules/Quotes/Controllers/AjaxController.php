@@ -30,7 +30,7 @@ class QuotesAjaxController extends AdminController
     public function save()
     {
         $this->load->model([
-            'quotes/mdl_quote_items',
+            'quotes/mdl_quote_item',
             'quotes/mdl_quotes',
             'units/mdl_units',
         ]);
@@ -137,7 +137,7 @@ class QuotesAjaxController extends AdminController
 
             if (config_item('legacy_calculation')) {
                 // Recalculate for discounts
-                $this->load->model('quotes/quoteamounts');
+                $this->load->model('quotes/quoteamount');
                 $this->quoteamounts->calculate($quote_id, $global_discount);
             }
 
@@ -196,7 +196,7 @@ class QuotesAjaxController extends AdminController
      */
     public function save_quote_tax_rate()
     {
-        $this->load->model('quotes/quotetaxrates');
+        $this->load->model('quotes/quotetaxrate');
 
         if ($this->quotetaxrates->run_validation()) {
             // Only Legacy calculation have global taxes - since v1.6.3
@@ -231,7 +231,7 @@ class QuotesAjaxController extends AdminController
         // Only continue if the quote exists or no item id was provided
         if ($this->quote->get_by_id($quote_id) || empty($item_id)) {
             // Delete quote item
-            $this->load->model('quotes/quoteitems');
+            $this->load->model('quotes/quoteitem');
             $item = $this->quoteitems->delete($item_id);
 
             // Check if deletion was successful
@@ -251,7 +251,7 @@ class QuotesAjaxController extends AdminController
      */
     public function get_item()
     {
-        $this->load->model('quotes/quoteitems');
+        $this->load->model('quotes/quoteitem');
 
         $item = $this->quoteitems->get_by_id($this->input->post('item_id'));
 
@@ -268,8 +268,8 @@ class QuotesAjaxController extends AdminController
         $this->load->module('layout');
         $this->load->model([
             'quotes/mdl_quotes',
-            'invoice_groups/mdl_invoice_groups',
-            'tax_rates/mdl_tax_rates',
+            'invoice_groups/mdl_invoice_group',
+            'tax_rates/mdl_tax_rate',
             'clients/mdl_clients',
         ]);
 
@@ -293,8 +293,8 @@ class QuotesAjaxController extends AdminController
     {
         $this->load->model([
             'quotes/mdl_quotes',
-            'quotes/mdl_quote_items',
-            'quotes/mdl_quote_tax_rates',
+            'quotes/mdl_quote_item',
+            'quotes/mdl_quote_tax_rate',
         ]);
 
         if ($this->quote->run_validation()) {
@@ -451,8 +451,8 @@ class QuotesAjaxController extends AdminController
     {
         $this->load->module('layout');
         $this->load->model([
-            'invoice_groups/mdl_invoice_groups',
-            'tax_rates/mdl_tax_rates',
+            'invoice_groups/mdl_invoice_group',
+            'tax_rates/mdl_tax_rate',
             'clients/mdl_clients',
         ]);
 
@@ -501,7 +501,7 @@ class QuotesAjaxController extends AdminController
     public function modal_quote_to_invoice($quote_id)
     {
         $this->load->model([
-            'invoice_groups/mdl_invoice_groups',
+            'invoice_groups/mdl_invoice_group',
             'quotes/mdl_quotes',
         ]);
 
@@ -523,11 +523,11 @@ class QuotesAjaxController extends AdminController
     {
         $this->load->model([
             'invoices/mdl_invoices',
-            'invoices/mdl_items',
-            'invoices/mdl_invoice_tax_rates',
+            'invoices/mdl_item',
+            'invoices/mdl_invoice_tax_rate',
             'quotes/mdl_quotes',
-            'quotes/mdl_quote_items',
-            'quotes/mdl_quote_tax_rates',
+            'quotes/mdl_quote_item',
+            'quotes/mdl_quote_tax_rate',
         ]);
 
         if ($this->invoice->run_validation()) {
@@ -581,7 +581,7 @@ class QuotesAjaxController extends AdminController
                     'item_order'           => $quote_item->item_order,
                 ];
 
-                $this->items->save(null, $db_array, $global_discount);
+                $this->item->save(null, $db_array, $global_discount);
             }
 
             $quote_tax_rates = $this->quotetaxrates->where('quote_id', $this->input->post('quote_id'))->get()->result();

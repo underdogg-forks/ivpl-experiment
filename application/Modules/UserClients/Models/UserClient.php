@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class UserClients extends \MY_Model
+class UserClient extends \MY_Model
 {
     public $table = 'ip_user_clients';
 
@@ -24,7 +24,7 @@ class UserClients extends \MY_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/user_clients/models/Mdl_user_clients.php
+     * @legacy-file application/modules/user_clients/models/Mdl_user_client.php
      * @legacy-function default_select()
      */
     public function default_select()
@@ -34,7 +34,7 @@ class UserClients extends \MY_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/user_clients/models/Mdl_user_clients.php
+     * @legacy-file application/modules/user_clients/models/Mdl_user_client.php
      * @legacy-function default_join()
      */
     public function default_join()
@@ -45,7 +45,7 @@ class UserClients extends \MY_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/user_clients/models/Mdl_user_clients.php
+     * @legacy-file application/modules/user_clients/models/Mdl_user_client.php
      * @legacy-function default_order_by()
      */
     public function default_order_by()
@@ -57,7 +57,7 @@ class UserClients extends \MY_Model
      * @return array
      *
      * Legacy migration info:
-     * @legacy-file application/modules/user_clients/models/Mdl_user_clients.php
+     * @legacy-file application/modules/user_clients/models/Mdl_user_client.php
      * @legacy-function validation_rules()
      */
     public function validation_rules()
@@ -82,7 +82,7 @@ class UserClients extends \MY_Model
      * @return $this
      *
      * Legacy migration info:
-     * @legacy-file application/modules/user_clients/models/Mdl_user_clients.php
+     * @legacy-file application/modules/user_clients/models/Mdl_user_client.php
      * @legacy-function assigned_to()
      */
     public function assigned_to($user_id)
@@ -96,7 +96,7 @@ class UserClients extends \MY_Model
      * @param array $users_id
      *
      * Legacy migration info:
-     * @legacy-file application/modules/user_clients/models/Mdl_user_clients.php
+     * @legacy-file application/modules/user_clients/models/Mdl_user_client.php
      * @legacy-function set_all_clients_user()
      */
     public function set_all_clients_user($users_id)
@@ -120,7 +120,7 @@ class UserClients extends \MY_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/user_clients/models/Mdl_user_clients.php
+     * @legacy-file application/modules/user_clients/models/Mdl_user_client.php
      * @legacy-function get_users_all_clients()
      */
     public function get_users_all_clients()

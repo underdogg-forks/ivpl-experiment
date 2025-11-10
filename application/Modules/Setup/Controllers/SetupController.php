@@ -41,7 +41,7 @@ class SetupController extends MX_Controller
         $this->load->helper('settings');
         $this->load->helper('echo');
 
-        $this->load->model('settings/settings'); // For get_setting() in echo_helper
+        $this->load->model('settings/setting'); // For get_setting() in echo_helper
         $this->load->model('setup/setup');
 
         $this->load->module('layout');
@@ -556,9 +556,9 @@ class SetupController extends MX_Controller
     private function check_calculation_config(): array
     {
         $this->load_ci_database();
-        $this->load->model('settings/versions');
+        $this->load->model('settings/version');
 
-        $current_version = $this->versions->get_current_version();
+        $current_version = $this->version->get_current_version();
 
         if (version_compare($current_version, '1.6.3', '>=')) {
             // Reload the ipconfig.php

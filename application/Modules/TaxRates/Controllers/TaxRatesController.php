@@ -27,7 +27,7 @@ class Tax_Rates extends AdminController
     {
         parent::__construct();
 
-        $this->load->model('tax_rates/taxrates');
+        $this->load->model('tax_rates/taxrate');
     }
 
     /**

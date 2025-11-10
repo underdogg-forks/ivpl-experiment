@@ -133,7 +133,7 @@ class ClientsController extends AdminController
             $id = $this->client->save($id);
 
             if ($new_client) {
-                $this->load->model('user_clients/userclients');
+                $this->load->model('user_clients/userclient');
                 $this->userclients->get_users_all_clients();
             }
 
@@ -185,8 +185,8 @@ class ClientsController extends AdminController
         }
 
         $this->load->model([
-            'custom_fields/mdl_custom_fields',
-            'custom_values/mdl_custom_values',
+            'custom_fields/mdl_custom_field',
+            'custom_values/mdl_custom_value',
             'custom_fields/mdl_client_custom',
         ]);
 
@@ -256,11 +256,11 @@ class ClientsController extends AdminController
 
         $this->load->model(
             [
-                'clients/mdl_client_notes',
+                'clients/mdl_client_note',
                 'invoices/mdl_invoices',
                 'quotes/mdl_quotes',
                 'payments/mdl_payments',
-                'custom_fields/mdl_custom_fields',
+                'custom_fields/mdl_custom_field',
                 'custom_fields/mdl_client_custom',
             ]
         );

@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class InvoicesRecurring extends \Response_Model
+class InvoiceRecurring extends \Response_Model
 {
     public $table = 'ip_invoices_recurring';
 
@@ -55,7 +55,7 @@ class InvoicesRecurring extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoices_recurring.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_recurring.php
      * @legacy-function default_select()
      */
     public function default_select()
@@ -70,7 +70,7 @@ class InvoicesRecurring extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoices_recurring.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_recurring.php
      * @legacy-function default_order_by()
      */
     public function default_order_by()
@@ -80,7 +80,7 @@ class InvoicesRecurring extends \Response_Model
     
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoices_recurring.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_recurring.php
      * @legacy-function default_join()
      */
     public function default_join()
@@ -93,7 +93,7 @@ class InvoicesRecurring extends \Response_Model
      * @return array
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoices_recurring.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_recurring.php
      * @legacy-function validation_rules()
      */
     public function validation_rules()
@@ -124,7 +124,7 @@ class InvoicesRecurring extends \Response_Model
      * @return array
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoices_recurring.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_recurring.php
      * @legacy-function db_array()
      */
     public function db_array()
@@ -143,7 +143,7 @@ class InvoicesRecurring extends \Response_Model
      * @param $invoice_recurring_id
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoices_recurring.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_recurring.php
      * @legacy-function stop()
      */
     public function stop($invoice_recurring_id)
@@ -163,7 +163,7 @@ class InvoicesRecurring extends \Response_Model
      * @return \Mdl_Invoices_Recurring
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoices_recurring.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_recurring.php
      * @legacy-function active()
      */
     public function active()
@@ -177,7 +177,7 @@ class InvoicesRecurring extends \Response_Model
      * @param $invoice_recurring_id
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoices_recurring.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_recurring.php
      * @legacy-function set_next_recur_date()
      */
     public function set_next_recur_date($invoice_recurring_id)

@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class QuoteAmounts extends CI_Model
+class QuoteAmount extends CI_Model
 {
     /**
      * @var int
@@ -49,7 +49,7 @@ class QuoteAmounts extends CI_Model
      * @param $global_discount
      *
      * Legacy migration info:
-     * @legacy-file application/modules/quotes/models/Mdl_quote_amounts.php
+     * @legacy-file application/modules/quotes/models/Mdl_quote_amount.php
      * @legacy-function calculate()
      */
     public function calculate($quote_id, $global_discount)
@@ -106,7 +106,7 @@ class QuoteAmounts extends CI_Model
      * @return float
      *
      * Legacy migration info:
-     * @legacy-file application/modules/quotes/models/Mdl_quote_amounts.php
+     * @legacy-file application/modules/quotes/models/Mdl_quote_amount.php
      * @legacy-function calculate_discount()
      */
     public function calculate_discount($quote_id, $quote_total)
@@ -132,7 +132,7 @@ class QuoteAmounts extends CI_Model
      * return global_discount
      *
      * Legacy migration info:
-     * @legacy-file application/modules/quotes/models/Mdl_quote_amounts.php
+     * @legacy-file application/modules/quotes/models/Mdl_quote_amount.php
      * @legacy-function get_global_discount()
      */
     public function get_global_discount($quote_id)
@@ -152,13 +152,13 @@ class QuoteAmounts extends CI_Model
      * @param $quote_id
      *
      * Legacy migration info:
-     * @legacy-file application/modules/quotes/models/Mdl_quote_amounts.php
+     * @legacy-file application/modules/quotes/models/Mdl_quote_amount.php
      * @legacy-function calculate_quote_taxes()
      */
     public function calculate_quote_taxes($quote_id)
     {
         // First check to see if there are any quote taxes applied
-        $this->load->model('quotes/mdl_quote_tax_rates');
+        $this->load->model('quotes/mdl_quote_tax_rate');
         // Only appliable in legacy calculation - since 1.6.3
         $quote_tax_rates = config_item('legacy_calculation') ? $this->mdl_quote_tax_rates->where('quote_id', $quote_id)->get()->result() : null;
 
@@ -229,7 +229,7 @@ class QuoteAmounts extends CI_Model
      * @return mixed
      *
      * Legacy migration info:
-     * @legacy-file application/modules/quotes/models/Mdl_quote_amounts.php
+     * @legacy-file application/modules/quotes/models/Mdl_quote_amount.php
      * @legacy-function get_total_quoted()
      */
     public function get_total_quoted($period = null)
@@ -274,7 +274,7 @@ class QuoteAmounts extends CI_Model
      * @return array
      *
      * Legacy migration info:
-     * @legacy-file application/modules/quotes/models/Mdl_quote_amounts.php
+     * @legacy-file application/modules/quotes/models/Mdl_quote_amount.php
      * @legacy-function get_status_totals()
      */
     public function get_status_totals($period = '')

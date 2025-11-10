@@ -101,7 +101,7 @@ class ImportController extends AdminController
                             $this->import->record_import_details($import_id, 'ip_invoices', 'invoices', $ids);
                             break;
                         case 'invoice_items.csv':
-                            $this->load->model('invoices/items');
+                            $this->load->model('invoices/item');
                             $ids = $this->import->import_invoice_items();
                             $this->import->record_import_details($import_id, 'ip_invoice_items', 'invoice_items', $ids);
                             break;

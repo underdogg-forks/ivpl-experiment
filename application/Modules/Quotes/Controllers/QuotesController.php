@@ -101,12 +101,12 @@ class QuotesController extends AdminController
     {
         $this->load->model(
             [
-                'quotes/mdl_quote_items',
-                'tax_rates/mdl_tax_rates',
+                'quotes/mdl_quote_item',
+                'tax_rates/mdl_tax_rate',
                 'units/mdl_units',
                 'mdl_quote_tax_rates',
-                'custom_fields/mdl_custom_fields',
-                'custom_values/mdl_custom_values',
+                'custom_fields/mdl_custom_field',
+                'custom_values/mdl_custom_value',
                 'custom_fields/mdl_quote_custom',
                 'upload/mdl_uploads',
             ]
@@ -245,10 +245,10 @@ class QuotesController extends AdminController
      */
     public function delete_quote_tax(string $quote_id, $quote_tax_rate_id)
     {
-        $this->load->model('quotes/quotetaxrates');
+        $this->load->model('quotes/quotetaxrate');
         $this->quotetaxrates->delete($quote_tax_rate_id);
 
-        $this->load->model('quotes/quoteamounts');
+        $this->load->model('quotes/quoteamount');
         $global_discount['item'] = $this->quoteamounts->get_global_discount($quote_id);
         // Recalculate quote amounts
         $this->quoteamounts->calculate($quote_id, $global_discount);
@@ -266,7 +266,7 @@ class QuotesController extends AdminController
         $this->db->select('quote_id');
         $quote_ids = $this->db->get('ip_quotes')->result();
 
-        $this->load->model('quotes/quoteamounts');
+        $this->load->model('quotes/quoteamount');
 
         foreach ($quote_ids as $quote_id) {
             $global_discount['item'] = $this->quoteamounts->get_global_discount($quote_id->quote_id);

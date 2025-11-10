@@ -27,8 +27,8 @@ class DashboardController extends AdminController
      */
     public function index()
     {
-        $this->load->model('invoices/invoiceamounts');
-        $this->load->model('quotes/quoteamounts');
+        $this->load->model('invoices/invoiceamount');
+        $this->load->model('quotes/quoteamount');
         $this->load->model('invoices/invoice');
         $this->load->model('quotes/quote');
         $this->load->model('projects/project');

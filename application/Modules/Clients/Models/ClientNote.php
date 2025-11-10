@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class ClientNotes extends \Response_Model
+class ClientNote extends \Response_Model
 {
     public $table = 'ip_client_notes';
 
@@ -24,7 +24,7 @@ class ClientNotes extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/clients/models/Mdl_client_notes.php
+     * @legacy-file application/modules/clients/models/Mdl_client_note.php
      * @legacy-function default_order_by()
      */
     public function default_order_by()
@@ -34,7 +34,7 @@ class ClientNotes extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/clients/models/Mdl_client_notes.php
+     * @legacy-file application/modules/clients/models/Mdl_client_note.php
      * @legacy-function validation_rules()
      */
     public function validation_rules()
@@ -55,7 +55,7 @@ class ClientNotes extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/clients/models/Mdl_client_notes.php
+     * @legacy-file application/modules/clients/models/Mdl_client_note.php
      * @legacy-function db_array()
      */
     public function db_array()
@@ -71,7 +71,7 @@ class ClientNotes extends \Response_Model
      * @param int $id
      *
      * Legacy migration info:
-     * @legacy-file application/modules/clients/models/Mdl_client_notes.php
+     * @legacy-file application/modules/clients/models/Mdl_client_note.php
      * @legacy-function delete()
      */
     public function delete($id): bool

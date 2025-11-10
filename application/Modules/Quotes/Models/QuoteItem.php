@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class QuoteItems extends \Response_Model
+class QuoteItem extends \Response_Model
 {
     public $table = 'ip_quote_items';
 
@@ -26,7 +26,7 @@ class QuoteItems extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/quotes/models/Mdl_quote_items.php
+     * @legacy-file application/modules/quotes/models/Mdl_quote_item.php
      * @legacy-function default_select()
      */
     public function default_select()
@@ -38,7 +38,7 @@ class QuoteItems extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/quotes/models/Mdl_quote_items.php
+     * @legacy-file application/modules/quotes/models/Mdl_quote_item.php
      * @legacy-function default_order_by()
      */
     public function default_order_by()
@@ -48,7 +48,7 @@ class QuoteItems extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/quotes/models/Mdl_quote_items.php
+     * @legacy-file application/modules/quotes/models/Mdl_quote_item.php
      * @legacy-function default_join()
      */
     public function default_join()
@@ -62,7 +62,7 @@ class QuoteItems extends \Response_Model
      * @return array
      *
      * Legacy migration info:
-     * @legacy-file application/modules/quotes/models/Mdl_quote_items.php
+     * @legacy-file application/modules/quotes/models/Mdl_quote_item.php
      * @legacy-function validation_rules()
      */
     public function validation_rules()
@@ -112,7 +112,7 @@ class QuoteItems extends \Response_Model
      * @return int|null
      *
      * Legacy migration info:
-     * @legacy-file application/modules/quotes/models/Mdl_quote_items.php
+     * @legacy-file application/modules/quotes/models/Mdl_quote_item.php
      * @legacy-function save()
      */
     public function save($id = null, $db_array = null, &$global_discount = [])
@@ -120,8 +120,8 @@ class QuoteItems extends \Response_Model
         $id = parent::save($id, $db_array);
 
         $this->load->model([
-            'quotes/mdl_quote_item_amounts',
-            'quotes/mdl_quote_amounts',
+            'quotes/mdl_quote_item_amount',
+            'quotes/mdl_quote_amount',
         ]);
         $this->mdl_quote_item_amounts->calculate($id, $global_discount);
 
@@ -138,7 +138,7 @@ class QuoteItems extends \Response_Model
      * @param int $item_id
      *
      * Legacy migration info:
-     * @legacy-file application/modules/quotes/models/Mdl_quote_items.php
+     * @legacy-file application/modules/quotes/models/Mdl_quote_item.php
      * @legacy-function delete()
      */
     public function delete($item_id): bool
@@ -161,7 +161,7 @@ class QuoteItems extends \Response_Model
         $this->db->where('item_id', $item_id);
         $this->db->delete('ip_quote_item_amounts');
 
-        $this->load->model('quotes/mdl_quote_amounts');
+        $this->load->model('quotes/mdl_quote_amount');
         $global_discount['item'] = $this->mdl_quote_amounts->get_global_discount($quote_id);
         // Recalculate quote amounts
         $this->mdl_quote_amounts->calculate($quote_id, $global_discount);
@@ -177,7 +177,7 @@ class QuoteItems extends \Response_Model
      * return items_subtotal
      *
      * Legacy migration info:
-     * @legacy-file application/modules/quotes/models/Mdl_quote_items.php
+     * @legacy-file application/modules/quotes/models/Mdl_quote_item.php
      * @legacy-function get_items_subtotal()
      */
     public function get_items_subtotal($quote_id)

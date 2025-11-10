@@ -30,7 +30,7 @@ class InvoicesAjaxController extends AdminController
     public function save()
     {
         $this->load->model([
-            'invoices/mdl_items',
+            'invoices/mdl_item',
             'invoices/mdl_invoices',
             'units/mdl_units',
             'invoices/mdl_invoice_sumex',
@@ -102,7 +102,7 @@ class InvoicesAjaxController extends AdminController
                         $this->task->update_status(4, $item->item_task_id);
                     }
 
-                    $this->items->save($item_id, $item, $global_discount);
+                    $this->item->save($item_id, $item, $global_discount);
                 } elseif (empty($item->item_name) && ( ! empty($item->item_quantity) || ! empty($item->item_price))) {
                     // Throw an error message and use the form validation for that (todo: where the translations of: The .* field is required.)
                     $this->load->library('form_validation');
@@ -174,7 +174,7 @@ class InvoicesAjaxController extends AdminController
 
             if (config_item('legacy_calculation')) {
                 // Recalculate for discounts
-                $this->load->model('invoices/invoiceamounts');
+                $this->load->model('invoices/invoiceamount');
                 $this->invoiceamounts->calculate($invoice_id, $global_discount);
             }
 
@@ -233,7 +233,7 @@ class InvoicesAjaxController extends AdminController
      */
     public function save_invoice_tax_rate()
     {
-        $this->load->model('invoices/invoicetaxrates');
+        $this->load->model('invoices/invoicetaxrate');
 
         if ($this->invoicetaxrates->run_validation()) {
             // Only Legacy calculation have global taxes - since v1.6.3
@@ -268,8 +268,8 @@ class InvoicesAjaxController extends AdminController
         // Only continue if the invoice exists or no item id was provided
         if ($this->invoice->get_by_id($invoice_id) || empty($item_id)) {
             // Delete invoice item
-            $this->load->model('invoices/items');
-            $item = $this->items->delete($item_id);
+            $this->load->model('invoices/item');
+            $item = $this->item->delete($item_id);
 
             // Check if deletion was successful
             if ($item) {
@@ -293,9 +293,9 @@ class InvoicesAjaxController extends AdminController
      */
     public function get_item()
     {
-        $this->load->model('invoices/items');
+        $this->load->model('invoices/item');
 
-        $item = $this->items->get_by_id($this->security->xss_clean($this->input->post('item_id', true)));
+        $item = $this->item->get_by_id($this->security->xss_clean($this->input->post('item_id', true)));
 
         echo json_encode($item);
     }
@@ -311,8 +311,8 @@ class InvoicesAjaxController extends AdminController
 
         $this->load->model([
             'invoices/mdl_invoices',
-            'invoice_groups/mdl_invoice_groups',
-            'tax_rates/mdl_tax_rates',
+            'invoice_groups/mdl_invoice_group',
+            'tax_rates/mdl_tax_rate',
             'clients/mdl_clients',
         ]);
 
@@ -336,8 +336,8 @@ class InvoicesAjaxController extends AdminController
     {
         $this->load->model([
             'invoices/mdl_invoices',
-            'invoices/mdl_items',
-            'invoices/mdl_invoice_tax_rates',
+            'invoices/mdl_item',
+            'invoices/mdl_invoice_tax_rate',
         ]);
 
         if ($this->invoice->run_validation()) {
@@ -494,8 +494,8 @@ class InvoicesAjaxController extends AdminController
     {
         $this->load->module('layout');
         $this->load->model([
-            'invoice_groups/mdl_invoice_groups',
-            'tax_rates/mdl_tax_rates',
+            'invoice_groups/mdl_invoice_group',
+            'tax_rates/mdl_tax_rate',
             'clients/mdl_clients',
         ]);
 
@@ -543,10 +543,10 @@ class InvoicesAjaxController extends AdminController
      */
     public function create_recurring()
     {
-        $this->load->model('invoices/invoicesrecurring');
+        $this->load->model('invoices/invoicerecurring');
 
-        if ($this->invoices_recurring->run_validation()) {
-            $this->invoices_recurring->save();
+        if ($this->invoice_recurring->run_validation()) {
+            $this->invoice_recurring->save();
 
             $response = [
                 'success' => 1,
@@ -571,11 +571,11 @@ class InvoicesAjaxController extends AdminController
     {
         $this->load->module('layout');
 
-        $this->load->model('invoices/invoicesrecurring');
+        $this->load->model('invoices/invoicerecurring');
 
         $data = [
             'invoice_id'        => $this->security->xss_clean($this->input->post('invoice_id')),
-            'recur_frequencies' => $this->invoices_recurring->recur_frequencies,
+            'recur_frequencies' => $this->invoice_recurring->recur_frequencies,
         ];
 
         $this->layout->load_view('invoices/modal_create_recurring', $data);
@@ -604,8 +604,8 @@ class InvoicesAjaxController extends AdminController
         $this->load->module('layout');
         $this->load->model([
             'invoices/mdl_invoices',
-            'invoice_groups/mdl_invoice_groups',
-            'tax_rates/mdl_tax_rates',
+            'invoice_groups/mdl_invoice_group',
+            'tax_rates/mdl_tax_rate',
         ]);
 
         $data = [
@@ -627,8 +627,8 @@ class InvoicesAjaxController extends AdminController
     {
         $this->load->model([
             'invoices/mdl_invoices',
-            'invoices/mdl_items',
-            'invoices/mdl_invoice_tax_rates',
+            'invoices/mdl_item',
+            'invoices/mdl_invoice_tax_rate',
         ]);
 
         if ($this->invoice->run_validation()) {

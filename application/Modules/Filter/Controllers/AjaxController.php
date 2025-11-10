@@ -113,7 +113,7 @@ class FilterAjaxController extends AdminController
         // custom table option name Normaly always here (it's ajax). Old school but work.
         $name = empty($_SERVER['HTTP_REFERER']) ? 'all' : basename($_SERVER['HTTP_REFERER']); // Todo: With CI?
 
-        $this->load->model('custom_fields/customfields');
+        $this->load->model('custom_fields/customfield');
 
         $query    = $this->input->post('filter_query');
         $keywords = explode(' ', $query);
@@ -134,7 +134,7 @@ class FilterAjaxController extends AdminController
 
         $custom_fields = $this->customfields->get()->result();
 
-        $this->load->model('custom_values/customvalues');
+        $this->load->model('custom_values/customvalue');
         $data = [
             'custom_fields'       => $custom_fields,
             'custom_tables'       => $custom_tables,
@@ -157,8 +157,8 @@ class FilterAjaxController extends AdminController
 
         $this->load->model(
             [
-                'custom_values/mdl_custom_values',
-                'custom_fields/mdl_custom_fields',
+                'custom_values/mdl_custom_value',
+                'custom_fields/mdl_custom_field',
             ]
         );
 
@@ -191,7 +191,7 @@ class FilterAjaxController extends AdminController
      */
     public function filter_custom_values_field()
     {
-        $this->load->model('custom_values/customvalues');
+        $this->load->model('custom_values/customvalue');
 
         // custom values id Normaly always here (it's ajax). Old school but work.
         $id = empty($_SERVER['HTTP_REFERER']) ? 0 : basename($_SERVER['HTTP_REFERER']); // Todo: With CI?
@@ -367,7 +367,7 @@ class FilterAjaxController extends AdminController
      */
     public function filter_invoices_recuring()
     {
-        $this->load->model('invoices/invoicesrecurring');
+        $this->load->model('invoices/invoicerecurring');
 
         $query    = $this->input->post('filter_query');
         $keywords = explode(' ', $query);
@@ -376,13 +376,13 @@ class FilterAjaxController extends AdminController
         foreach ($keywords as $keyword) {
             if ($keyword) {
                 $keyword = mb_strtolower($keyword);
-                $this->invoices_recurring->like("CONCAT_WS('^',recur_start_date,recur_end_date,recur_next_date,recur_frequency,LOWER(invoice_number),LOWER(client_title),LOWER(client_name),LOWER(client_surname))", $keyword);
+                $this->invoice_recurring->like("CONCAT_WS('^',recur_start_date,recur_end_date,recur_next_date,recur_frequency,LOWER(invoice_number),LOWER(client_title),LOWER(client_name),LOWER(client_surname))", $keyword);
             }
         }
 
         $data = [
-            'recur_frequencies'  => $this->invoices_recurring->recur_frequencies,
-            'recurring_invoices' => $this->invoices_recurring->get()->result(),
+            'recur_frequencies'  => $this->invoice_recurring->recur_frequencies,
+            'recurring_invoices' => $this->invoice_recurring->get()->result(),
         ];
 
         $this->layout->load_view('invoices/partial_invoices_recurring_table', $data);
@@ -395,7 +395,7 @@ class FilterAjaxController extends AdminController
      */
     public function filter_online_logs()
     {
-        $this->load->model('payments/paymentlogs');
+        $this->load->model('payments/paymentlog');
 
         $query    = $this->input->post('filter_query');
         $keywords = explode(' ', $query);

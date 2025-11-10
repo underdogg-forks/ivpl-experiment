@@ -54,9 +54,9 @@ class MailerController extends AdminController
 
         $this->load->model(
             [
-                'email_templates/mdl_email_templates',
-                'custom_fields/mdl_custom_fields',
-                'invoices/mdl_templates',
+                'email_templates/mdl_email_template',
+                'custom_fields/mdl_custom_field',
+                'invoices/mdl_template',
                 'invoices/mdl_invoices',
                 'upload/mdl_uploads',
             ]
@@ -85,7 +85,7 @@ class MailerController extends AdminController
                 'email_templates'         => $this->emailtemplates->where('email_template_type', 'invoice')->get()->result(),
                 'email_template'          => $email_template,
                 'custom_fields'           => $custom_fields,
-                'pdf_templates'           => $this->templates->get_invoice_templates(),
+                'pdf_templates'           => $this->template->get_invoice_templates(),
                 'invoice'                 => $invoice,
             ]
         );
@@ -108,9 +108,9 @@ class MailerController extends AdminController
 
         $this->load->model(
             [
-                'email_templates/mdl_email_templates',
-                'custom_fields/mdl_custom_fields',
-                'invoices/mdl_templates',
+                'email_templates/mdl_email_template',
+                'custom_fields/mdl_custom_field',
+                'invoices/mdl_template',
                 'quotes/mdl_quotes',
                 'upload/mdl_uploads',
             ]
@@ -138,7 +138,7 @@ class MailerController extends AdminController
                 'email_templates'         => $this->emailtemplates->where('email_template_type', 'quote')->get()->result(),
                 'email_template'          => $email_template,
                 'custom_fields'           => $custom_fields,
-                'pdf_templates'           => $this->templates->get_quote_templates(),
+                'pdf_templates'           => $this->template->get_quote_templates(),
                 'quote'                   => $this->quote->get_by_id($quote_id),
             ]
         );

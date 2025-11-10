@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class QuoteItemAmounts extends CI_Model
+class QuoteItemAmount extends CI_Model
 {
     /**
      * item_amount_id
@@ -29,12 +29,12 @@ class QuoteItemAmounts extends CI_Model
      * @param $global_discount
      *
      * Legacy migration info:
-     * @legacy-file application/modules/quotes/models/Mdl_quote_item_amounts.php
+     * @legacy-file application/modules/quotes/models/Mdl_quote_item_amount.php
      * @legacy-function calculate()
      */
     public function calculate($item_id, &$global_discount)
     {
-        $this->load->model('quotes/mdl_quote_items');
+        $this->load->model('quotes/mdl_quote_item');
         $item = $this->mdl_quote_items->get_by_id($item_id);
 
         $item_subtotal = $item->item_quantity * $item->item_price;

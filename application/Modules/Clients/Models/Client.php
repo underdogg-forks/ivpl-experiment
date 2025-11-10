@@ -359,7 +359,7 @@ class Client extends ResponseModel
      */
     public function get_not_assigned_to_user($user_id)
     {
-        $this->load->model('user_clients/mdl_user_clients');
+        $this->load->model('user_clients/mdl_user_client');
         $clients = $this->mdl_user_clients->select('ip_user_clients.client_id')
             ->assigned_to($user_id)->get()->result();
 

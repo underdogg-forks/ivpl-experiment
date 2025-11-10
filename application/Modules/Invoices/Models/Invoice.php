@@ -224,7 +224,7 @@ class Invoice extends ResponseModel
         }
 
         if ($invoice_group !== '0') {
-            $this->load->model('invoice_groups/mdl_invoice_groups');
+            $this->load->model('invoice_groups/mdl_invoice_group');
             $invgroup = $this->mdl_invoice_groups->where('invoice_group_id', $invoice_group)->get()->row();
             if (preg_match('/sumex/i', $invgroup->invoice_group_name)) {
                 // If the Invoice Group includes "Sumex", make the invoice a Sumex one
@@ -251,8 +251,8 @@ class Invoice extends ResponseModel
      */
     public function copy_invoice($source_id, $target_id, $copy_recurring_items_only = false): void
     {
-        $this->load->model('invoices/mdl_items');
-        $this->load->model('invoices/mdl_invoice_tax_rates');
+        $this->load->model('invoices/mdl_item');
+        $this->load->model('invoices/mdl_invoice_tax_rate');
 
         // Discounts calculation - since v1.6.3 Need if taxes applied after discounts
         $invoice         = $this->get_by_id($source_id); // This is the original invoice
@@ -333,8 +333,8 @@ class Invoice extends ResponseModel
      */
     public function copy_credit_invoice($source_id, $target_id)
     {
-        $this->load->model('invoices/mdl_items');
-        $this->load->model('invoices/mdl_invoice_tax_rates');
+        $this->load->model('invoices/mdl_item');
+        $this->load->model('invoices/mdl_invoice_tax_rate');
 
         // Discounts calculation - since v1.6.3 Need if taxes applied after discounts
         $invoice         = $this->get_by_id($source_id); // This is the original invoice
@@ -415,7 +415,7 @@ class Invoice extends ResponseModel
         $this->load->model('clients/mdl_clients');
 
         // Check if is SUMEX
-        $this->load->model('invoice_groups/mdl_invoice_groups');
+        $this->load->model('invoice_groups/mdl_invoice_group');
 
         $db_array['invoice_date_created'] = date_to_mysql($db_array['invoice_date_created']);
         $db_array['invoice_date_due']     = $this->get_date_due($db_array['invoice_date_created']);
@@ -493,7 +493,7 @@ class Invoice extends ResponseModel
      */
     public function get_invoice_number($invoice_group_id)
     {
-        $this->load->model('invoice_groups/mdl_invoice_groups');
+        $this->load->model('invoice_groups/mdl_invoice_group');
 
         return $this->mdl_invoice_groups->generate_invoice_number($invoice_group_id);
     }

@@ -226,7 +226,7 @@ class Quote extends ResponseModel
      */
     public function copy_quote($source_id, $target_id)
     {
-        $this->load->model('quotes/mdl_quote_items');
+        $this->load->model('quotes/mdl_quote_item');
 
         // Discounts calculation - since v1.6.3 Need if taxes applied after discounts
         $quote           = $this->get_by_id($source_id); // This is the original quote
@@ -355,7 +355,7 @@ class Quote extends ResponseModel
      */
     public function get_quote_number($invoice_group_id)
     {
-        $this->load->model('invoice_groups/mdl_invoice_groups');
+        $this->load->model('invoice_groups/mdl_invoice_group');
 
         return $this->mdl_invoice_groups->generate_invoice_number($invoice_group_id);
     }

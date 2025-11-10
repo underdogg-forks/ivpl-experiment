@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class InvoiceAmounts extends CI_Model
+class InvoiceAmount extends CI_Model
 {
     /**
      * @var int
@@ -51,7 +51,7 @@ class InvoiceAmounts extends CI_Model
      * @param $global_discount
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoice_amounts.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_amount.php
      * @legacy-function calculate()
      */
     public function calculate($invoice_id, $global_discount)
@@ -146,7 +146,7 @@ class InvoiceAmounts extends CI_Model
      * @return float
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoice_amounts.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_amount.php
      * @legacy-function calculate_discount()
      */
     public function calculate_discount($invoice_id, $invoice_total)
@@ -171,7 +171,7 @@ class InvoiceAmounts extends CI_Model
      * return global_discount
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoice_amounts.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_amount.php
      * @legacy-function get_global_discount()
      */
     public function get_global_discount($invoice_id)
@@ -191,13 +191,13 @@ class InvoiceAmounts extends CI_Model
      * @param $invoice_id
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoice_amounts.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_amount.php
      * @legacy-function calculate_invoice_taxes()
      */
     public function calculate_invoice_taxes($invoice_id)
     {
         // First check to see if there are any invoice taxes applied
-        $this->load->model('invoices/mdl_invoice_tax_rates');
+        $this->load->model('invoices/mdl_invoice_tax_rate');
         // Only appliable in legacy calculation - since 1.6.3
         $invoice_tax_rates = config_item('legacy_calculation') ? $this->mdl_invoice_tax_rates->where('invoice_id', $invoice_id)->get()->result() : null;
 
@@ -270,7 +270,7 @@ class InvoiceAmounts extends CI_Model
      * @return mixed
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoice_amounts.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_amount.php
      * @legacy-function get_total_invoiced()
      */
     public function get_total_invoiced($period = null)
@@ -313,7 +313,7 @@ class InvoiceAmounts extends CI_Model
      * @return mixed
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoice_amounts.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_amount.php
      * @legacy-function get_total_paid()
      */
     public function get_total_paid($period = null)
@@ -353,7 +353,7 @@ class InvoiceAmounts extends CI_Model
      * @return mixed
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoice_amounts.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_amount.php
      * @legacy-function get_total_balance()
      */
     public function get_total_balance($period = null)
@@ -394,7 +394,7 @@ class InvoiceAmounts extends CI_Model
      * @return array
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoice_amounts.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_amount.php
      * @legacy-function get_status_totals()
      */
     public function get_status_totals($period = '')

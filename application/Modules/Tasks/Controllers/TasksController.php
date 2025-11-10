@@ -81,7 +81,7 @@ class TasksController extends AdminController
         }
 
         $this->load->model('projects/project');
-        $this->load->model('tax_rates/taxrates');
+        $this->load->model('tax_rates/taxrate');
 
         $this->layout->set(
             [

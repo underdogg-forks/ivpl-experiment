@@ -109,14 +109,14 @@ class ClientsAjaxController extends AdminController
      */
     public function save_preference_permissive_search_clients()
     {
-        $this->load->model('settings/settings');
+        $this->load->model('settings/setting');
         $permissiveSearchClients = $this->input->get('permissive_search_clients');
 
         if ( ! preg_match('!^[0-1]{1}$!', $permissiveSearchClients)) {
             exit;
         }
 
-        $this->settings->save('enable_permissive_search_clients', $permissiveSearchClients);
+        $this->setting->save('enable_permissive_search_clients', $permissiveSearchClients);
     }
 
     /**
@@ -130,12 +130,12 @@ class ClientsAjaxController extends AdminController
     {
         $success        = 0;
         $client_note_id = $this->input->post('client_note_id');
-        $this->load->model('clients/clientnotes');
+        $this->load->model('clients/clientnote');
 
         // Only continue if the note exists or no item id was provided
         if ($this->clientnotes->get_by_id($client_note_id) || empty($client_note_id)) {
             // Delete invoice item
-            $this->load->model('clients/clientnotes');
+            $this->load->model('clients/clientnote');
             $item = $this->clientnotes->delete($client_note_id);
 
             // Check if deletion was successful
@@ -157,7 +157,7 @@ class ClientsAjaxController extends AdminController
      */
     public function save_client_note()
     {
-        $this->load->model('clients/clientnotes');
+        $this->load->model('clients/clientnote');
 
         if ($this->clientnotes->run_validation()) {
             $this->clientnotes->save();
@@ -185,7 +185,7 @@ class ClientsAjaxController extends AdminController
      */
     public function load_client_notes()
     {
-        $this->load->model('clients/clientnotes');
+        $this->load->model('clients/clientnote');
         $data = [
             'client_notes' => $this->clientnotes->where(
                 'client_id',

@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class EmailTemplates extends \Response_Model
+class EmailTemplate extends \Response_Model
 {
     public $table = 'ip_email_templates';
 
@@ -24,7 +24,7 @@ class EmailTemplates extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/email_templates/models/Mdl_email_templates.php
+     * @legacy-file application/modules/email_templates/models/Mdl_email_template.php
      * @legacy-function default_select()
      */
     public function default_select()
@@ -34,7 +34,7 @@ class EmailTemplates extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/email_templates/models/Mdl_email_templates.php
+     * @legacy-file application/modules/email_templates/models/Mdl_email_template.php
      * @legacy-function default_order_by()
      */
     public function default_order_by()
@@ -46,7 +46,7 @@ class EmailTemplates extends \Response_Model
      * @return array
      *
      * Legacy migration info:
-     * @legacy-file application/modules/email_templates/models/Mdl_email_templates.php
+     * @legacy-file application/modules/email_templates/models/Mdl_email_template.php
      * @legacy-function validation_rules()
      */
     public function validation_rules()

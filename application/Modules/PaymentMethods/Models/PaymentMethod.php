@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class PaymentMethods extends \Response_Model
+class PaymentMethod extends \Response_Model
 {
     public $table = 'ip_payment_methods';
 
@@ -24,7 +24,7 @@ class PaymentMethods extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/payment_methods/models/Mdl_payment_methods.php
+     * @legacy-file application/modules/payment_methods/models/Mdl_payment_method.php
      * @legacy-function default_select()
      */
     public function default_select()
@@ -34,7 +34,7 @@ class PaymentMethods extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/payment_methods/models/Mdl_payment_methods.php
+     * @legacy-file application/modules/payment_methods/models/Mdl_payment_method.php
      * @legacy-function order_by()
      */
     public function order_by()
@@ -46,7 +46,7 @@ class PaymentMethods extends \Response_Model
      * @return array
      *
      * Legacy migration info:
-     * @legacy-file application/modules/payment_methods/models/Mdl_payment_methods.php
+     * @legacy-file application/modules/payment_methods/models/Mdl_payment_method.php
      * @legacy-function validation_rules()
      */
     public function validation_rules()

@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class Settings extends CI_Model
+class Setting extends CI_Model
 {
     public $settings = [];
 
@@ -25,7 +25,7 @@ class Settings extends CI_Model
      * @param $value
      *
      * Legacy migration info:
-     * @legacy-file application/modules/settings/models/Mdl_settings.php
+     * @legacy-file application/modules/settings/models/Mdl_setting.php
      * @legacy-function save()
      */
     public function save($key, $value)
@@ -47,7 +47,7 @@ class Settings extends CI_Model
      * @param $key
      *
      * Legacy migration info:
-     * @legacy-file application/modules/settings/models/Mdl_settings.php
+     * @legacy-file application/modules/settings/models/Mdl_setting.php
      * @legacy-function get()
      */
     public function get($key)
@@ -66,7 +66,7 @@ class Settings extends CI_Model
      * @param $key
      *
      * Legacy migration info:
-     * @legacy-file application/modules/settings/models/Mdl_settings.php
+     * @legacy-file application/modules/settings/models/Mdl_setting.php
      * @legacy-function delete()
      */
     public function delete($key)
@@ -80,7 +80,7 @@ class Settings extends CI_Model
      * without additional queries.
      *
      * Legacy migration info:
-     * @legacy-file application/modules/settings/models/Mdl_settings.php
+     * @legacy-file application/modules/settings/models/Mdl_setting.php
      * @legacy-function load_settings()
      */
     public function load_settings()
@@ -89,12 +89,12 @@ class Settings extends CI_Model
         $ip_settings = $this->db->get('ip_settings')->result();
 
         foreach ($ip_settings as $data) {
-            $this->settings[$data->setting_key] = $data->setting_value;
+            $this->setting[$data->setting_key] = $data->setting_value;
         }
 
         // Append current version to the settings
-        $this->load->model('settings/mdl_versions');
-        $this->settings['current_version'] = $this->mdl_versions->get_current_version();
+        $this->load->model('settings/mdl_version');
+        $this->setting['current_version'] = $this->mdl_versions->get_current_version();
     }
 
     /**
@@ -104,12 +104,12 @@ class Settings extends CI_Model
      * @return mixed|string
      *
      * Legacy migration info:
-     * @legacy-file application/modules/settings/models/Mdl_settings.php
+     * @legacy-file application/modules/settings/models/Mdl_setting.php
      * @legacy-function setting()
      */
     public function setting($key, $default = '')
     {
-        return (isset($this->settings[$key]) && $this->settings[$key] !== '') ? $this->settings[$key] : $default;
+        return (isset($this->setting[$key]) && $this->setting[$key] !== '') ? $this->setting[$key] : $default;
     }
 
     /**
@@ -118,7 +118,7 @@ class Settings extends CI_Model
      * @return mixed|string
      *
      * Legacy migration info:
-     * @legacy-file application/modules/settings/models/Mdl_settings.php
+     * @legacy-file application/modules/settings/models/Mdl_setting.php
      * @legacy-function gateway_settings()
      */
     public function gateway_settings($key)
@@ -131,12 +131,12 @@ class Settings extends CI_Model
      * @param $value
      *
      * Legacy migration info:
-     * @legacy-file application/modules/settings/models/Mdl_settings.php
+     * @legacy-file application/modules/settings/models/Mdl_setting.php
      * @legacy-function set_setting()
      */
     public function set_setting($key, $value)
     {
-        $this->settings[$key] = $value;
+        $this->setting[$key] = $value;
     }
 
     /**
@@ -145,7 +145,7 @@ class Settings extends CI_Model
      * @return array
      *
      * Legacy migration info:
-     * @legacy-file application/modules/settings/models/Mdl_settings.php
+     * @legacy-file application/modules/settings/models/Mdl_setting.php
      * @legacy-function get_themes()
      */
     public function get_themes()

@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class InvoiceTaxRates extends \Response_Model
+class InvoiceTaxRate extends \Response_Model
 {
     public $table = 'ip_invoice_tax_rates';
 
@@ -24,7 +24,7 @@ class InvoiceTaxRates extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoice_tax_rates.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_tax_rate.php
      * @legacy-function default_select()
      */
     public function default_select()
@@ -36,7 +36,7 @@ class InvoiceTaxRates extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoice_tax_rates.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_tax_rate.php
      * @legacy-function default_join()
      */
     public function default_join()
@@ -48,7 +48,7 @@ class InvoiceTaxRates extends \Response_Model
      * @return void
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoice_tax_rates.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_tax_rate.php
      * @legacy-function save()
      */
     public function save($id = null, $db_array = null)
@@ -56,7 +56,7 @@ class InvoiceTaxRates extends \Response_Model
         // Only appliable in legacy calculation - since 1.6.3
         config_item('legacy_calculation') && parent::save($id, $db_array);
 
-        $this->load->model('invoices/mdl_invoice_amounts');
+        $this->load->model('invoices/mdl_invoice_amount');
 
         $invoice_id = $db_array['invoice_id'] ?? $this->input->post('invoice_id');
 
@@ -71,7 +71,7 @@ class InvoiceTaxRates extends \Response_Model
      * @return array
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_invoice_tax_rates.php
+     * @legacy-file application/modules/invoices/models/Mdl_invoice_tax_rate.php
      * @legacy-function validation_rules()
      */
     public function validation_rules()

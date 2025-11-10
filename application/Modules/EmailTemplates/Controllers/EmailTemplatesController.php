@@ -27,7 +27,7 @@ class EmailTemplatesController extends AdminController
     {
         parent::__construct();
 
-        $this->load->model('email_templates/emailtemplates');
+        $this->load->model('email_templates/emailtemplate');
     }
 
     /**
@@ -82,8 +82,8 @@ class EmailTemplatesController extends AdminController
         }
 
         $this->load->model([
-            'custom_fields/mdl_custom_fields',
-            'invoices/mdl_templates',
+            'custom_fields/mdl_custom_field',
+            'invoices/mdl_template',
         ]);
 
         foreach (array_keys($this->customfields->custom_tables()) as $table) {
@@ -92,8 +92,8 @@ class EmailTemplatesController extends AdminController
 
         $this->layout->set([
             'custom_fields'         => $custom_fields,
-            'invoice_templates'     => $this->templates->get_invoice_templates(),
-            'quote_templates'       => $this->templates->get_quote_templates(),
+            'invoice_templates'     => $this->template->get_invoice_templates(),
+            'quote_templates'       => $this->template->get_quote_templates(),
             'selected_pdf_template' => $this->emailtemplates->form_value('email_template_pdf_template'),
         ]);
         $this->layout->buffer('content', 'email_templates/form');

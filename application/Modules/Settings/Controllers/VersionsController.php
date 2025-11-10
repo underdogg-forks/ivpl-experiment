@@ -43,7 +43,7 @@ class VersionsController extends AdminController
         $versions = $this->version->result();
 
         $this->layout->set('versions', $versions);
-        $this->layout->buffer('content', 'settings/versions');
+        $this->layout->buffer('content', 'settings/version');
         $this->layout->render();
     }
 }

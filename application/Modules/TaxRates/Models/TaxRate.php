@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class TaxRates extends \Response_Model
+class TaxRate extends \Response_Model
 {
     public $table = 'ip_tax_rates';
 
@@ -24,7 +24,7 @@ class TaxRates extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/tax_rates/models/Mdl_tax_rates.php
+     * @legacy-file application/modules/tax_rates/models/Mdl_tax_rate.php
      * @legacy-function default_select()
      */
     public function default_select()
@@ -34,7 +34,7 @@ class TaxRates extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/tax_rates/models/Mdl_tax_rates.php
+     * @legacy-file application/modules/tax_rates/models/Mdl_tax_rate.php
      * @legacy-function default_order_by()
      */
     public function default_order_by()
@@ -46,7 +46,7 @@ class TaxRates extends \Response_Model
      * @return array
      *
      * Legacy migration info:
-     * @legacy-file application/modules/tax_rates/models/Mdl_tax_rates.php
+     * @legacy-file application/modules/tax_rates/models/Mdl_tax_rate.php
      * @legacy-function validation_rules()
      */
     public function validation_rules()

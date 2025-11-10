@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class CustomFields extends \MY_Model
+class CustomField extends \MY_Model
 {
     public $table = 'ip_custom_fields';
 
@@ -28,7 +28,7 @@ class CustomFields extends \MY_Model
      * @return string
      *
      * Legacy migration info:
-     * @legacy-file application/modules/custom_fields/models/Mdl_custom_fields.php
+     * @legacy-file application/modules/custom_fields/models/Mdl_custom_field.php
      * @legacy-function get_nicename()
      */
     public static function get_nicename($element)
@@ -44,20 +44,20 @@ class CustomFields extends \MY_Model
      * @return string[]
      *
      * Legacy migration info:
-     * @legacy-file application/modules/custom_fields/models/Mdl_custom_fields.php
+     * @legacy-file application/modules/custom_fields/models/Mdl_custom_field.php
      * @legacy-function custom_types()
      */
     public static function custom_types()
     {
         $CI = &get_instance();
-        $CI->load->model('custom_values/mdl_custom_values');
+        $CI->load->model('custom_values/mdl_custom_value');
 
         return Mdl_Custom_Values::custom_types();
     }
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/custom_fields/models/Mdl_custom_fields.php
+     * @legacy-file application/modules/custom_fields/models/Mdl_custom_field.php
      * @legacy-function default_select()
      */
     public function default_select()
@@ -67,7 +67,7 @@ class CustomFields extends \MY_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/custom_fields/models/Mdl_custom_fields.php
+     * @legacy-file application/modules/custom_fields/models/Mdl_custom_field.php
      * @legacy-function default_order_by()
      */
     public function default_order_by()
@@ -79,7 +79,7 @@ class CustomFields extends \MY_Model
      * @return array
      *
      * Legacy migration info:
-     * @legacy-file application/modules/custom_fields/models/Mdl_custom_fields.php
+     * @legacy-file application/modules/custom_fields/models/Mdl_custom_field.php
      * @legacy-function validation_rules()
      */
     public function validation_rules()
@@ -119,7 +119,7 @@ class CustomFields extends \MY_Model
      * @return $this
      *
      * Legacy migration info:
-     * @legacy-file application/modules/custom_fields/models/Mdl_custom_fields.php
+     * @legacy-file application/modules/custom_fields/models/Mdl_custom_field.php
      * @legacy-function get_by_table()
      */
     public function get_by_table($table)
@@ -131,7 +131,7 @@ class CustomFields extends \MY_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/custom_fields/models/Mdl_custom_fields.php
+     * @legacy-file application/modules/custom_fields/models/Mdl_custom_field.php
      * @legacy-function save()
      */
     public function save($id = null, $db_array = null)
@@ -156,7 +156,7 @@ class CustomFields extends \MY_Model
      * @return array
      *
      * Legacy migration info:
-     * @legacy-file application/modules/custom_fields/models/Mdl_custom_fields.php
+     * @legacy-file application/modules/custom_fields/models/Mdl_custom_field.php
      * @legacy-function get_positions()
      */
     public function get_positions($table_name = false)
@@ -199,7 +199,7 @@ class CustomFields extends \MY_Model
      * @return $this
      *
      * Legacy migration info:
-     * @legacy-file application/modules/custom_fields/models/Mdl_custom_fields.php
+     * @legacy-file application/modules/custom_fields/models/Mdl_custom_field.php
      * @legacy-function get_by_id()
      */
     public function get_by_id($column)
@@ -213,7 +213,7 @@ class CustomFields extends \MY_Model
      * @return array
      *
      * Legacy migration info:
-     * @legacy-file application/modules/custom_fields/models/Mdl_custom_fields.php
+     * @legacy-file application/modules/custom_fields/models/Mdl_custom_field.php
      * @legacy-function db_array()
      */
     public function db_array()
@@ -245,7 +245,7 @@ class CustomFields extends \MY_Model
      * @return array
      *
      * Legacy migration info:
-     * @legacy-file application/modules/custom_fields/models/Mdl_custom_fields.php
+     * @legacy-file application/modules/custom_fields/models/Mdl_custom_field.php
      * @legacy-function custom_tables()
      */
     public function custom_tables()
@@ -265,7 +265,7 @@ class CustomFields extends \MY_Model
      * @return mixed
      *
      * Legacy migration info:
-     * @legacy-file application/modules/custom_fields/models/Mdl_custom_fields.php
+     * @legacy-file application/modules/custom_fields/models/Mdl_custom_field.php
      * @legacy-function used()
      */
     public function used($id = null, $get = true)
@@ -289,7 +289,7 @@ class CustomFields extends \MY_Model
      * @param $id
      *
      * Legacy migration info:
-     * @legacy-file application/modules/custom_fields/models/Mdl_custom_fields.php
+     * @legacy-file application/modules/custom_fields/models/Mdl_custom_field.php
      * @legacy-function delete()
      */
     public function delete($id): bool
@@ -298,7 +298,7 @@ class CustomFields extends \MY_Model
             $custom_field = $this->get_by_id($id);
             // Remove MULTIPLE|SINGLE CHOICE values
             if (preg_match('/CHOICE/', $custom_field->custom_field_type)) {
-                $this->load->model('custom_values/mdl_custom_values');
+                $this->load->model('custom_values/mdl_custom_value');
                 $this->mdl_custom_values->delete_all_fid($id);
             }
 
@@ -320,7 +320,7 @@ class CustomFields extends \MY_Model
      * @return $this
      *
      * Legacy migration info:
-     * @legacy-file application/modules/custom_fields/models/Mdl_custom_fields.php
+     * @legacy-file application/modules/custom_fields/models/Mdl_custom_field.php
      * @legacy-function by_table_name()
      */
     public function by_table_name($name)
@@ -337,7 +337,7 @@ class CustomFields extends \MY_Model
      * @return $this
      *
      * Legacy migration info:
-     * @legacy-file application/modules/custom_fields/models/Mdl_custom_fields.php
+     * @legacy-file application/modules/custom_fields/models/Mdl_custom_field.php
      * @legacy-function by_table()
      */
     public function by_table($table)
@@ -355,7 +355,7 @@ class CustomFields extends \MY_Model
      * @return string
      *
      * Legacy migration info:
-     * @legacy-file application/modules/custom_fields/models/Mdl_custom_fields.php
+     * @legacy-file application/modules/custom_fields/models/Mdl_custom_field.php
      * @legacy-function get_value_for_field()
      */
     public function get_value_for_field($field_id, $custom_field_model, $object)
@@ -387,13 +387,13 @@ class CustomFields extends \MY_Model
      * @return array
      *
      * Legacy migration info:
-     * @legacy-file application/modules/custom_fields/models/Mdl_custom_fields.php
+     * @legacy-file application/modules/custom_fields/models/Mdl_custom_field.php
      * @legacy-function get_values_for_fields()
      */
     public function get_values_for_fields($custom_field_model, $model_id)
     {
         $this->load->model('custom_fields/' . $custom_field_model);
-        $this->load->model('custom_values/mdl_custom_values');
+        $this->load->model('custom_values/mdl_custom_value');
 
         $fields = $this->{$custom_field_model}->by_id($model_id)->get()->result();
 
@@ -453,7 +453,7 @@ class CustomFields extends \MY_Model
      * @param string $new_column_name
      *
      * Legacy migration info:
-     * @legacy-file application/modules/custom_fields/models/Mdl_custom_fields.php
+     * @legacy-file application/modules/custom_fields/models/Mdl_custom_field.php
      * @legacy-function rename_column()
      */
     private function rename_column($table_name, $old_column_name, $new_column_name)
@@ -476,7 +476,7 @@ class CustomFields extends \MY_Model
      * @param string $column_name
      *
      * Legacy migration info:
-     * @legacy-file application/modules/custom_fields/models/Mdl_custom_fields.php
+     * @legacy-file application/modules/custom_fields/models/Mdl_custom_field.php
      * @legacy-function add_column()
      */
     private function add_column($table_name, $column_name)

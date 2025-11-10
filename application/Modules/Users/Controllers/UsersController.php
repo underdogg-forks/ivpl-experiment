@@ -124,11 +124,11 @@ class UsersController extends AdminController
         $this->load->helper(['custom_values', 'e-invoice']);
         $this->load->model(
             [
-                'user_clients/mdl_user_clients',
+                'user_clients/mdl_user_client',
                 'clients/mdl_clients',
-                'custom_fields/mdl_custom_fields',
+                'custom_fields/mdl_custom_field',
                 'custom_fields/mdl_user_custom',
-                'custom_values/mdl_custom_values',
+                'custom_values/mdl_custom_value',
             ]
         );
 
@@ -226,7 +226,7 @@ class UsersController extends AdminController
      */
     public function delete_user_client(string $user_id, $user_client_id)
     {
-        $this->load->model('user_clients/userclients');
+        $this->load->model('user_clients/userclient');
 
         $this->userclients->delete($user_client_id);
 

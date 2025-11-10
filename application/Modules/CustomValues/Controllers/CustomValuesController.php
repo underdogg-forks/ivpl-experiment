@@ -27,7 +27,7 @@ class Custom_Values extends AdminController
     {
         parent::__construct();
 
-        $this->load->model('custom_values/customvalues');
+        $this->load->model('custom_values/customvalue');
     }
 
     /**
@@ -42,7 +42,7 @@ class Custom_Values extends AdminController
         $this->customvalues->grouped()->paginate(site_url('custom_values/index'), $page);
         $custom_values = $this->customvalues->result();
 
-        $this->load->model('custom_fields/customfields');
+        $this->load->model('custom_fields/customfield');
         // Determine which name of table custom field to load
         $custom_tables = $this->customfields->custom_tables();
         // load positions by table name
@@ -73,7 +73,7 @@ class Custom_Values extends AdminController
             redirect('custom_values');
         }
 
-        $this->load->model('custom_fields/customfields');
+        $this->load->model('custom_fields/customfield');
         $field  = $this->customfields->get_by_id($id);
         $result = $this->customvalues->get_by_fid($id)->result();
         // Determine which name of table custom field to load
@@ -119,7 +119,7 @@ class Custom_Values extends AdminController
             redirect('custom_values/field/' . $fid);
         }
 
-        $this->load->model('custom_fields/customfields');
+        $this->load->model('custom_fields/customfield');
         $positions = $this->customfields->get_positions(true);
         $position  = $positions[$value->custom_field_table][$value->custom_field_location];
         unset($positions);
@@ -159,7 +159,7 @@ class Custom_Values extends AdminController
             redirect('custom_values/field/' . $fid);
         }
 
-        $this->load->model('custom_fields/customfields');
+        $this->load->model('custom_fields/customfield');
         $field = $this->customfields->get_by_id($id);
 
         // Determine which name of table custom field to load

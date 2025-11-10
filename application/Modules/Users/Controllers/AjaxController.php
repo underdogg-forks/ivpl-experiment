@@ -111,14 +111,14 @@ class UsersAjaxController extends AdminController
      */
     public function save_preference_permissive_search_users()
     {
-        $this->load->model('settings/settings');
+        $this->load->model('settings/setting');
         $permissiveSearchUsers = $this->input->get('permissive_search_users');
 
         if ( ! preg_match('!^[0-1]{1}$!', $permissiveSearchUsers)) {
             exit;
         }
 
-        $this->settings->save('enable_permissive_search_users', $permissiveSearchUsers);
+        $this->setting->save('enable_permissive_search_users', $permissiveSearchUsers);
     }
 
     /**
@@ -132,7 +132,7 @@ class UsersAjaxController extends AdminController
         $client_id = $this->input->post('client_id');
 
         $this->load->model('clients/client');
-        $this->load->model('user_clients/userclients');
+        $this->load->model('user_clients/userclient');
 
         $client = $this->client->get_by_id($client_id);
         if ($client) {
@@ -175,7 +175,7 @@ class UsersAjaxController extends AdminController
                 'user_clients' => $this->client->where_in('ip_clients.client_id', $session_user_clients)->get()->result(),
             ];
         } else {
-            $this->load->model('user_clients/userclients');
+            $this->load->model('user_clients/userclient');
 
             $data = [
                 'id'           => $this->input->post('user_id'),
@@ -199,7 +199,7 @@ class UsersAjaxController extends AdminController
             $clients          = $this->client->where_not_in('ip_clients.client_id', $session_user_clients)->get()->result();
             $assigned_clients = [];
         } else {
-            $this->load->model('user_clients/userclients');
+            $this->load->model('user_clients/userclient');
             $assigned_clients_query = $this->userclients->where('ip_user_clients.user_id', $user_id)->get()->result();
             $assigned_clients       = [];
 

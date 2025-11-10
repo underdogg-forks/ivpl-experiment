@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class Items extends \Response_Model
+class Item extends \Response_Model
 {
     public $table = 'ip_invoice_items';
 
@@ -26,7 +26,7 @@ class Items extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_items.php
+     * @legacy-file application/modules/invoices/models/Mdl_item.php
      * @legacy-function default_select()
      */
     public function default_select()
@@ -38,7 +38,7 @@ class Items extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_items.php
+     * @legacy-file application/modules/invoices/models/Mdl_item.php
      * @legacy-function default_order_by()
      */
     public function default_order_by()
@@ -48,7 +48,7 @@ class Items extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_items.php
+     * @legacy-file application/modules/invoices/models/Mdl_item.php
      * @legacy-function default_join()
      */
     public function default_join()
@@ -62,7 +62,7 @@ class Items extends \Response_Model
      * @return array
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_items.php
+     * @legacy-file application/modules/invoices/models/Mdl_item.php
      * @legacy-function validation_rules()
      */
     public function validation_rules()
@@ -122,7 +122,7 @@ class Items extends \Response_Model
      * @return int|null
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_items.php
+     * @legacy-file application/modules/invoices/models/Mdl_item.php
      * @legacy-function save()
      */
     public function save($id = null, $db_array = null, &$global_discount = [])
@@ -130,8 +130,8 @@ class Items extends \Response_Model
         $id = parent::save($id, $db_array);
 
         $this->load->model([
-            'invoices/mdl_item_amounts',
-            'invoices/mdl_invoice_amounts',
+            'invoices/mdl_item_amount',
+            'invoices/mdl_invoice_amount',
         ]);
         $this->mdl_item_amounts->calculate($id, $global_discount);
 
@@ -148,7 +148,7 @@ class Items extends \Response_Model
      * @param int $item_id
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_items.php
+     * @legacy-file application/modules/invoices/models/Mdl_item.php
      * @legacy-function delete()
      */
     public function delete($item_id): bool
@@ -172,7 +172,7 @@ class Items extends \Response_Model
         $this->db->where('item_id', $item_id);
         $this->db->delete('ip_invoice_item_amounts');
 
-        $this->load->model('invoices/mdl_invoice_amounts');
+        $this->load->model('invoices/mdl_invoice_amount');
         $global_discount['item'] = $this->mdl_invoice_amounts->get_global_discount($invoice_id);
         // Recalculate invoice amounts
         $this->mdl_invoice_amounts->calculate($invoice_id, $global_discount);
@@ -188,7 +188,7 @@ class Items extends \Response_Model
      * return items_subtotal
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_items.php
+     * @legacy-file application/modules/invoices/models/Mdl_item.php
      * @legacy-function get_items_subtotal()
      */
     public function get_items_subtotal($invoice_id)

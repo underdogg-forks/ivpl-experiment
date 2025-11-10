@@ -58,7 +58,7 @@ class PaymentsAjaxController extends AdminController
     {
         $this->load->module('layout');
         $this->load->model('payments/payment');
-        $this->load->model('payment_methods/paymentmethods');
+        $this->load->model('payment_methods/paymentmethod');
         $this->load->model('custom_fields/paymentcustom');
 
         $data = [

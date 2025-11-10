@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class Versions extends \Response_Model
+class Version extends \Response_Model
 {
     public $table = 'ip_versions';
 
@@ -24,7 +24,7 @@ class Versions extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/settings/models/Mdl_versions.php
+     * @legacy-file application/modules/settings/models/Mdl_version.php
      * @legacy-function default_select()
      */
     public function default_select()
@@ -34,7 +34,7 @@ class Versions extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/settings/models/Mdl_versions.php
+     * @legacy-file application/modules/settings/models/Mdl_version.php
      * @legacy-function default_order_by()
      */
     public function default_order_by()
@@ -48,7 +48,7 @@ class Versions extends \Response_Model
      * @return string
      *
      * Legacy migration info:
-     * @legacy-file application/modules/settings/models/Mdl_versions.php
+     * @legacy-file application/modules/settings/models/Mdl_version.php
      * @legacy-function get_current_version()
      */
     public function get_current_version()

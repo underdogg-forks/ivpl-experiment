@@ -80,7 +80,7 @@ class ProductsController extends AdminController
 
         $this->load->model('families/family');
         $this->load->model('units/unit');
-        $this->load->model('tax_rates/taxrates');
+        $this->load->model('tax_rates/taxrate');
 
         $this->layout->set(
             [

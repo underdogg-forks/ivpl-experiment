@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class QuoteTaxRates extends \Response_Model
+class QuoteTaxRate extends \Response_Model
 {
     public $table = 'ip_quote_tax_rates';
 
@@ -24,7 +24,7 @@ class QuoteTaxRates extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/quotes/models/Mdl_quote_tax_rates.php
+     * @legacy-file application/modules/quotes/models/Mdl_quote_tax_rate.php
      * @legacy-function default_select()
      */
     public function default_select()
@@ -36,7 +36,7 @@ class QuoteTaxRates extends \Response_Model
 
     /**
      * Legacy migration info:
-     * @legacy-file application/modules/quotes/models/Mdl_quote_tax_rates.php
+     * @legacy-file application/modules/quotes/models/Mdl_quote_tax_rate.php
      * @legacy-function default_join()
      */
     public function default_join()
@@ -48,7 +48,7 @@ class QuoteTaxRates extends \Response_Model
      * @return void
      *
      * Legacy migration info:
-     * @legacy-file application/modules/quotes/models/Mdl_quote_tax_rates.php
+     * @legacy-file application/modules/quotes/models/Mdl_quote_tax_rate.php
      * @legacy-function save()
      */
     public function save($id = null, $db_array = null)
@@ -56,7 +56,7 @@ class QuoteTaxRates extends \Response_Model
         // Only appliable in legacy calculation - since 1.6.3
         config_item('legacy_calculation') && parent::save($id, $db_array);
 
-        $this->load->model('quotes/mdl_quote_amounts');
+        $this->load->model('quotes/mdl_quote_amount');
 
         $quote_id = $db_array['quote_id'] ?? $this->input->post('quote_id');
 
@@ -72,7 +72,7 @@ class QuoteTaxRates extends \Response_Model
      * @return void
      *
      * Legacy migration info:
-     * @legacy-file application/modules/quotes/models/Mdl_quote_tax_rates.php
+     * @legacy-file application/modules/quotes/models/Mdl_quote_tax_rate.php
      * @legacy-function validation_rules()
      */
     public function validation_rules()

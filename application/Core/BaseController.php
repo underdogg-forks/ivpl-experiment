@@ -56,7 +56,7 @@ class BaseController extends \MX_Controller
             $this->load->helper(['trans', 'number', 'pager', 'invoice', 'date', 'form', 'echo', 'user', 'client', 'country']);
 
             // Load setting model and load settings
-            $this->load->model('settings/mdl_settings');
+            $this->load->model('settings/mdl_setting');
             if ($this->mdl_settings != null) {
                 $this->mdl_settings->load_settings();
             }

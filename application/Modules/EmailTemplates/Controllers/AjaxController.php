@@ -29,7 +29,7 @@ class EmailTemplatesAjaxController extends AdminController
      */
     public function get_content()
     {
-        $this->load->model('email_templates/emailtemplates');
+        $this->load->model('email_templates/emailtemplate');
 
         $id = $this->input->post('email_template_id');
 

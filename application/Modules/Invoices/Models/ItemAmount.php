@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class ItemAmounts extends CI_Model
+class ItemAmount extends CI_Model
 {
     /**
      * item_amount_id
@@ -29,12 +29,12 @@ class ItemAmounts extends CI_Model
      * @param $global_discount
      *
      * Legacy migration info:
-     * @legacy-file application/modules/invoices/models/Mdl_item_amounts.php
+     * @legacy-file application/modules/invoices/models/Mdl_item_amount.php
      * @legacy-function calculate()
      */
     public function calculate($item_id, &$global_discount)
     {
-        $this->load->model('invoices/mdl_items');
+        $this->load->model('invoices/mdl_item');
         $item = $this->mdl_items->get_by_id($item_id);
 
         $item_subtotal = $item->item_quantity * $item->item_price;

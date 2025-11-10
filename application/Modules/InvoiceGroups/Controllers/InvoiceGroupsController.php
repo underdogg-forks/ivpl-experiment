@@ -27,7 +27,7 @@ class Invoice_Groups extends AdminController
     {
         parent::__construct();
 
-        $this->load->model('invoice_groups/invoicegroups');
+        $this->load->model('invoice_groups/invoicegroup');
     }
 
     /**

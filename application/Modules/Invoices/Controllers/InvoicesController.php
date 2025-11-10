@@ -149,12 +149,12 @@ class InvoicesController extends AdminController
     {
         $this->load->model(
             [
-                'invoices/mdl_items',
-                'invoices/mdl_invoice_tax_rates',
-                'tax_rates/mdl_tax_rates',
-                'payment_methods/mdl_payment_methods',
-                'custom_fields/mdl_custom_fields',
-                'custom_values/mdl_custom_values',
+                'invoices/mdl_item',
+                'invoices/mdl_invoice_tax_rate',
+                'tax_rates/mdl_tax_rate',
+                'payment_methods/mdl_payment_method',
+                'custom_fields/mdl_custom_field',
+                'custom_values/mdl_custom_value',
                 'custom_fields/mdl_invoice_custom',
                 'units/mdl_units',
                 'upload/mdl_uploads',
@@ -210,7 +210,7 @@ class InvoicesController extends AdminController
         $payment_cf       = $this->customfields->by_table('ip_payment_custom')->get();
         $payment_cf_exist = ($payment_cf->num_rows() > 0) ? 'yes' : 'no';
         // Get Items
-        $items = $this->items->where('invoice_id', $invoice_id)->get()->result();
+        $items = $this->item->where('invoice_id', $invoice_id)->get()->result();
         // Get eInvoice library name and user checks
         $einvoice = get_einvoice_usage($invoice, $items);
         // Activate 'Change_user' if admin users > 1  (get the sum of user type = 1 & active)
@@ -312,8 +312,8 @@ class InvoicesController extends AdminController
             show_404();
         }
 
-        $this->load->model('invoices/items');
-        $items = $this->items->where('invoice_id', $invoice_id)->get()->result();
+        $this->load->model('invoices/item');
+        $items = $this->item->where('invoice_id', $invoice_id)->get()->result();
 
         $this->load->helper('e-invoice'); // eInvoicing++
         $einvoice = get_einvoice_usage($invoice, $items, false);
@@ -359,10 +359,10 @@ class InvoicesController extends AdminController
      */
     public function generate_sumex_copy($invoice_id): void
     {
-        $this->load->model('invoices/items');
+        $this->load->model('invoices/item');
         $this->load->library('Sumex', [
             'invoice' => $this->invoice->get_by_id($invoice_id),
-            'items'   => $this->items->where('invoice_id', $invoice_id)->get()->result(),
+            'items'   => $this->item->where('invoice_id', $invoice_id)->get()->result(),
             'options' => [
                 'copy'   => '1',
                 'storno' => '0',
@@ -380,10 +380,10 @@ class InvoicesController extends AdminController
      */
     public function delete_invoice_tax(string $invoice_id, $invoice_tax_rate_id): void
     {
-        $this->load->model('invoices/invoicetaxrates');
+        $this->load->model('invoices/invoicetaxrate');
         $this->invoicetaxrates->delete($invoice_tax_rate_id);
 
-        $this->load->model('invoices/invoiceamounts');
+        $this->load->model('invoices/invoiceamount');
         $global_discount['item'] = $this->invoiceamounts->get_global_discount($invoice_id);
         // Recalculate invoice amounts
         $this->invoiceamounts->calculate($invoice_id, $global_discount);
@@ -401,7 +401,7 @@ class InvoicesController extends AdminController
         $this->db->select('invoice_id');
         $invoice_ids = $this->db->get('ip_invoices')->result();
 
-        $this->load->model('invoices/invoiceamounts');
+        $this->load->model('invoices/invoiceamount');
 
         foreach ($invoice_ids as $invoice_id) {
             $global_discount['item'] = $this->invoiceamounts->get_global_discount($invoice_id->invoice_id);
