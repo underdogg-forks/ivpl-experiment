@@ -7,6 +7,20 @@
 /node_modules
 /vendor
 
+# Built assets - generated from resources/assets
+/public/assets/*/css/*.css
+/public/assets/*/css/*.css.map
+/public/assets/core/js/*.js
+!/public/assets/core/js/scripts.js
+!/public/assets/core/js/jquery-ui.js
+!/public/assets/core/js/paypal.js
+/public/assets/core/fonts/*
+!/public/assets/core/fonts/.gitignore
+/public/assets/core/js/locales/
+
+# Old assets directory (deprecated - use public/assets instead)
+/assets/
+
 # Other files
 .htaccess
 .idea
