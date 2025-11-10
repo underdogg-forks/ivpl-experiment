@@ -25,7 +25,7 @@ Transform InvoicePlane from an ancient CodeIgniter 3 codebase into a modern, mai
 
 ## Naming Conventions
 
-### Current (Legacy) - In Production
+### Current (Legacy) - Still Supported
 ```
 Controllers: Invoices (class Invoices extends Admin_Controller)
 Models: Mdl_invoices (class Mdl_invoices extends Response_Model)
@@ -34,21 +34,30 @@ Location: application/modules/{module}/controllers/, models/
 Namespace: None
 ```
 
-### Target (Modern) - Goal State
+### Active (PSR-4) - Preferred ✅
 ```
 Controllers: InvoicesController (class InvoicesController extends Admin_Controller)
-Models: Invoice (class Invoice extends Response_Model)
+Models: Invoice (class Invoice extends Response_Model)  
 Files: InvoicesController.php, Invoice.php
 Location: application/modules/{module}/Controllers/, Models/
 Namespace: App\Modules\{Module}\{Controllers|Models}
+Examples:
+  - App\Modules\Invoices\Controllers\InvoicesController
+  - App\Modules\Invoices\Models\Invoice
 ```
 
 ### Transition Strategy
-1. **Phase 1**: Add Composer PSR-4 autoloader
-2. **Phase 2**: Modify MX to detect and load PSR-4 controllers
-3. **Phase 3**: Create new controllers with PSR-4 naming in parallel
+1. **Phase 1**: ✅ Add Composer PSR-4 autoloader
+2. **Phase 2**: ✅ Modify MX to detect and load PSR-4 controllers
+3. **Phase 3**: ✅ Create new controllers with PSR-4 naming in parallel
 4. **Phase 4**: Gradually migrate existing controllers
 5. **Phase 5**: Deprecate and remove legacy controllers
+
+### Routing Behavior
+- **PSR-4 Controllers**: `invoices/form` → `App\Modules\Invoices\Controllers\InvoicesController::form()`
+- **Legacy Controllers**: `invoices/index` → `Invoices::index()` (backward compatible)
+- MX Router checks PSR-4 first, then falls back to legacy
+- URL structure remains unchanged: `invoices/form` works for both
 
 ## Directory Structure
 
