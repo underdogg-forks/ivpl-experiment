@@ -23,7 +23,7 @@ class AjaxController extends \Admin_Controller
     public function name_query()
     {
         // Load the model & helper
-        $this->load->model('clients/mdl_clients');
+        $this->load->model('clients/clients');
 
         $response = [];
 
@@ -43,7 +43,7 @@ class AjaxController extends \Admin_Controller
         $escapedQuery = $this->db->escape_str($query);
         $escapedQuery = str_replace('%', '', $escapedQuery);
 
-        $clients = $this->mdl_clients
+        $clients = $this->clients
             ->where('client_active', 1)
             ->having("client_name LIKE '" . $moreClientsQuery . $escapedQuery . "%'")
             ->or_having("client_surname LIKE '" . $moreClientsQuery . $escapedQuery . "%'")
@@ -69,11 +69,11 @@ class AjaxController extends \Admin_Controller
     public function get_latest()
     {
         // Load the model & helper
-        $this->load->model('clients/mdl_clients');
+        $this->load->model('clients/clients');
 
         $response = [];
 
-        $clients = $this->mdl_clients
+        $clients = $this->clients
             ->where('client_active', 1)
             ->limit(5)
             ->order_by('client_date_created')
@@ -93,14 +93,14 @@ class AjaxController extends \Admin_Controller
 
     public function save_preference_permissive_search_clients()
     {
-        $this->load->model('mdl_settings');
+        $this->load->model('settings/settings');
         $permissiveSearchClients = $this->input->get('permissive_search_clients');
 
         if ( ! preg_match('!^[0-1]{1}$!', $permissiveSearchClients)) {
             exit;
         }
 
-        $this->mdl_settings->save('enable_permissive_search_clients', $permissiveSearchClients);
+        $this->settings->save('enable_permissive_search_clients', $permissiveSearchClients);
     }
 
     /**
@@ -110,13 +110,13 @@ class AjaxController extends \Admin_Controller
     {
         $success        = 0;
         $client_note_id = $this->input->post('client_note_id');
-        $this->load->model('mdl_client_notes');
+        $this->load->model('clients/clientnotes');
 
         // Only continue if the note exists or no item id was provided
-        if ($this->mdl_client_notes->get_by_id($client_note_id) || empty($client_note_id)) {
+        if ($this->clientnotes->get_by_id($client_note_id) || empty($client_note_id)) {
             // Delete invoice item
-            $this->load->model('mdl_client_notes');
-            $item = $this->mdl_client_notes->delete($client_note_id);
+            $this->load->model('clients/clientnotes');
+            $item = $this->clientnotes->delete($client_note_id);
 
             // Check if deletion was successful
             if ($item) {
@@ -132,10 +132,10 @@ class AjaxController extends \Admin_Controller
 
     public function save_client_note()
     {
-        $this->load->model('clients/mdl_client_notes');
+        $this->load->model('clients/clientnotes');
 
-        if ($this->mdl_client_notes->run_validation()) {
-            $this->mdl_client_notes->save();
+        if ($this->clientnotes->run_validation()) {
+            $this->clientnotes->save();
 
             $response = [
                 'success'   => 1,
@@ -155,9 +155,9 @@ class AjaxController extends \Admin_Controller
 
     public function load_client_notes()
     {
-        $this->load->model('clients/mdl_client_notes');
+        $this->load->model('clients/clientnotes');
         $data = [
-            'client_notes' => $this->mdl_client_notes->where(
+            'client_notes' => $this->clientnotes->where(
                 'client_id',
                 $this->input->post('client_id')
             )->get()->result(),

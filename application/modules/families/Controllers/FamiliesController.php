@@ -25,7 +25,7 @@ class FamiliesController extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('mdl_families');
+        $this->load->model('families/families');
     }
 
     /**
@@ -33,8 +33,8 @@ class FamiliesController extends \Admin_Controller
      */
     public function index($page = 0)
     {
-        $this->mdl_families->paginate(site_url('families/index'), $page);
-        $families = $this->mdl_families->result();
+        $this->families->paginate(site_url('families/index'), $page);
+        $families = $this->families->result();
 
         $this->layout->set([
             'filter_display'     => true,
@@ -63,17 +63,17 @@ class FamiliesController extends \Admin_Controller
             }
         }
 
-        if ($this->mdl_families->run_validation()) {
-            $this->mdl_families->save($id);
+        if ($this->families->run_validation()) {
+            $this->families->save($id);
             redirect('families');
         }
 
         if ($id && ! $this->input->post('btn_submit')) {
-            if ( ! $this->mdl_families->prep_form($id)) {
+            if ( ! $this->families->prep_form($id)) {
                 show_404();
             }
 
-            $this->mdl_families->set_form_value('is_update', true);
+            $this->families->set_form_value('is_update', true);
         }
 
         $this->layout->buffer('content', 'families/form');
@@ -85,7 +85,7 @@ class FamiliesController extends \Admin_Controller
      */
     public function delete($id)
     {
-        $this->mdl_families->delete($id);
+        $this->families->delete($id);
         redirect('families');
     }
 }

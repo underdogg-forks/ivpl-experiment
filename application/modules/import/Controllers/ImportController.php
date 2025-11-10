@@ -32,7 +32,7 @@ class ImportController extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('mdl_import');
+        $this->load->model('import/import');
     }
 
     /**
@@ -40,8 +40,8 @@ class ImportController extends \Admin_Controller
      */
     public function index($page = 0)
     {
-        $this->mdl_import->paginate(site_url('import/index'), $page);
-        $imports = $this->mdl_import->result();
+        $this->import->paginate(site_url('import/index'), $page);
+        $imports = $this->import->result();
 
         $this->layout->set('imports', $imports);
         $this->layout->buffer('content', 'import/index');
@@ -67,7 +67,7 @@ class ImportController extends \Admin_Controller
         } else {
             $this->load->helper('file');
 
-            $import_id = $this->mdl_import->start_import();
+            $import_id = $this->import->start_import();
 
             if ($this->input->post('files')) {
                 $files = $this->allowed_files;
@@ -81,23 +81,23 @@ class ImportController extends \Admin_Controller
                 foreach ($files as $file) {
                     switch ($file) {
                         case 'clients.csv':
-                            $ids = $this->mdl_import->import_data($file, 'ip_clients');
-                            $this->mdl_import->record_import_details($import_id, 'ip_clients', 'clients', $ids);
+                            $ids = $this->import->import_data($file, 'ip_clients');
+                            $this->import->record_import_details($import_id, 'ip_clients', 'clients', $ids);
                             break;
                         case 'invoices.csv':
-                            $this->load->model('invoices/mdl_invoices');
-                            $ids = $this->mdl_import->import_invoices();
-                            $this->mdl_import->record_import_details($import_id, 'ip_invoices', 'invoices', $ids);
+                            $this->load->model('invoices/invoices');
+                            $ids = $this->import->import_invoices();
+                            $this->import->record_import_details($import_id, 'ip_invoices', 'invoices', $ids);
                             break;
                         case 'invoice_items.csv':
-                            $this->load->model('invoices/mdl_items');
-                            $ids = $this->mdl_import->import_invoice_items();
-                            $this->mdl_import->record_import_details($import_id, 'ip_invoice_items', 'invoice_items', $ids);
+                            $this->load->model('invoices/items');
+                            $ids = $this->import->import_invoice_items();
+                            $this->import->record_import_details($import_id, 'ip_invoice_items', 'invoice_items', $ids);
                             break;
                         case 'payments.csv':
-                            $this->load->model('payments/mdl_payments');
-                            $ids = $this->mdl_import->import_payments();
-                            $this->mdl_import->record_import_details($import_id, 'ip_payments', 'payments', $ids);
+                            $this->load->model('payments/payments');
+                            $ids = $this->import->import_payments();
+                            $this->import->record_import_details($import_id, 'ip_payments', 'payments', $ids);
                             break;
                     }
                 }
@@ -112,7 +112,7 @@ class ImportController extends \Admin_Controller
      */
     public function delete($id)
     {
-        $this->mdl_import->delete($id);
+        $this->import->delete($id);
         redirect('import');
     }
 }

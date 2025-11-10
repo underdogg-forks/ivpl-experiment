@@ -25,7 +25,7 @@ class Tax_Rates extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('mdl_tax_rates');
+        $this->load->model('tax_rates/taxrates');
     }
 
     /**
@@ -33,8 +33,8 @@ class Tax_Rates extends \Admin_Controller
      */
     public function index($page = 0)
     {
-        $this->mdl_tax_rates->paginate(site_url('tax_rates/index'), $page);
-        $tax_rates = $this->mdl_tax_rates->result();
+        $this->taxrates->paginate(site_url('tax_rates/index'), $page);
+        $tax_rates = $this->taxrates->result();
 
         $this->layout->set('tax_rates', $tax_rates);
         $this->layout->buffer('content', 'tax_rates/index');
@@ -49,19 +49,19 @@ class Tax_Rates extends \Admin_Controller
 
         $this->filter_input();  // <<<--- filters _POST array for nastiness
 
-        if ($this->mdl_tax_rates->run_validation()) {
-            $this->mdl_tax_rates->form_values['tax_rate_percent'] = standardize_amount($this->mdl_tax_rates->form_values['tax_rate_percent']);
+        if ($this->taxrates->run_validation()) {
+            $this->taxrates->form_values['tax_rate_percent'] = standardize_amount($this->taxrates->form_values['tax_rate_percent']);
 
             // We need to use the correct decimal point for sql IPT-310
-            $db_array                     = $this->mdl_tax_rates->db_array();
+            $db_array                     = $this->taxrates->db_array();
             $db_array['tax_rate_percent'] = standardize_amount($this->input->post('tax_rate_percent'));
 
-            $this->mdl_tax_rates->save($id, $db_array);
+            $this->taxrates->save($id, $db_array);
 
             redirect('tax_rates');
         }
 
-        if ($id && ! $this->input->post('btn_submit') && ! $this->mdl_tax_rates->prep_form($id)) {
+        if ($id && ! $this->input->post('btn_submit') && ! $this->taxrates->prep_form($id)) {
             show_404();
         }
 
@@ -74,7 +74,7 @@ class Tax_Rates extends \Admin_Controller
      */
     public function delete($id)
     {
-        $this->mdl_tax_rates->delete($id);
+        $this->taxrates->delete($id);
         redirect('tax_rates');
     }
 }

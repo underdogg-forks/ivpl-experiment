@@ -25,7 +25,7 @@ class SettingsController extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('mdl_versions');
+        $this->load->model('settings/versions');
     }
 
     /**
@@ -33,8 +33,8 @@ class SettingsController extends \Admin_Controller
      */
     public function index($page = 0)
     {
-        $this->mdl_versions->paginate(site_url('versions/index'), $page);
-        $versions = $this->mdl_versions->result();
+        $this->versions->paginate(site_url('versions/index'), $page);
+        $versions = $this->versions->result();
 
         $this->layout->set('versions', $versions);
         $this->layout->buffer('content', 'settings/versions');

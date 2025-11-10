@@ -25,7 +25,7 @@ class Custom_Fields extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('mdl_custom_fields');
+        $this->load->model('custom_fields/customfields');
     }
 
     public function index(): void
@@ -41,16 +41,16 @@ class Custom_Fields extends \Admin_Controller
     public function table(string $name = 'all', $page = 0): void
     {
         // Determine which name of table custom field to load
-        $custom_tables = $this->mdl_custom_fields->custom_tables();
+        $custom_tables = $this->customfields->custom_tables();
         if ($name != 'all' && in_array($name, $custom_tables)) {
-            $this->mdl_custom_fields->by_table_name($name);
+            $this->customfields->by_table_name($name);
         }
 
         // Paginate before result
-        $this->mdl_custom_fields->paginate(site_url('custom_fields/name/' . $name), $page);
-        $custom_fields = $this->mdl_custom_fields->result();
+        $this->customfields->paginate(site_url('custom_fields/name/' . $name), $page);
+        $custom_fields = $this->customfields->result();
 
-        $this->load->model('custom_values/mdl_custom_values');
+        $this->load->model('custom_values/customvalues');
         $this->layout->set(
             [
                 'filter_display'     => true,
@@ -59,8 +59,8 @@ class Custom_Fields extends \Admin_Controller
 
                 'custom_fields'       => $custom_fields,
                 'custom_tables'       => $custom_tables,
-                'custom_value_fields' => $this->mdl_custom_values->custom_value_fields(),
-                'positions'           => $this->mdl_custom_fields->get_positions(true),
+                'custom_value_fields' => $this->customvalues->custom_value_fields(),
+                'positions'           => $this->customfields->get_positions(true),
             ]
         );
         $this->layout->buffer('content', 'custom_fields/index');
@@ -75,23 +75,23 @@ class Custom_Fields extends \Admin_Controller
 
         $this->filter_input();  // <<<--- filters _POST array for nastiness
 
-        if ($this->mdl_custom_fields->run_validation()) {
-            $this->mdl_custom_fields->save($id);
+        if ($this->customfields->run_validation()) {
+            $this->customfields->save($id);
             redirect('custom_fields');
         }
 
-        if ($id && ! $this->input->post('btn_submit') && ! $this->mdl_custom_fields->prep_form($id)) {
+        if ($id && ! $this->input->post('btn_submit') && ! $this->customfields->prep_form($id)) {
             show_404();
         }
 
         $this->layout->set(
             [
                 'custom_field_id'       => $id,
-                'custom_field_tables'   => $this->mdl_custom_fields->custom_tables(),
-                'custom_field_types'    => $this->mdl_custom_fields->custom_types(),
-                'custom_field_usage'    => $this->mdl_custom_fields->used($id),
-                'custom_field_location' => $this->mdl_custom_fields->form_value('custom_field_location'),
-                'positions'             => $this->mdl_custom_fields->get_positions(),
+                'custom_field_tables'   => $this->customfields->custom_tables(),
+                'custom_field_types'    => $this->customfields->custom_types(),
+                'custom_field_usage'    => $this->customfields->used($id),
+                'custom_field_location' => $this->customfields->form_value('custom_field_location'),
+                'positions'             => $this->customfields->get_positions(),
             ]
         );
         $this->layout->buffer('content', 'custom_fields/form');
@@ -103,7 +103,7 @@ class Custom_Fields extends \Admin_Controller
      */
     public function delete($id)
     {
-        if ( ! $this->mdl_custom_fields->delete($id)) {
+        if ( ! $this->customfields->delete($id)) {
             $this->session->set_flashdata('alert_info', trans('id') . sprintf(' "%s" ', $id) . trans('custom_fields_used_not_deletable'));
         }
 

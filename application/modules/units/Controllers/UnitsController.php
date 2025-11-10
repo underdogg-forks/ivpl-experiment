@@ -25,7 +25,7 @@ class UnitsController extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('mdl_units');
+        $this->load->model('units/units');
     }
 
     /**
@@ -33,8 +33,8 @@ class UnitsController extends \Admin_Controller
      */
     public function index($page = 0)
     {
-        $this->mdl_units->paginate(site_url('units/index'), $page);
-        $units = $this->mdl_units->result();
+        $this->units->paginate(site_url('units/index'), $page);
+        $units = $this->units->result();
 
         $this->layout->set('units', $units);
         $this->layout->buffer('content', 'units/index');
@@ -62,17 +62,17 @@ class UnitsController extends \Admin_Controller
             }
         }
 
-        if ($this->mdl_units->run_validation()) {
-            $this->mdl_units->save($id);
+        if ($this->units->run_validation()) {
+            $this->units->save($id);
             redirect('units');
         }
 
         if ($id && ! $this->input->post('btn_submit')) {
-            if ( ! $this->mdl_units->prep_form($id)) {
+            if ( ! $this->units->prep_form($id)) {
                 show_404();
             }
 
-            $this->mdl_units->set_form_value('is_update', true);
+            $this->units->set_form_value('is_update', true);
         }
 
         $this->layout->buffer('content', 'units/form');
@@ -84,7 +84,7 @@ class UnitsController extends \Admin_Controller
      */
     public function delete($id)
     {
-        $this->mdl_units->delete($id);
+        $this->units->delete($id);
         redirect('units');
     }
 }

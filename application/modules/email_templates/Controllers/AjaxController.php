@@ -22,10 +22,10 @@ class AjaxController extends \Admin_Controller
 
     public function get_content()
     {
-        $this->load->model('email_templates/mdl_email_templates');
+        $this->load->model('email_templates/emailtemplates');
 
         $id = $this->input->post('email_template_id');
 
-        echo json_encode($this->mdl_email_templates->get_by_id($id));
+        echo json_encode($this->emailtemplates->get_by_id($id));
     }
 }

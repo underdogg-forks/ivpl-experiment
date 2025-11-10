@@ -25,7 +25,7 @@ class Email_Templates extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('mdl_email_templates');
+        $this->load->model('email_templates/emailtemplates');
     }
 
     /**
@@ -33,8 +33,8 @@ class Email_Templates extends \Admin_Controller
      */
     public function index($page = 0)
     {
-        $this->mdl_email_templates->paginate(site_url('email_templates/index'), $page);
-        $email_templates = $this->mdl_email_templates->result();
+        $this->emailtemplates->paginate(site_url('email_templates/index'), $page);
+        $email_templates = $this->emailtemplates->result();
 
         $this->layout->set('email_templates', $email_templates);
         $this->layout->buffer('content', 'email_templates/index');
@@ -57,17 +57,17 @@ class Email_Templates extends \Admin_Controller
             }
         }
 
-        if ($this->mdl_email_templates->run_validation()) {
-            $this->mdl_email_templates->save($id);
+        if ($this->emailtemplates->run_validation()) {
+            $this->emailtemplates->save($id);
             redirect('email_templates');
         }
 
         if ($id && ! $this->input->post('btn_submit')) {
-            if ( ! $this->mdl_email_templates->prep_form($id)) {
+            if ( ! $this->emailtemplates->prep_form($id)) {
                 show_404();
             }
 
-            $this->mdl_email_templates->set_form_value('is_update', true);
+            $this->emailtemplates->set_form_value('is_update', true);
         }
 
         $this->load->model([
@@ -75,15 +75,15 @@ class Email_Templates extends \Admin_Controller
             'invoices/mdl_templates',
         ]);
 
-        foreach (array_keys($this->mdl_custom_fields->custom_tables()) as $table) {
-            $custom_fields[$table] = $this->mdl_custom_fields->by_table($table)->get()->result();
+        foreach (array_keys($this->customfields->custom_tables()) as $table) {
+            $custom_fields[$table] = $this->customfields->by_table($table)->get()->result();
         }
 
         $this->layout->set([
             'custom_fields'         => $custom_fields,
-            'invoice_templates'     => $this->mdl_templates->get_invoice_templates(),
-            'quote_templates'       => $this->mdl_templates->get_quote_templates(),
-            'selected_pdf_template' => $this->mdl_email_templates->form_value('email_template_pdf_template'),
+            'invoice_templates'     => $this->templates->get_invoice_templates(),
+            'quote_templates'       => $this->templates->get_quote_templates(),
+            'selected_pdf_template' => $this->emailtemplates->form_value('email_template_pdf_template'),
         ]);
         $this->layout->buffer('content', 'email_templates/form');
         $this->layout->render();
@@ -94,7 +94,7 @@ class Email_Templates extends \Admin_Controller
      */
     public function delete($id)
     {
-        $this->mdl_email_templates->delete($id);
+        $this->emailtemplates->delete($id);
         redirect('email_templates');
     }
 }

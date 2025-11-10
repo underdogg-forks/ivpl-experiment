@@ -25,7 +25,7 @@ class ProductsController extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('mdl_products');
+        $this->load->model('products/products');
     }
 
     /**
@@ -33,8 +33,8 @@ class ProductsController extends \Admin_Controller
      */
     public function index($page = 0)
     {
-        $this->mdl_products->paginate(site_url('products/index'), $page);
-        $products = $this->mdl_products->result();
+        $this->products->paginate(site_url('products/index'), $page);
+        $products = $this->products->result();
 
         $this->layout->set(
             [
@@ -56,26 +56,26 @@ class ProductsController extends \Admin_Controller
 
         $this->filter_input();  // <<<--- filters _POST array for nastiness
 
-        if ($this->mdl_products->run_validation()) {
+        if ($this->products->run_validation()) {
             // Get the db array
-            $db_array = $this->mdl_products->db_array();
-            $this->mdl_products->save($id, $db_array);
+            $db_array = $this->products->db_array();
+            $this->products->save($id, $db_array);
             redirect('products');
         }
 
-        if ($id && ! $this->input->post('btn_submit') && ! $this->mdl_products->prep_form($id)) {
+        if ($id && ! $this->input->post('btn_submit') && ! $this->products->prep_form($id)) {
             show_404();
         }
 
-        $this->load->model('families/mdl_families');
-        $this->load->model('units/mdl_units');
-        $this->load->model('tax_rates/mdl_tax_rates');
+        $this->load->model('families/families');
+        $this->load->model('units/units');
+        $this->load->model('tax_rates/taxrates');
 
         $this->layout->set(
             [
-                'families'  => $this->mdl_families->get()->result(),
-                'units'     => $this->mdl_units->get()->result(),
-                'tax_rates' => $this->mdl_tax_rates->get()->result(),
+                'families'  => $this->families->get()->result(),
+                'units'     => $this->units->get()->result(),
+                'tax_rates' => $this->taxrates->get()->result(),
             ]
         );
 
@@ -88,7 +88,7 @@ class ProductsController extends \Admin_Controller
      */
     public function delete($id)
     {
-        $this->mdl_products->delete($id);
+        $this->products->delete($id);
         redirect('products');
     }
 }

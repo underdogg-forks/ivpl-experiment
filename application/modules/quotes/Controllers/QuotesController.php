@@ -25,7 +25,7 @@ class QuotesController extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('mdl_quotes');
+        $this->load->model('quotes/quotes');
     }
 
     public function index()
@@ -42,27 +42,27 @@ class QuotesController extends \Admin_Controller
         // Determine which group of quotes to load
         switch ($status) {
             case 'draft':
-                $this->mdl_quotes->is_draft();
+                $this->quotes->is_draft();
                 break;
             case 'sent':
-                $this->mdl_quotes->is_sent();
+                $this->quotes->is_sent();
                 break;
             case 'viewed':
-                $this->mdl_quotes->is_viewed();
+                $this->quotes->is_viewed();
                 break;
             case 'approved':
-                $this->mdl_quotes->is_approved();
+                $this->quotes->is_approved();
                 break;
             case 'rejected':
-                $this->mdl_quotes->is_rejected();
+                $this->quotes->is_rejected();
                 break;
             case 'canceled':
-                $this->mdl_quotes->is_canceled();
+                $this->quotes->is_canceled();
                 break;
         }
 
-        $this->mdl_quotes->paginate(site_url('quotes/status/' . $status), $page);
-        $quotes = $this->mdl_quotes->result();
+        $this->quotes->paginate(site_url('quotes/status/' . $status), $page);
+        $quotes = $this->quotes->result();
 
         $this->layout->set(
             [
@@ -71,7 +71,7 @@ class QuotesController extends \Admin_Controller
                 'filter_display'     => true,
                 'filter_placeholder' => trans('filter_quotes'),
                 'filter_method'      => 'filter_quotes',
-                'quote_statuses'     => $this->mdl_quotes->statuses(),
+                'quote_statuses'     => $this->quotes->statuses(),
             ]
         );
 
@@ -99,10 +99,10 @@ class QuotesController extends \Admin_Controller
 
         $this->load->helper(['custom_values', 'dropzone', 'e-invoice']);
 
-        $fields = $this->mdl_quote_custom->by_id($quote_id)->get()->result();
+        $fields = $this->quotecustom->by_id($quote_id)->get()->result();
         $this->db->reset_query();
 
-        $quote_custom = $this->mdl_quote_custom->where('quote_id', $quote_id)->get();
+        $quote_custom = $this->quotecustom->where('quote_id', $quote_id)->get();
 
         if ($quote_custom->num_rows()) {
             $quote_custom = $quote_custom->row();
@@ -110,21 +110,21 @@ class QuotesController extends \Admin_Controller
             unset($quote_custom->quote_id, $quote_custom->quote_custom_id);
 
             foreach ($quote_custom as $key => $val) {
-                $this->mdl_quotes->set_form_value('custom[' . $key . ']', $val);
+                $this->quotes->set_form_value('custom[' . $key . ']', $val);
             }
         }
 
-        $quote = $this->mdl_quotes->get_by_id($quote_id);
+        $quote = $this->quotes->get_by_id($quote_id);
 
         if ( ! $quote) {
             show_404();
         }
 
-        $custom_fields = $this->mdl_custom_fields->by_table('ip_quote_custom')->get()->result();
+        $custom_fields = $this->customfields->by_table('ip_quote_custom')->get()->result();
         $custom_values = [];
         foreach ($custom_fields as $custom_field) {
-            if (in_array($custom_field->custom_field_type, $this->mdl_custom_values->custom_value_fields())) {
-                $values                                        = $this->mdl_custom_values->get_by_fid($custom_field->custom_field_id)->result();
+            if (in_array($custom_field->custom_field_type, $this->customvalues->custom_value_fields())) {
+                $values                                        = $this->customvalues->get_by_fid($custom_field->custom_field_id)->result();
                 $custom_values[$custom_field->custom_field_id] = $values;
             }
         }
@@ -133,7 +133,7 @@ class QuotesController extends \Admin_Controller
             foreach ($fields as $fvalue) {
                 if ($fvalue->quote_custom_fieldid == $cfield->custom_field_id) {
                     // TODO: Hackish, may need a better optimization
-                    $this->mdl_quotes->set_form_value(
+                    $this->quotes->set_form_value(
                         'custom[' . $cfield->custom_field_id . ']',
                         $fvalue->quote_custom_fieldvalue
                     );
@@ -142,7 +142,7 @@ class QuotesController extends \Admin_Controller
             }
         }
 
-        $items = $this->mdl_quote_items->where('quote_id', $quote_id)->get()->result();
+        $items = $this->quoteitems->where('quote_id', $quote_id)->get()->result();
 
         // Get eInvoice library name and user checks
         $einvoice = get_einvoice_usage($quote, $items);
@@ -158,10 +158,10 @@ class QuotesController extends \Admin_Controller
                 'quote_id'        => $quote_id,
                 'einvoice'        => $einvoice,
                 'change_user'     => $change_user,
-                'units'           => $this->mdl_units->get()->result(),
-                'tax_rates'       => $this->mdl_tax_rates->get()->result(),
-                'quote_tax_rates' => $this->mdl_quote_tax_rates->where('quote_id', $quote_id)->get()->result(),
-                'quote_statuses'  => $this->mdl_quotes->statuses(),
+                'units'           => $this->units->get()->result(),
+                'tax_rates'       => $this->taxrates->get()->result(),
+                'quote_tax_rates' => $this->quotetaxrates->where('quote_id', $quote_id)->get()->result(),
+                'quote_statuses'  => $this->quotes->statuses(),
                 'custom_fields'   => $custom_fields,
                 'custom_values'   => $custom_values,
                 'custom_js_vars'  => [
@@ -190,7 +190,7 @@ class QuotesController extends \Admin_Controller
     public function delete($quote_id)
     {
         // Delete the quote
-        $this->mdl_quotes->delete($quote_id);
+        $this->quotes->delete($quote_id);
 
         // Redirect to quote index
         redirect('quotes/index');
@@ -205,8 +205,8 @@ class QuotesController extends \Admin_Controller
         $this->load->helper('pdf');
 
         if (get_setting('mark_quotes_sent_pdf') == 1) {
-            $this->mdl_quotes->generate_quote_number_if_applicable($quote_id);
-            $this->mdl_quotes->mark_sent($quote_id);
+            $this->quotes->generate_quote_number_if_applicable($quote_id);
+            $this->quotes->mark_sent($quote_id);
         }
 
         generate_quote_pdf($quote_id, $stream, $quote_template);
@@ -218,13 +218,13 @@ class QuotesController extends \Admin_Controller
      */
     public function delete_quote_tax(string $quote_id, $quote_tax_rate_id)
     {
-        $this->load->model('quotes/mdl_quote_tax_rates');
-        $this->mdl_quote_tax_rates->delete($quote_tax_rate_id);
+        $this->load->model('quotes/quotetaxrates');
+        $this->quotetaxrates->delete($quote_tax_rate_id);
 
-        $this->load->model('quotes/mdl_quote_amounts');
-        $global_discount['item'] = $this->mdl_quote_amounts->get_global_discount($quote_id);
+        $this->load->model('quotes/quoteamounts');
+        $global_discount['item'] = $this->quoteamounts->get_global_discount($quote_id);
         // Recalculate quote amounts
-        $this->mdl_quote_amounts->calculate($quote_id, $global_discount);
+        $this->quoteamounts->calculate($quote_id, $global_discount);
 
         redirect('quotes/view/' . $quote_id);
     }
@@ -234,12 +234,12 @@ class QuotesController extends \Admin_Controller
         $this->db->select('quote_id');
         $quote_ids = $this->db->get('ip_quotes')->result();
 
-        $this->load->model('mdl_quote_amounts');
+        $this->load->model('quotes/quoteamounts');
 
         foreach ($quote_ids as $quote_id) {
-            $global_discount['item'] = $this->mdl_quote_amounts->get_global_discount($quote_id->quote_id);
+            $global_discount['item'] = $this->quoteamounts->get_global_discount($quote_id->quote_id);
             // Recalculate quote amounts
-            $this->mdl_quote_amounts->calculate($quote_id->quote_id, $global_discount);
+            $this->quoteamounts->calculate($quote_id->quote_id, $global_discount);
         }
     }
 }

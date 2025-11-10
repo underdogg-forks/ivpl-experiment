@@ -25,7 +25,7 @@ class ProjectsController extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('mdl_projects');
+        $this->load->model('projects/projects');
     }
 
     /**
@@ -33,8 +33,8 @@ class ProjectsController extends \Admin_Controller
      */
     public function index($page = 0)
     {
-        $this->mdl_projects->paginate(site_url('projects/index'), $page);
-        $projects = $this->mdl_projects->result();
+        $this->projects->paginate(site_url('projects/index'), $page);
+        $projects = $this->projects->result();
 
         $this->layout->set(
             [
@@ -56,21 +56,21 @@ class ProjectsController extends \Admin_Controller
 
         $this->filter_input();  // <<<--- filters _POST array for nastiness
 
-        if ($this->mdl_projects->run_validation()) {
-            $this->mdl_projects->save($id);
+        if ($this->projects->run_validation()) {
+            $this->projects->save($id);
             redirect('projects');
         }
 
-        if ($id && ! $this->input->post('btn_submit') && ! $this->mdl_projects->prep_form($id)) {
+        if ($id && ! $this->input->post('btn_submit') && ! $this->projects->prep_form($id)) {
             show_404();
         }
 
-        $this->load->model('clients/mdl_clients');
+        $this->load->model('clients/clients');
 
         $this->layout->set(
             [
-                'project' => $this->mdl_projects->get_by_id($id),
-                'clients' => $this->mdl_clients->where('client_active', 1)->get()->result(),
+                'project' => $this->projects->get_by_id($id),
+                'clients' => $this->clients->where('client_active', 1)->get()->result(),
             ]
         );
 
@@ -84,19 +84,19 @@ class ProjectsController extends \Admin_Controller
             redirect('projects');
         }
 
-        $this->load->model('projects/mdl_projects');
-        $project = $this->mdl_projects->get_by_id($project_id);
+        $this->load->model('projects/projects');
+        $project = $this->projects->get_by_id($project_id);
 
         if ( ! $project) {
             show_404();
         }
 
-        $this->load->model('tasks/mdl_tasks');
+        $this->load->model('tasks/tasks');
 
         $this->layout->set([
             'project'       => $project,
-            'tasks'         => $this->mdl_projects->get_tasks($project->project_id),
-            'task_statuses' => $this->mdl_tasks->statuses(),
+            'tasks'         => $this->projects->get_tasks($project->project_id),
+            'task_statuses' => $this->tasks->statuses(),
         ]);
         $this->layout->buffer('content', 'projects/view');
         $this->layout->render();
@@ -107,10 +107,10 @@ class ProjectsController extends \Admin_Controller
      */
     public function delete($id)
     {
-        $this->load->model('tasks/mdl_tasks');
-        $this->mdl_tasks->update_on_project_delete($id);
+        $this->load->model('tasks/tasks');
+        $this->tasks->update_on_project_delete($id);
 
-        $this->mdl_projects->delete($id);
+        $this->projects->delete($id);
         redirect('projects');
     }
 }

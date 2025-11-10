@@ -58,28 +58,28 @@ class MailerController extends \Admin_Controller
 
         $this->load->helper(['template', 'dropzone']);
 
-        $invoice           = $this->mdl_invoices->get_by_id($invoice_id);
+        $invoice           = $this->invoices->get_by_id($invoice_id);
         $email_template_id = select_email_invoice_template($invoice);
         $email_template    = '{}';
 
         if ($email_template_id) {
-            $email_template = json_encode($this->mdl_email_templates->get_by_id($email_template_id));
+            $email_template = json_encode($this->emailtemplates->get_by_id($email_template_id));
         }
 
         // Get all custom fields
         $custom_fields = [];
-        foreach (array_keys($this->mdl_custom_fields->custom_tables()) as $table) {
-            $custom_fields[$table] = $this->mdl_custom_fields->by_table($table)->get()->result();
+        foreach (array_keys($this->customfields->custom_tables()) as $table) {
+            $custom_fields[$table] = $this->customfields->by_table($table)->get()->result();
         }
 
         $this->layout->set(
             [
                 'selected_email_template' => $email_template_id,
                 'selected_pdf_template'   => select_pdf_invoice_template($invoice),
-                'email_templates'         => $this->mdl_email_templates->where('email_template_type', 'invoice')->get()->result(),
+                'email_templates'         => $this->emailtemplates->where('email_template_type', 'invoice')->get()->result(),
                 'email_template'          => $email_template,
                 'custom_fields'           => $custom_fields,
-                'pdf_templates'           => $this->mdl_templates->get_invoice_templates(),
+                'pdf_templates'           => $this->templates->get_invoice_templates(),
                 'invoice'                 => $invoice,
             ]
         );
@@ -112,24 +112,24 @@ class MailerController extends \Admin_Controller
         $email_template    = '{}';
 
         if ($email_template_id) {
-            $email_template = json_encode($this->mdl_email_templates->get_by_id($email_template_id));
+            $email_template = json_encode($this->emailtemplates->get_by_id($email_template_id));
         }
 
         // Get all custom fields
         $custom_fields = [];
-        foreach (array_keys($this->mdl_custom_fields->custom_tables()) as $table) {
-            $custom_fields[$table] = $this->mdl_custom_fields->by_table($table)->get()->result();
+        foreach (array_keys($this->customfields->custom_tables()) as $table) {
+            $custom_fields[$table] = $this->customfields->by_table($table)->get()->result();
         }
 
         $this->layout->set(
             [
                 'selected_email_template' => $email_template_id,
                 'selected_pdf_template'   => get_setting('pdf_quote_template'),
-                'email_templates'         => $this->mdl_email_templates->where('email_template_type', 'quote')->get()->result(),
+                'email_templates'         => $this->emailtemplates->where('email_template_type', 'quote')->get()->result(),
                 'email_template'          => $email_template,
                 'custom_fields'           => $custom_fields,
-                'pdf_templates'           => $this->mdl_templates->get_quote_templates(),
-                'quote'                   => $this->mdl_quotes->get_by_id($quote_id),
+                'pdf_templates'           => $this->templates->get_quote_templates(),
+                'quote'                   => $this->quotes->get_by_id($quote_id),
             ]
         );
         $this->layout->buffer('content', 'mailer/quote');
@@ -167,13 +167,13 @@ class MailerController extends \Admin_Controller
         $cc  = $this->input->post('cc');
         $bcc = $this->input->post('bcc');
 
-        $this->load->model('upload/mdl_uploads');
-        $attachment_files = $this->mdl_uploads->get_invoice_uploads($invoice_id);
+        $this->load->model('upload/uploads');
+        $attachment_files = $this->uploads->get_invoice_uploads($invoice_id);
 
-        $this->mdl_invoices->generate_invoice_number_if_applicable($invoice_id);
+        $this->invoices->generate_invoice_number_if_applicable($invoice_id);
 
         if (email_invoice($invoice_id, $pdf_template, $from, $to, $subject, $body, $cc, $bcc, $attachment_files)) {
-            $this->mdl_invoices->mark_sent($invoice_id);
+            $this->invoices->mark_sent($invoice_id);
             $this->session->set_flashdata('alert_success', trans('email_successfully_sent'));
             redirect('invoices/view/' . $invoice_id);
         }
@@ -211,13 +211,13 @@ class MailerController extends \Admin_Controller
         $cc  = $this->input->post('cc');
         $bcc = $this->input->post('bcc');
 
-        $this->load->model('upload/mdl_uploads');
-        $attachment_files = $this->mdl_uploads->get_quote_uploads($quote_id);
+        $this->load->model('upload/uploads');
+        $attachment_files = $this->uploads->get_quote_uploads($quote_id);
 
-        $this->mdl_quotes->generate_quote_number_if_applicable($quote_id);
+        $this->quotes->generate_quote_number_if_applicable($quote_id);
 
         if (email_quote($quote_id, $pdf_template, $from, $to, $subject, $body, $cc, $bcc, $attachment_files)) {
-            $this->mdl_quotes->mark_sent($quote_id);
+            $this->quotes->mark_sent($quote_id);
             $this->session->set_flashdata('alert_success', trans('email_successfully_sent'));
 
             redirect('quotes/view/' . $quote_id);

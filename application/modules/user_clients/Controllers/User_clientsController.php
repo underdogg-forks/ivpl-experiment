@@ -25,9 +25,9 @@ class User_Clients extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('users/mdl_users');
-        $this->load->model('clients/mdl_clients');
-        $this->load->model('user_clients/mdl_user_clients');
+        $this->load->model('users/users');
+        $this->load->model('clients/clients');
+        $this->load->model('user_clients/userclients');
     }
 
     public function index()
@@ -41,13 +41,13 @@ class User_Clients extends \Admin_Controller
             redirect('users');
         }
 
-        $user = $this->mdl_users->get_by_id($id);
+        $user = $this->users->get_by_id($id);
 
         if (empty($user)) {
             redirect('users');
         }
 
-        $user_clients = $this->mdl_user_clients->assigned_to($id)->get()->result();
+        $user_clients = $this->userclients->assigned_to($id)->get()->result();
 
         $this->layout->set(
             [
@@ -68,17 +68,17 @@ class User_Clients extends \Admin_Controller
             redirect('user_clients/field/' . $user_id);
         }
 
-        if ($this->mdl_user_clients->run_validation()) {
+        if ($this->userclients->run_validation()) {
             if ($this->input->post('user_all_clients')) {
                 $users_id = [$user_id];
 
-                $this->mdl_user_clients->set_all_clients_user($users_id);
+                $this->userclients->set_all_clients_user($users_id);
 
                 $user_update = ['user_all_clients' => 1];
             } else {
                 $user_update = ['user_all_clients' => 0];
 
-                $this->mdl_user_clients->save();
+                $this->userclients->save();
             }
 
             $this->db->where('user_id', $user_id);
@@ -87,8 +87,8 @@ class User_Clients extends \Admin_Controller
             redirect('user_clients/user/' . $user_id);
         }
 
-        $user    = $this->mdl_users->get_by_id($user_id);
-        $clients = $this->mdl_clients->get_not_assigned_to_user($user_id);
+        $user    = $this->users->get_by_id($user_id);
+        $clients = $this->clients->get_not_assigned_to_user($user_id);
 
         $this->layout->set(
             [
@@ -106,9 +106,9 @@ class User_Clients extends \Admin_Controller
      */
     public function delete($user_client_id)
     {
-        $ref = $this->mdl_user_clients->get_by_id($user_client_id);
+        $ref = $this->userclients->get_by_id($user_client_id);
 
-        $this->mdl_user_clients->delete($user_client_id);
+        $this->userclients->delete($user_client_id);
         redirect('user_clients/user/' . $ref->user_id);
     }
 }

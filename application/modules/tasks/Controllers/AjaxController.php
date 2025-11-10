@@ -30,8 +30,8 @@ class AjaxController extends \Admin_Controller
         ];
 
         if ( ! empty($invoice_id)) {
-            $this->load->model('mdl_tasks');
-            $data['tasks'] = $this->mdl_tasks->get_tasks_to_invoice($invoice_id);
+            $this->load->model('tasks/tasks');
+            $data['tasks'] = $this->tasks->get_tasks_to_invoice($invoice_id);
         }
 
         $this->layout->load_view('tasks/modal_task_lookups', $data);
@@ -39,9 +39,9 @@ class AjaxController extends \Admin_Controller
 
     public function process_task_selections()
     {
-        $this->load->model('mdl_tasks');
+        $this->load->model('tasks/tasks');
 
-        $tasks = $this->mdl_tasks->where_in('task_id', $this->input->post('task_ids'))->get()->result();
+        $tasks = $this->tasks->where_in('task_id', $this->input->post('task_ids'))->get()->result();
         foreach ($tasks as $task) {
             $task->task_price = format_amount($task->task_price);
         }

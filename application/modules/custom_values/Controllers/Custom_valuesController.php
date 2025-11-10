@@ -25,7 +25,7 @@ class Custom_Values extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('mdl_custom_values');
+        $this->load->model('custom_values/customvalues');
     }
 
     /**
@@ -33,14 +33,14 @@ class Custom_Values extends \Admin_Controller
      */
     public function index($page = 0)
     {
-        $this->mdl_custom_values->grouped()->paginate(site_url('custom_values/index'), $page);
-        $custom_values = $this->mdl_custom_values->result();
+        $this->customvalues->grouped()->paginate(site_url('custom_values/index'), $page);
+        $custom_values = $this->customvalues->result();
 
-        $this->load->model('custom_fields/mdl_custom_fields');
+        $this->load->model('custom_fields/customfields');
         // Determine which name of table custom field to load
-        $custom_tables = $this->mdl_custom_fields->custom_tables();
+        $custom_tables = $this->customfields->custom_tables();
         // load positions by table name
-        $positions = $this->mdl_custom_fields->get_positions(true);
+        $positions = $this->customfields->get_positions(true);
 
         $this->layout->set(
             [
@@ -62,13 +62,13 @@ class Custom_Values extends \Admin_Controller
             redirect('custom_values');
         }
 
-        $this->load->model('custom_fields/mdl_custom_fields');
-        $field  = $this->mdl_custom_fields->get_by_id($id);
-        $result = $this->mdl_custom_values->get_by_fid($id)->result();
+        $this->load->model('custom_fields/customfields');
+        $field  = $this->customfields->get_by_id($id);
+        $result = $this->customvalues->get_by_fid($id)->result();
         // Determine which name of table custom field to load
-        $custom_tables = $this->mdl_custom_fields->custom_tables();
+        $custom_tables = $this->customfields->custom_tables();
 
-        $positions = $this->mdl_custom_fields->get_positions(true);
+        $positions = $this->customfields->get_positions(true);
         $position  = $positions[$field->custom_field_table][$field->custom_field_location];
         unset($positions);
 
@@ -80,7 +80,7 @@ class Custom_Values extends \Admin_Controller
                 'id'                 => $id,
                 'field'              => $field,
                 'elements'           => $result,
-                'custom_field_usage' => $this->mdl_custom_fields->used($id),
+                'custom_field_usage' => $this->customfields->used($id),
                 'position'           => $position,
                 'table'              => $custom_tables[$field->custom_field_table],
             ]
@@ -91,20 +91,20 @@ class Custom_Values extends \Admin_Controller
 
     public function edit($id = null)
     {
-        $value = $this->mdl_custom_values->get_by_id($id)->row();
+        $value = $this->customvalues->get_by_id($id)->row();
         $fid   = $value->custom_field_id;
 
         if ($this->input->post('btn_cancel')) {
             redirect('custom_values/field/' . $fid);
         }
 
-        if ($this->mdl_custom_values->run_validation()) {
-            $this->mdl_custom_values->save($id);
+        if ($this->customvalues->run_validation()) {
+            $this->customvalues->save($id);
             redirect('custom_values/field/' . $fid);
         }
 
-        $this->load->model('custom_fields/mdl_custom_fields');
-        $positions = $this->mdl_custom_fields->get_positions(true);
+        $this->load->model('custom_fields/customfields');
+        $positions = $this->customfields->get_positions(true);
         $position  = $positions[$value->custom_field_table][$value->custom_field_location];
         unset($positions);
 
@@ -114,7 +114,7 @@ class Custom_Values extends \Admin_Controller
                 'fid'                => $fid,
                 'value'              => $value,
                 'position'           => $position,
-                'custom_field_usage' => $this->mdl_custom_values->used($id),
+                'custom_field_usage' => $this->customvalues->used($id),
             ]
         );
         $this->layout->buffer('content', 'custom_values/edit');
@@ -133,20 +133,20 @@ class Custom_Values extends \Admin_Controller
             redirect('custom_values/field/' . $fid);
         }
 
-        if ($this->mdl_custom_values->run_validation()) {
-            $this->mdl_custom_values->save_custom($fid);
+        if ($this->customvalues->run_validation()) {
+            $this->customvalues->save_custom($fid);
             redirect('custom_values/field/' . $fid);
         }
 
-        $this->load->model('custom_fields/mdl_custom_fields');
-        $field = $this->mdl_custom_fields->get_by_id($id);
+        $this->load->model('custom_fields/customfields');
+        $field = $this->customfields->get_by_id($id);
 
         // Determine which name of table custom field to load
-        $custom_tables = $this->mdl_custom_fields->custom_tables();
+        $custom_tables = $this->customfields->custom_tables();
         $table         = $custom_tables[$field->custom_field_table];
         unset($custom_tables);
 
-        $positions = $this->mdl_custom_fields->get_positions(true);
+        $positions = $this->customfields->get_positions(true);
         $position  = $positions[$field->custom_field_table][$field->custom_field_location];
         unset($positions);
 
@@ -167,7 +167,7 @@ class Custom_Values extends \Admin_Controller
      */
     public function delete($id)
     {
-        if ( ! $this->mdl_custom_values->delete($id)) {
+        if ( ! $this->customvalues->delete($id)) {
             $this->session->set_flashdata('alert_info', trans('id') . sprintf(' "%s" ', $id) . trans('custom_values_used_not_deletable'));
         }
 

@@ -23,7 +23,7 @@ class AjaxController extends \Admin_Controller
     public function name_query($type = 1)
     {
         // Load the model & helper
-        $this->load->model('users/mdl_users');
+        $this->load->model('users/users');
         $this->load->helper('user');
 
         $response = [];
@@ -44,7 +44,7 @@ class AjaxController extends \Admin_Controller
         $escapedQuery = $this->db->escape_str($query);
         $escapedQuery = str_replace('%', '', $escapedQuery);
         // Not searched: user_address_1 user_address_2 user_city user_state user_zip user_country user_invoicing_contact
-        $users = $this->mdl_users
+        $users = $this->users
             ->where('user_active', 1)
             ->where('user_type', $type)
             ->having("user_name LIKE '" . $moreUsersQuery . $escapedQuery . "%'")
@@ -71,11 +71,11 @@ class AjaxController extends \Admin_Controller
     public function get_latest()
     {
         // Load the model & helper
-        $this->load->model('users/mdl_users');
+        $this->load->model('users/users');
 
         $response = [];
 
-        $users = $this->mdl_users
+        $users = $this->users
             ->where('user_active', 1)
             ->limit(5)
             ->order_by('user_date_created')
@@ -95,14 +95,14 @@ class AjaxController extends \Admin_Controller
 
     public function save_preference_permissive_search_users()
     {
-        $this->load->model('mdl_settings');
+        $this->load->model('settings/settings');
         $permissiveSearchUsers = $this->input->get('permissive_search_users');
 
         if ( ! preg_match('!^[0-1]{1}$!', $permissiveSearchUsers)) {
             exit;
         }
 
-        $this->mdl_settings->save('enable_permissive_search_users', $permissiveSearchUsers);
+        $this->settings->save('enable_permissive_search_users', $permissiveSearchUsers);
     }
 
     public function save_user_client()
@@ -110,21 +110,21 @@ class AjaxController extends \Admin_Controller
         $user_id   = $this->input->post('user_id');
         $client_id = $this->input->post('client_id');
 
-        $this->load->model('clients/mdl_clients');
-        $this->load->model('users/mdl_user_clients');
+        $this->load->model('clients/clients');
+        $this->load->model('user_clients/userclients');
 
-        $client = $this->mdl_clients->get_by_id($client_id);
+        $client = $this->clients->get_by_id($client_id);
         if ($client) {
             $client_id = $client->client_id;
 
             // Is this a new user or an existing user?
             if ( ! empty($user_id)) {
                 // Existing user - go ahead and save the entries
-                $user_client = $this->mdl_user_clients->where('ip_user_clients.user_id', $user_id)
+                $user_client = $this->userclients->where('ip_user_clients.user_id', $user_id)
                     ->where('ip_user_clients.client_id', $client_id)->get();
 
                 if ( ! $user_client->num_rows()) {
-                    $this->mdl_user_clients->save(null, ['user_id' => $user_id, 'client_id' => $client_id]);
+                    $this->userclients->save(null, ['user_id' => $user_id, 'client_id' => $client_id]);
                 }
             } else {
                 // New user - assign the entries to a session variable until user record is saved
@@ -142,18 +142,18 @@ class AjaxController extends \Admin_Controller
         $session_user_clients = $this->session->userdata('user_clients');
 
         if ($session_user_clients) {
-            $this->load->model('clients/mdl_clients');
+            $this->load->model('clients/clients');
 
             $data = [
                 'id'           => null,
-                'user_clients' => $this->mdl_clients->where_in('ip_clients.client_id', $session_user_clients)->get()->result(),
+                'user_clients' => $this->clients->where_in('ip_clients.client_id', $session_user_clients)->get()->result(),
             ];
         } else {
-            $this->load->model('users/mdl_user_clients');
+            $this->load->model('user_clients/userclients');
 
             $data = [
                 'id'           => $this->input->post('user_id'),
-                'user_clients' => $this->mdl_user_clients->where('ip_user_clients.user_id', $this->input->post('user_id'))->get()->result(),
+                'user_clients' => $this->userclients->where('ip_user_clients.user_id', $this->input->post('user_id'))->get()->result(),
             ];
         }
 
@@ -162,14 +162,14 @@ class AjaxController extends \Admin_Controller
 
     public function modal_add_user_client($user_id = null)
     {
-        $this->load->model('clients/mdl_clients');
+        $this->load->model('clients/clients');
 
         if ($session_user_clients = $this->session->userdata('user_clients')) {
-            $clients          = $this->mdl_clients->where_not_in('ip_clients.client_id', $session_user_clients)->get()->result();
+            $clients          = $this->clients->where_not_in('ip_clients.client_id', $session_user_clients)->get()->result();
             $assigned_clients = [];
         } else {
-            $this->load->model('users/mdl_user_clients');
-            $assigned_clients_query = $this->mdl_user_clients->where('ip_user_clients.user_id', $user_id)->get()->result();
+            $this->load->model('user_clients/userclients');
+            $assigned_clients_query = $this->userclients->where('ip_user_clients.user_id', $user_id)->get()->result();
             $assigned_clients       = [];
 
             foreach ($assigned_clients_query as $assigned_client) {
@@ -177,9 +177,9 @@ class AjaxController extends \Admin_Controller
             }
 
             if ($assigned_clients === []) {
-                $clients = $this->mdl_clients->get()->result();
+                $clients = $this->clients->get()->result();
             } else {
-                $clients = $this->mdl_clients->where_not_in('ip_clients.client_id', $assigned_clients)->get()->result();
+                $clients = $this->clients->where_not_in('ip_clients.client_id', $assigned_clients)->get()->result();
             }
         }
 

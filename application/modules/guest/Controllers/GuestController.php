@@ -27,9 +27,9 @@ class GuestController extends \Base_Controller
             show_404();
         }
 
-        $this->load->model('invoices/mdl_invoices');
+        $this->load->model('invoices/invoices');
 
-        $invoice = $this->mdl_invoices->guest_visible()->where('invoice_url_key', $invoice_url_key)->get();
+        $invoice = $this->invoices->guest_visible()->where('invoice_url_key', $invoice_url_key)->get();
 
         if ($invoice->num_rows() != 1) {
             show_404();
@@ -49,19 +49,19 @@ class GuestController extends \Base_Controller
         $invoice = $invoice->row();
 
         if ($this->session->userdata('user_type') != 1 && $invoice->invoice_status_id == 2) {
-            $this->mdl_invoices->mark_viewed($invoice->invoice_id);
+            $this->invoices->mark_viewed($invoice->invoice_id);
         }
 
-        $payment_method = $this->mdl_payment_methods->where('payment_method_id', $invoice->payment_method)->get()->row();
+        $payment_method = $this->paymentmethods->where('payment_method_id', $invoice->payment_method)->get()->row();
         if ($invoice->payment_method == 0) {
             $payment_method = null;
         }
 
         // Get all custom fields
         $custom_fields = [
-            'invoice' => $this->mdl_custom_fields->get_values_for_fields('mdl_invoice_custom', $invoice->invoice_id),
-            'client'  => $this->mdl_custom_fields->get_values_for_fields('mdl_client_custom', $invoice->client_id),
-            'user'    => $this->mdl_custom_fields->get_values_for_fields('mdl_user_custom', $invoice->user_id),
+            'invoice' => $this->customfields->get_values_for_fields('mdl_invoice_custom', $invoice->invoice_id),
+            'client'  => $this->customfields->get_values_for_fields('mdl_client_custom', $invoice->client_id),
+            'user'    => $this->customfields->get_values_for_fields('mdl_user_custom', $invoice->user_id),
         ];
 
         // Attachments
@@ -71,8 +71,8 @@ class GuestController extends \Base_Controller
 
         $data = [
             'invoice'             => $invoice,
-            'items'               => $this->mdl_items->where('invoice_id', $invoice->invoice_id)->get()->result(),
-            'invoice_tax_rates'   => $this->mdl_invoice_tax_rates->where('invoice_id', $invoice->invoice_id)->get()->result(),
+            'items'               => $this->items->where('invoice_id', $invoice->invoice_id)->get()->result(),
+            'invoice_tax_rates'   => $this->invoicetaxrates->where('invoice_id', $invoice->invoice_id)->get()->result(),
             'invoice_url_key'     => $invoice_url_key,
             'flash_message'       => $this->session->flashdata('flash_message'),
             'payment_method'      => $payment_method,
@@ -94,9 +94,9 @@ class GuestController extends \Base_Controller
      */
     public function generate_invoice_pdf($invoice_url_key, $stream = true, $invoice_template = null)
     {
-        $this->load->model('invoices/mdl_invoices');
+        $this->load->model('invoices/invoices');
 
-        $invoice = $this->mdl_invoices->guest_visible()->where('invoice_url_key', $invoice_url_key)->get();
+        $invoice = $this->invoices->guest_visible()->where('invoice_url_key', $invoice_url_key)->get();
 
         if ($invoice->num_rows() == 1) {
             $invoice = $invoice->row();
@@ -118,9 +118,9 @@ class GuestController extends \Base_Controller
      */
     public function generate_sumex_pdf($invoice_url_key, $stream = true, $invoice_template = null)
     {
-        $this->load->model('invoices/mdl_invoices');
+        $this->load->model('invoices/invoices');
 
-        $invoice = $this->mdl_invoices->guest_visible()->where('invoice_url_key', $invoice_url_key)->get();
+        $invoice = $this->invoices->guest_visible()->where('invoice_url_key', $invoice_url_key)->get();
 
         if ($invoice->num_rows() == 1) {
             $invoice = $invoice->row();
@@ -148,29 +148,29 @@ class GuestController extends \Base_Controller
             show_404();
         }
 
-        $this->load->model('quotes/mdl_quotes');
+        $this->load->model('quotes/quotes');
 
-        $quote = $this->mdl_quotes->guest_visible()->where('quote_url_key', $quote_url_key)->get();
+        $quote = $this->quotes->guest_visible()->where('quote_url_key', $quote_url_key)->get();
 
         if ($quote->num_rows() != 1) {
             show_404();
         }
 
-        $this->load->model('quotes/mdl_quote_items');
-        $this->load->model('quotes/mdl_quote_tax_rates');
-        $this->load->model('custom_fields/mdl_custom_fields');
+        $this->load->model('quotes/quoteitems');
+        $this->load->model('quotes/quotetaxrates');
+        $this->load->model('custom_fields/customfields');
 
         $quote = $quote->row();
 
         if ($this->session->userdata('user_type') != 1 && $quote->quote_status_id == 2) {
-            $this->mdl_quotes->mark_viewed($quote->quote_id);
+            $this->quotes->mark_viewed($quote->quote_id);
         }
 
         // Get all custom fields
         $custom_fields = [
-            'quote'  => $this->mdl_custom_fields->get_values_for_fields('mdl_quote_custom', $quote->quote_id),
-            'client' => $this->mdl_custom_fields->get_values_for_fields('mdl_client_custom', $quote->client_id),
-            'user'   => $this->mdl_custom_fields->get_values_for_fields('mdl_user_custom', $quote->user_id),
+            'quote'  => $this->customfields->get_values_for_fields('mdl_quote_custom', $quote->quote_id),
+            'client' => $this->customfields->get_values_for_fields('mdl_client_custom', $quote->client_id),
+            'user'   => $this->customfields->get_values_for_fields('mdl_user_custom', $quote->user_id),
         ];
 
         // Attachments
@@ -180,8 +180,8 @@ class GuestController extends \Base_Controller
 
         $data = [
             'quote'              => $quote,
-            'items'              => $this->mdl_quote_items->where('quote_id', $quote->quote_id)->get()->result(),
-            'quote_tax_rates'    => $this->mdl_quote_tax_rates->where('quote_id', $quote->quote_id)->get()->result(),
+            'items'              => $this->quoteitems->where('quote_id', $quote->quote_id)->get()->result(),
+            'quote_tax_rates'    => $this->quotetaxrates->where('quote_id', $quote->quote_id)->get()->result(),
             'quote_url_key'      => $quote_url_key,
             'flash_message'      => $this->session->flashdata('flash_message'),
             'is_expired'         => $is_expired,
@@ -200,9 +200,9 @@ class GuestController extends \Base_Controller
      */
     public function generate_quote_pdf($quote_url_key, $stream = true, $quote_template = null)
     {
-        $this->load->model('quotes/mdl_quotes');
+        $this->load->model('quotes/quotes');
 
-        $quote = $this->mdl_quotes->guest_visible()->where('quote_url_key', $quote_url_key)->get()->row();
+        $quote = $this->quotes->guest_visible()->where('quote_url_key', $quote_url_key)->get()->row();
 
         if ( ! $quote) {
             show_404();
@@ -222,11 +222,11 @@ class GuestController extends \Base_Controller
      */
     public function approve_quote(string $quote_url_key)
     {
-        $this->load->model('quotes/mdl_quotes');
+        $this->load->model('quotes/quotes');
         $this->load->helper('mailer');
 
-        $this->mdl_quotes->approve_quote_by_key($quote_url_key);
-        email_quote_status($this->mdl_quotes->where('ip_quotes.quote_url_key', $quote_url_key)->get()->row()->quote_id, 'approved');
+        $this->quotes->approve_quote_by_key($quote_url_key);
+        email_quote_status($this->quotes->where('ip_quotes.quote_url_key', $quote_url_key)->get()->row()->quote_id, 'approved');
 
         redirect('guest/view/quote/' . $quote_url_key);
     }
@@ -236,11 +236,11 @@ class GuestController extends \Base_Controller
      */
     public function reject_quote(string $quote_url_key)
     {
-        $this->load->model('quotes/mdl_quotes');
+        $this->load->model('quotes/quotes');
         $this->load->helper('mailer');
 
-        $this->mdl_quotes->reject_quote_by_key($quote_url_key);
-        email_quote_status($this->mdl_quotes->where('ip_quotes.quote_url_key', $quote_url_key)->get()->row()->quote_id, 'rejected');
+        $this->quotes->reject_quote_by_key($quote_url_key);
+        email_quote_status($this->quotes->where('ip_quotes.quote_url_key', $quote_url_key)->get()->row()->quote_id, 'rejected');
 
         redirect('guest/view/quote/' . $quote_url_key);
     }

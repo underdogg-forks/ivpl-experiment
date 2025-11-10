@@ -20,7 +20,7 @@ class WelcomeController extends CI_Controller
 {
     public function index()
     {
-        $this->load->model('settings/mdl_settings');
+        $this->load->model('settings/settings');
         $this->load->helper(['settings', 'echo', 'url']);
         $this->load->view('welcome');
     }

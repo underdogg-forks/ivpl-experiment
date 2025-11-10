@@ -37,13 +37,7 @@
             "App\\Modules\\": "application/modules/"
         },
         "files": [
-            "application/core/Admin_Controller.php",
-            "application/core/Base_Controller.php",
-            "application/core/User_Controller.php",
-            "application/core/Guest_Controller.php",
-            "application/core/MY_Model.php",
-            "application/core/Response_Model.php",
-            "application/core/Form_Validation_Model.php"
+            "application/core/bootstrap_core.php"
         ]
     },
     "scripts": {

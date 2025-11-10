@@ -25,7 +25,7 @@ class Invoice_Groups extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('mdl_invoice_groups');
+        $this->load->model('invoice_groups/invoicegroups');
     }
 
     /**
@@ -33,8 +33,8 @@ class Invoice_Groups extends \Admin_Controller
      */
     public function index($page = 0)
     {
-        $this->mdl_invoice_groups->paginate(site_url('invoice_groups/index'), $page);
-        $invoice_groups = $this->mdl_invoice_groups->result();
+        $this->invoicegroups->paginate(site_url('invoice_groups/index'), $page);
+        $invoice_groups = $this->invoicegroups->result();
 
         $this->layout->set('invoice_groups', $invoice_groups);
         $this->layout->buffer('content', 'invoice_groups/index');
@@ -49,18 +49,18 @@ class Invoice_Groups extends \Admin_Controller
 
         $this->filter_input();  // <<<--- filters _POST array for nastiness
 
-        if ($this->mdl_invoice_groups->run_validation()) {
-            $this->mdl_invoice_groups->save($id);
+        if ($this->invoicegroups->run_validation()) {
+            $this->invoicegroups->save($id);
             redirect('invoice_groups');
         }
 
         if ($id && ! $this->input->post('btn_submit')) {
-            if ( ! $this->mdl_invoice_groups->prep_form($id)) {
+            if ( ! $this->invoicegroups->prep_form($id)) {
                 show_404();
             }
         } elseif ( ! $id) {
-            $this->mdl_invoice_groups->set_form_value('invoice_group_left_pad', 0);
-            $this->mdl_invoice_groups->set_form_value('invoice_group_next_id', 1);
+            $this->invoicegroups->set_form_value('invoice_group_left_pad', 0);
+            $this->invoicegroups->set_form_value('invoice_group_next_id', 1);
         }
 
         $this->layout->buffer('content', 'invoice_groups/form');
@@ -72,7 +72,7 @@ class Invoice_Groups extends \Admin_Controller
      */
     public function delete($id)
     {
-        $this->mdl_invoice_groups->delete($id);
+        $this->invoicegroups->delete($id);
         redirect('invoice_groups');
     }
 }

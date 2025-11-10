@@ -32,8 +32,8 @@ class UploadController extends \Admin_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('upload/mdl_uploads');
-        $this->content_types = $this->mdl_uploads->content_types;
+        $this->load->model('upload/uploads');
+        $this->content_types = $this->uploads->content_types;
     }
 
     public function upload_file(int $customerId, string $url_key): void
@@ -79,7 +79,7 @@ class UploadController extends \Admin_Controller
     public function show_files($url_key = null): void
     {
         header('Content-Type: application/json; charset=utf-8');
-        if ($url_key && ! $result = $this->mdl_uploads->get_files($url_key)) {
+        if ($url_key && ! $result = $this->uploads->get_files($url_key)) {
             exit('{}');
         }
 
@@ -100,7 +100,7 @@ class UploadController extends \Admin_Controller
         $finalPath = $this->targetPath . $url_key . '_' . $filename;
 
         if (realpath($this->targetPath) === mb_substr(realpath($finalPath), 0, mb_strlen(realpath($this->targetPath))) && ( ! file_exists($finalPath) || @unlink($finalPath))) {
-            $this->mdl_uploads->delete_file($url_key, $filename);
+            $this->uploads->delete_file($url_key, $filename);
             $this->respond_message(200, 'upload_file_deleted_successfully', $filename);
         }
 
@@ -182,7 +182,7 @@ class UploadController extends \Admin_Controller
             'file_name_new'      => $url_key . '_' . $filename,
         ];
 
-        if ( ! $this->mdl_uploads->create($data)) {
+        if ( ! $this->uploads->create($data)) {
             $this->respond_message(500, 'upload_error_database', $filename);
         }
     }

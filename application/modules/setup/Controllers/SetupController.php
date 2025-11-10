@@ -41,8 +41,8 @@ class SetupController extends MX_Controller
         $this->load->helper('settings');
         $this->load->helper('echo');
 
-        $this->load->model('settings/mdl_settings'); // For get_setting() in echo_helper
-        $this->load->model('setup/mdl_setup');
+        $this->load->model('settings/settings'); // For get_setting() in echo_helper
+        $this->load->model('setup/setup');
 
         $this->load->module('layout');
 
@@ -160,8 +160,8 @@ class SetupController extends MX_Controller
 
         $this->layout->set(
             [
-                'success' => $this->mdl_setup->install_tables(),
-                'errors'  => $this->mdl_setup->errors,
+                'success' => $this->setup->install_tables(),
+                'errors'  => $this->setup->errors,
             ]
         );
 
@@ -198,8 +198,8 @@ class SetupController extends MX_Controller
 
         $this->layout->set(
             [
-                'success' => $this->mdl_setup->upgrade_tables(),
-                'errors'  => $this->mdl_setup->errors,
+                'success' => $this->setup->upgrade_tables(),
+                'errors'  => $this->setup->errors,
             ]
         );
 
@@ -215,15 +215,15 @@ class SetupController extends MX_Controller
 
         $this->load_ci_database();
 
-        $this->load->model('users/mdl_users');
+        $this->load->model('users/users');
 
         $this->load->helper('country');
 
-        if ($this->mdl_users->run_validation()) {
-            $db_array              = $this->mdl_users->db_array();
+        if ($this->users->run_validation()) {
+            $db_array              = $this->users->db_array();
             $db_array['user_type'] = 1;
 
-            $this->mdl_users->save(null, $db_array);
+            $this->users->save(null, $db_array);
 
             $this->session->set_userdata('install_step', 'calculation_info');
             redirect('setup/calculation_info');
@@ -474,9 +474,9 @@ class SetupController extends MX_Controller
     private function check_calculation_config(): array
     {
         $this->load_ci_database();
-        $this->load->model('settings/mdl_versions');
+        $this->load->model('settings/versions');
 
-        $current_version = $this->mdl_versions->get_current_version();
+        $current_version = $this->versions->get_current_version();
 
         if (version_compare($current_version, '1.6.3', '>=')) {
             // Reload the ipconfig.php

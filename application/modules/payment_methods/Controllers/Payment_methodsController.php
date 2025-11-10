@@ -25,7 +25,7 @@ class Payment_Methods extends \Admin_Controller
     {
         parent::__construct();
 
-        $this->load->model('mdl_payment_methods');
+        $this->load->model('payment_methods/paymentmethods');
     }
 
     /**
@@ -33,8 +33,8 @@ class Payment_Methods extends \Admin_Controller
      */
     public function index($page = 0)
     {
-        $this->mdl_payment_methods->paginate(site_url('payment_methods/index'), $page);
-        $payment_methods = $this->mdl_payment_methods->result();
+        $this->paymentmethods->paginate(site_url('payment_methods/index'), $page);
+        $payment_methods = $this->paymentmethods->result();
 
         $this->layout->set('payment_methods', $payment_methods);
         $this->layout->buffer('content', 'payment_methods/index');
@@ -57,17 +57,17 @@ class Payment_Methods extends \Admin_Controller
             }
         }
 
-        if ($this->mdl_payment_methods->run_validation()) {
-            $this->mdl_payment_methods->save($id);
+        if ($this->paymentmethods->run_validation()) {
+            $this->paymentmethods->save($id);
             redirect('payment_methods');
         }
 
         if ($id && ! $this->input->post('btn_submit')) {
-            if ( ! $this->mdl_payment_methods->prep_form($id)) {
+            if ( ! $this->paymentmethods->prep_form($id)) {
                 show_404();
             }
 
-            $this->mdl_payment_methods->set_form_value('is_update', true);
+            $this->paymentmethods->set_form_value('is_update', true);
         }
 
         $this->layout->buffer('content', 'payment_methods/form');
@@ -79,7 +79,7 @@ class Payment_Methods extends \Admin_Controller
      */
     public function delete($id)
     {
-        $this->mdl_payment_methods->delete($id);
+        $this->paymentmethods->delete($id);
         redirect('payment_methods');
     }
 }

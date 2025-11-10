@@ -36,7 +36,7 @@ if ( ! defined('BASEPATH')) {
  * THE SOFTWARE.
  */
 #[AllowDynamicProperties]
-class MY_Model extends CI_Model
+class MY_Model extends \CI_Model
 {
     public $table;
 

@@ -22,10 +22,10 @@ class AjaxController extends \Admin_Controller
 
     public function add()
     {
-        $this->load->model('payments/mdl_payments');
+        $this->load->model('payments/payments');
 
-        if ($this->mdl_payments->run_validation()) {
-            $payment_id = $this->mdl_payments->save();
+        if ($this->payments->run_validation()) {
+            $payment_id = $this->payments->save();
 
             $response = [
                 'success'    => 1,
@@ -45,12 +45,12 @@ class AjaxController extends \Admin_Controller
     public function modal_add_payment()
     {
         $this->load->module('layout');
-        $this->load->model('payments/mdl_payments');
-        $this->load->model('payment_methods/mdl_payment_methods');
-        $this->load->model('custom_fields/mdl_payment_custom');
+        $this->load->model('payments/payments');
+        $this->load->model('payment_methods/paymentmethods');
+        $this->load->model('custom_fields/paymentcustom');
 
         $data = [
-            'payment_methods'        => $this->mdl_payment_methods->get()->result(),
+            'payment_methods'        => $this->paymentmethods->get()->result(),
             'invoice_id'             => $this->security->xss_clean($this->input->post('invoice_id')),
             'invoice_balance'        => $this->input->post('invoice_balance'),
             'invoice_payment_method' => $this->input->post('invoice_payment_method'),

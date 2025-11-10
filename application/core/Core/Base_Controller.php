@@ -16,7 +16,7 @@ if ( ! defined('BASEPATH')) {
  */
 
 #[AllowDynamicProperties]
-class Base_Controller extends MX_Controller
+class Base_Controller extends \MX_Controller
 {
     /** @var bool */
     public $ajax_controller = false;

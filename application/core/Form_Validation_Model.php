@@ -1,29 +1,12 @@
 <?php
 
-if ( ! defined('BASEPATH')) {
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
 /*
- * InvoicePlane
- *
- * @author		InvoicePlane Developers & Contributors
- * @copyright	Copyright (c) 2012 - 2018 InvoicePlane.com
- * @license		https://invoiceplane.com/license.txt
- * @link		https://invoiceplane.com
+ * PSR-4 Compatibility Alias
+ * Loads the bootstrap file which handles all core classes
  */
 
-#[AllowDynamicProperties]
-class Form_Validation_Model extends MY_Model
-{
-    /**
-     * Form_Validation_Model constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->load->library('form_validation');
-        $this->form_validation->CI = & $this;
-    }
-}
+require_once __DIR__ . '/bootstrap_core.php';
