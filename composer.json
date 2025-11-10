@@ -35,7 +35,8 @@
         "psr-4": {
             "App\\": "application/",
             "App\\Core\\": "application/Core/",
-            "App\\Modules\\": "application/Modules/"
+            "App\\Modules\\": "application/Modules/",
+            "App\\Libraries\\": "application/Libraries/"
         },
         "files": [
             "application/core/bootstrap_core.php"
