@@ -11,6 +11,18 @@ require APPPATH . 'third_party/MX/Loader.php';
 class MY_Loader extends MX_Loader
 {
     /**
+     * Constructor - ensure inflector helper is loaded
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        
+        // Load inflector helper for pluralization support
+        if (!function_exists('pluralize')) {
+            $this->helper('inflector');
+        }
+    }
+    /**
      * Load model with backward compatibility for mdl_ prefix and plural forms
      * 
      * This method extends MX_Loader::model() to provide backward compatibility
@@ -55,49 +67,13 @@ class MY_Loader extends MX_Loader
      * - mdl_{plural} => model (e.g., $this->mdl_clients => $this->client)
      * - {plural} => model (e.g., $this->clients => $this->client)
      * 
+     * Uses inflector helper for automatic pluralization instead of hardcoded mappings.
+     * 
      * @param string $alias Current model alias
      * @param string $model_path Full model path
      */
     private function createLegacyAliases($alias, $model_path)
     {
-        // Get module from path if present (e.g., 'clients/client' => 'clients')
-        $parts = explode('/', $model_path);
-        $module = count($parts) > 1 ? $parts[0] : null;
-        
-        // Map of singular to plural forms for common models
-        $pluralMap = [
-            'client' => 'clients',
-            'invoice' => 'invoices',
-            'quote' => 'quotes',
-            'product' => 'products',
-            'user' => 'users',
-            'payment' => 'payments',
-            'task' => 'tasks',
-            'project' => 'projects',
-            'item' => 'items',
-            'setting' => 'settings',
-            'version' => 'versions',
-            'upload' => 'uploads',
-            'custom_field' => 'custom_fields',
-            'custom_value' => 'custom_values',
-            'email_template' => 'email_templates',
-            'client_note' => 'client_notes',
-            'invoice_group' => 'invoice_groups',
-            'invoice_amount' => 'invoice_amounts',
-            'invoice_tax_rate' => 'invoice_tax_rates',
-            'invoice_recurring' => 'invoices_recurring',
-            'item_amount' => 'item_amounts',
-            'payment_log' => 'payment_logs',
-            'payment_method' => 'payment_methods',
-            'quote_amount' => 'quote_amounts',
-            'quote_item' => 'quote_items',
-            'quote_item_amount' => 'quote_item_amounts',
-            'quote_tax_rate' => 'quote_tax_rates',
-            'tax_rate' => 'tax_rates',
-            'template' => 'templates',
-            'user_client' => 'user_clients',
-        ];
-        
         // Get the actual model instance
         if (!isset(CI::$APP->{$alias})) {
             return; // Model not loaded, skip
@@ -112,9 +88,11 @@ class MY_Loader extends MX_Loader
             $this->logDeprecation($mdl_singular, $alias);
         }
         
-        // Create mdl_{plural} alias if plural form exists (e.g., mdl_clients)
-        if (isset($pluralMap[$alias])) {
-            $plural = $pluralMap[$alias];
+        // Use inflector to determine plural form dynamically
+        $plural = pluralize($alias);
+        
+        // Only create plural aliases if the word actually pluralizes
+        if ($plural !== $alias) {
             $mdl_plural = 'mdl_' . $plural;
             
             if (!isset(CI::$APP->{$mdl_plural})) {
