@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX Pattern Test</title>
+    <meta name="csrf_token_name" content="_ip_csrf">
+    <meta name="csrf_cookie_name" content="ip_csrf_cookie">
+    <meta name="legacy_calculation" content="1">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        body { padding: 20px; }
+        .test-section { margin-bottom: 30px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        .code-block { background: #f5f5f5; padding: 10px; border-radius: 3px; margin: 10px 0; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AJAX Pattern Test Page</h1>
+        <p class="lead">This page demonstrates the new standardized AJAX pattern for InvoicePlane</p>
+
+        <!-- Test Section 1: showErrors() -->
+        <div class="test-section">
+            <h2>Test 1: showErrors() Function</h2>
+            <p>This test demonstrates the <code>showErrors()</code> function that displays validation errors.</p>
+            
+            <form>
+                <div class="form-group">
+                    <label for="test_email">Email</label>
+                    <input type="email" class="form-control" id="test_email" name="test_email">
+                </div>
+                <div class="form-group">
+                    <label for="test_amount">Amount</label>
+                    <input type="number" class="form-control" id="test_amount" name="test_amount">
+                </div>
+                <div class="form-group">
+                    <label for="test_date">Date</label>
+                    <input type="date" class="form-control" id="test_date" name="test_date">
+                </div>
+            </form>
+            
+            <button class="btn btn-primary" id="test-show-errors">Trigger showErrors()</button>
+            <div id="error-display-area" style="margin-top: 10px;"></div>
+            
+            <div class="code-block">
+                <strong>Code:</strong><br>
+                showErrors({<br>
+                &nbsp;&nbsp;test_email: 'Email is required',<br>
+                &nbsp;&nbsp;test_amount: 'Amount must be greater than 0',<br>
+                &nbsp;&nbsp;test_date: 'Invalid date format'<br>
+                }, '#error-display-area');
+            </div>
+        </div>
+
+        <!-- Test Section 2: Mock AJAX Success -->
+        <div class="test-section">
+            <h2>Test 2: Mock AJAX Success Response</h2>
+            <p>This test simulates a successful AJAX call using the new <code>ajaxPost()</code> pattern.</p>
+            
+            <button class="btn btn-success" id="test-ajax-success">Test Success Response</button>
+            <div id="success-result" style="margin-top: 10px;"></div>
+            
+            <div class="code-block">
+                <strong>Code:</strong><br>
+                ajaxPost('/mock-endpoint', { test: 'data' })<br>
+                &nbsp;&nbsp;.done(function(response) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log('Success!', response);<br>
+                &nbsp;&nbsp;})<br>
+                &nbsp;&nbsp;.fail(function(errors) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log('Failed!', errors);<br>
+                &nbsp;&nbsp;});
+            </div>
+        </div>
+
+        <!-- Test Section 3: Pattern Comparison -->
+        <div class="test-section">
+            <h2>Test 3: Pattern Comparison</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Old Pattern</h3>
+                    <div class="code-block">
+$.post(url, data, function(response) {<br>
+&nbsp;&nbsp;var resp = json_parse(response);<br>
+&nbsp;&nbsp;if (resp.success === 1) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;// Success handling<br>
+&nbsp;&nbsp;} else {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;// Manual error handling<br>
+&nbsp;&nbsp;&nbsp;&nbsp;$('.control-group').removeClass('has-error');<br>
+&nbsp;&nbsp;&nbsp;&nbsp;for (var key in resp.validation_errors) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$('#' + key).parent().parent().addClass('has-error');<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;}<br>
+});
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h3>New Pattern</h3>
+                    <div class="code-block">
+ajaxPost(url, data)<br>
+&nbsp;&nbsp;.done(function(response) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;// Success! Auto-validated<br>
+&nbsp;&nbsp;&nbsp;&nbsp;window.location = '/redirect';<br>
+&nbsp;&nbsp;})<br>
+&nbsp;&nbsp;.fail(function(errors) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;// Errors auto-displayed<br>
+&nbsp;&nbsp;&nbsp;&nbsp;console.log('Failed:', errors);<br>
+&nbsp;&nbsp;});
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Benefits Section -->
+        <div class="test-section">
+            <h2>Benefits of the New Pattern</h2>
+            <ul class="list-group">
+                <li class="list-group-item">✅ Less boilerplate code</li>
+                <li class="list-group-item">✅ Automatic JSON parsing and validation</li>
+                <li class="list-group-item">✅ Consistent error display across all forms</li>
+                <li class="list-group-item">✅ Promise-based API (modern and familiar)</li>
+                <li class="list-group-item">✅ Centralized error handling logic</li>
+                <li class="list-group-item">✅ Better user experience</li>
+                <li class="list-group-item">✅ Easier to maintain and test</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Load dependencies -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
+    
+    <!-- Set a mock CSRF cookie -->
+    <script>
+        Cookies.set('ip_csrf_cookie', 'mock_csrf_token_12345');
+    </script>
+    
+    <!-- Load our scripts.js with the new functions -->
+    <script src="assets/core/js/scripts.js"></script>
+    
+    <!-- Test scripts -->
+    <script>
+        $(function() {
+            // Test 1: showErrors()
+            $('#test-show-errors').click(function() {
+                showErrors({
+                    test_email: 'Email is required',
+                    test_amount: 'Amount must be greater than 0',
+                    test_date: 'Invalid date format'
+                }, '#error-display-area');
+            });
+
+            // Test 2: Mock AJAX Success
+            $('#test-ajax-success').click(function() {
+                var $result = $('#success-result');
+                $result.html('<div class="alert alert-info">Testing... This will fail because there is no backend endpoint, but it demonstrates the pattern.</div>');
+                
+                // This will fail because there's no real endpoint, but it shows the pattern
+                ajaxPost('/mock-endpoint', {
+                    test_field: 'test_value'
+                }).done(function(response) {
+                    $result.html('<div class="alert alert-success">Success! Response: ' + JSON.stringify(response) + '</div>');
+                }).fail(function(errors) {
+                    $result.html('<div class="alert alert-warning">Expected failure (no backend). This demonstrates error handling. Errors: ' + JSON.stringify(errors) + '</div>');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
