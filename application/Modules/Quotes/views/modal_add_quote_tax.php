@@ -10,6 +10,9 @@
             }, {
                 beforeSend: function() {
                     show_loader(); // Show spinner
+                },
+                always: function() {
+                    close_loader();
                 }
             }).done(function (response) {
                 window.location = "<?php echo site_url('quotes/view'); ?>/" + <?php echo $quote_id; ?>;

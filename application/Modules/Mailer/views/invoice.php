@@ -11,6 +11,8 @@
                 email_template_id: email_template_id
             }).done(function (data) {
                 inject_email_template(template_fields, data);
+            }).fail(function (errors) {
+                // Errors are automatically displayed by ajaxPost
             });
         });
 

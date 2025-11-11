@@ -15,6 +15,8 @@
                 }).done(function (data) {
                     <?php echo IP_DEBUG ? 'console.log(data);' : ''; ?>
                     $('#filter_results').html(data);
+                }).fail(function (errors) {
+                    // Errors are automatically displayed by ajaxPost
                 });
             }, 1000);
         });

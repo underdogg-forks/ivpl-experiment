@@ -41,6 +41,8 @@
 
                 // Legacy:no: check items tax usage is correct (ReLoad on change) - since 1.6.3
                 check_items_tax_usages();
+            }).fail(function (errors) {
+                // Errors are automatically displayed by ajaxPost
             });
         });
 

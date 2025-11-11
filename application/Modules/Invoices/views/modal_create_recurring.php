@@ -39,6 +39,8 @@
                 recur_frequency: $('#recur_frequency').val()
             }).done(function (data) {
                 $('#recur_start_date').val(data);
+            }).fail(function (errors) {
+                // Errors are automatically displayed by ajaxPost
             });
         }
     });

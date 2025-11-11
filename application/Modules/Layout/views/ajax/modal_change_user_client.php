@@ -26,6 +26,9 @@ $permissive = get_setting('enable_permissive_search_' . $who . 's');
             }, {
                 beforeSend: function() {
                     show_loader();
+                },
+                always: function() {
+                    close_loader();
                 }
             }).done(function (response) {
                 // The validation was successful and quote/invoice was Updated
