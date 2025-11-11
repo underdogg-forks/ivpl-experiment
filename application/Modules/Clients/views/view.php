@@ -36,25 +36,33 @@
             close_loader();
         }
         function delete_client_note(event) {
-            show_loader();
-            $.post('<?php echo site_url('clients/ajax/delete_client_note'); ?>',
-                {
-                    client_note_id: $(this).attr('data-id')
-                }, function (data) {
-                    reload_client_notes(data);
+            ajaxPost('<?php echo site_url('clients/ajax/delete_client_note'); ?>', {
+                client_note_id: $(this).attr('data-id')
+            }, {
+                beforeSend: function() {
+                    show_loader();
                 }
-            );
+            }).done(function (data) {
+                reload_client_notes(data);
+            }).fail(function (errors) {
+                close_loader();
+                // Errors are automatically displayed by ajaxPost
+            });
         }
         $('#save_client_note').click(function () {
-            show_loader();
-            $.post('<?php echo site_url('clients/ajax/save_client_note'); ?>',
-                {
-                    client_id: client_id,
-                    client_note: $('#client_note').val()
-                }, function (data) {
-                    reload_client_notes(data);
+            ajaxPost('<?php echo site_url('clients/ajax/save_client_note'); ?>', {
+                client_id: client_id,
+                client_note: $('#client_note').val()
+            }, {
+                beforeSend: function() {
+                    show_loader();
                 }
-            );
+            }).done(function (data) {
+                reload_client_notes(data);
+            }).fail(function (errors) {
+                close_loader();
+                // Errors are automatically displayed by ajaxPost
+            });
         });
         add_delete_client_notes_click_event();
     });

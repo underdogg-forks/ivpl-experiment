@@ -19,29 +19,20 @@ $permissive = get_setting('enable_permissive_search_' . $who . 's');
 
         // Change the user or client
         $('#<?php echo $who; ?>_change_confirm').click(function () {
-            // Show loader
-            show_loader();
-
             // Posts the data to validate
-            $.post("<?php echo site_url($type . 's/ajax/change_' . $who); ?>", {
-                    <?php echo $who; ?>_id: $('#change_<?php echo $who; ?>_id').val(),
-                    <?php echo $type; ?>_id: $('#<?php echo $type; ?>_id').val()
-                },
-                function (data) {
-                    var response = json_parse(data, <?php echo (int) IP_DEBUG; ?>);
-                    if (response.success === 1) {
-                        // The validation was successful and quote/invoice was Updated
-                        window.location = "<?php echo site_url($type . 's/view'); ?>/" + response.<?php echo $type; ?>_id;
-                    }
-                    else {
-                        // The validation was not successful
-                        $('.control-group').removeClass('has-error');
-                        for (var key in response.validation_errors) {
-                            $('#' + key).parent().parent().addClass('has-error');
-                        }
-                    }
+            ajaxPost("<?php echo site_url($type . 's/ajax/change_' . $who); ?>", {
+                <?php echo $who; ?>_id: $('#change_<?php echo $who; ?>_id').val(),
+                <?php echo $type; ?>_id: $('#<?php echo $type; ?>_id').val()
+            }, {
+                beforeSend: function() {
+                    show_loader();
                 }
-            );
+            }).done(function (response) {
+                // The validation was successful and quote/invoice was Updated
+                window.location = "<?php echo site_url($type . 's/view'); ?>/" + response.<?php echo $type; ?>_id;
+            }).fail(function (errors) {
+                // Errors are automatically displayed by ajaxPost
+            });
         });
     });
 </script>
