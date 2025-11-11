@@ -327,7 +327,12 @@ class InvoicesAjaxController extends AdminController
             'client'         => $this->client->get_by_id($this->input->post('client_id')),
         ];
 
+        // Capture view output and return as JSON
+        ob_start();
         $this->layout->load_view('invoices/modal_copy_invoice', $data);
+        $html = ob_get_clean();
+        
+        echo json_encode(['success' => 1, 'html' => $html]);
     }
 
     /**
@@ -386,7 +391,12 @@ class InvoicesAjaxController extends AdminController
             'users'      => $this->user->get_latest(),
         ];
 
+        // Capture view output and return as JSON
+        ob_start();
         $this->layout->load_view('layout/ajax/modal_change_user_client', $data);
+        $html = ob_get_clean();
+        
+        echo json_encode(['success' => 1, 'html' => $html]);
     }
 
     /**
@@ -445,7 +455,12 @@ class InvoicesAjaxController extends AdminController
             'clients'    => $this->client->get_latest(),
         ];
 
+        // Capture view output and return as JSON
+        ob_start();
         $this->layout->load_view('layout/ajax/modal_change_user_client', $data);
+        $html = ob_get_clean();
+        
+        echo json_encode(['success' => 1, 'html' => $html]);
     }
 
     /**
@@ -509,7 +524,12 @@ class InvoicesAjaxController extends AdminController
             'clients'        => $this->client->get_latest(),
         ];
 
+        // Capture view output and return as JSON
+        ob_start();
         $this->layout->load_view('invoices/modal_create_invoice', $data);
+        $html = ob_get_clean();
+        
+        echo json_encode(['success' => 1, 'html' => $html]);
     }
 
     /**
@@ -581,7 +601,12 @@ class InvoicesAjaxController extends AdminController
             'recur_frequencies' => $this->invoice_recurring->recur_frequencies,
         ];
 
+        // Capture view output and return as JSON
+        ob_start();
         $this->layout->load_view('invoices/modal_create_recurring', $data);
+        $html = ob_get_clean();
+        
+        echo json_encode(['success' => 1, 'html' => $html]);
     }
 
     /**
@@ -618,7 +643,12 @@ class InvoicesAjaxController extends AdminController
             'invoice'        => $this->invoice->where('ip_invoices.invoice_id', $this->security->xss_clean($this->input->post('invoice_id')))->get()->row(),
         ];
 
+        // Capture view output and return as JSON
+        ob_start();
         $this->layout->load_view('invoices/modal_create_credit', $data);
+        $html = ob_get_clean();
+        
+        echo json_encode(['success' => 1, 'html' => $html]);
     }
 
     /**

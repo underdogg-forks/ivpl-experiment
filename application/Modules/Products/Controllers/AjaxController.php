@@ -60,11 +60,16 @@ class ProductsAjaxController extends AdminController
             'default_item_tax_rate' => $default_item_tax_rate,
         ];
 
+        // Capture view output and return as JSON
+        ob_start();
         if ($filter_product || $filter_family || $reset_table) {
             $this->layout->load_view('products/partial_product_table_modal', $data);
         } else {
             $this->layout->load_view('products/modal_product_lookups', $data);
         }
+        $html = ob_get_clean();
+        
+        echo json_encode(['success' => 1, 'html' => $html]);
     }
 
     /**

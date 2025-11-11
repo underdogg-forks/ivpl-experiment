@@ -183,7 +183,12 @@ class UsersAjaxController extends AdminController
             ];
         }
 
+        // Capture view output and return as JSON
+        ob_start();
         $this->layout->load_view('users/partial_user_client_table', $data);
+        $html = ob_get_clean();
+        
+        echo json_encode(['success' => 1, 'html' => $html]);
     }
 
     /**
@@ -219,6 +224,11 @@ class UsersAjaxController extends AdminController
             'clients' => $clients,
         ];
 
+        // Capture view output and return as JSON
+        ob_start();
         $this->layout->load_view('users/modal_user_client', $data);
+        $html = ob_get_clean();
+        
+        echo json_encode(['success' => 1, 'html' => $html]);
     }
 }

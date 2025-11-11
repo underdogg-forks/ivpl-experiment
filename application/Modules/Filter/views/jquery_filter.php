@@ -14,7 +14,7 @@
                     filter_query: $('#filter').val()
                 }).done(function (data) {
                     <?php echo IP_DEBUG ? 'console.log(data);' : ''; ?>
-                    $('#filter_results').html(data);
+                    $('#filter_results').html(data.html);
                 }).fail(function (errors) {
                     // Errors are automatically displayed by ajaxPost
                 });

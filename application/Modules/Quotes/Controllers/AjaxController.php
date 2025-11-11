@@ -281,7 +281,12 @@ class QuotesAjaxController extends AdminController
             'client'         => $this->client->get_by_id($this->input->post('client_id')),
         ];
 
+        // Capture view output and return as JSON
+        ob_start();
         $this->layout->load_view('quotes/modal_copy_quote', $data);
+        $html = ob_get_clean();
+        
+        echo json_encode(['success' => 1, 'html' => $html]);
     }
 
     /**
@@ -340,7 +345,12 @@ class QuotesAjaxController extends AdminController
             'users'    => $this->user->get_latest(),
         ];
 
+        // Capture view output and return as JSON
+        ob_start();
         $this->layout->load_view('layout/ajax/modal_change_user_client', $data);
+        $html = ob_get_clean();
+        
+        echo json_encode(['success' => 1, 'html' => $html]);
     }
 
     /**
@@ -399,7 +409,12 @@ class QuotesAjaxController extends AdminController
             'clients'   => $this->client->get_latest(),
         ];
 
+        // Capture view output and return as JSON
+        ob_start();
         $this->layout->load_view('layout/ajax/modal_change_user_client', $data);
+        $html = ob_get_clean();
+        
+        echo json_encode(['success' => 1, 'html' => $html]);
     }
 
     /**
@@ -463,7 +478,12 @@ class QuotesAjaxController extends AdminController
             'clients'        => $this->client->get_latest(),
         ];
 
+        // Capture view output and return as JSON
+        ob_start();
         $this->layout->load_view('quotes/modal_create_quote', $data);
+        $html = ob_get_clean();
+        
+        echo json_encode(['success' => 1, 'html' => $html]);
     }
 
     /**
@@ -511,7 +531,12 @@ class QuotesAjaxController extends AdminController
             'quote'          => $this->quote->where('ip_quotes.quote_id', $quote_id)->get()->row(),
         ];
 
+        // Capture view output and return as JSON
+        ob_start();
         $this->load->view('quotes/modal_quote_to_invoice', $data);
+        $html = ob_get_clean();
+        
+        echo json_encode(['success' => 1, 'html' => $html]);
     }
 
     /**
