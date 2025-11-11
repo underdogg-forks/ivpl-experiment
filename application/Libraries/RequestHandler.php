@@ -194,7 +194,7 @@ class RequestHandler
      */
     protected function logRequestError($url, $method, $exception)
     {
-        $logFile = defined('LOGS_FOLDER') ? LOGS_FOLDER . 'http-errors-' . date('Y-m-d') . '.php' : null;
+        $logFile = logs_path('http-errors-' . date('Y-m-d') . '.php');
 
         if ($logFile) {
             $logEntry = sprintf(

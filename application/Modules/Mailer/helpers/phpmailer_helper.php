@@ -138,7 +138,7 @@ function phpmail_send(
         $mail->addAttachment($attachment_path);
 
         // eInvoicing replace ARCHIVE (pdf) to TEMP (xml) for no embed_xml - since 1.6.3
-        $attachment_path = strtr($attachment_path, [UPLOADS_ARCHIVE_FOLDER => UPLOADS_TEMP_FOLDER]);
+        $attachment_path = strtr($attachment_path, [uploads_archive_path() => uploads_temp_path()]);
 
         // The XML eInvoicing file exist in temporary?
         $xml_file = mb_rtrim($attachment_path, '.pdf') . '.xml';

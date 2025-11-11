@@ -301,26 +301,15 @@ define('THEME_FOLDER', FCPATH . 'assets' . DIRECTORY_SEPARATOR);
  * --------------------------------------------------------------------
  * 
  * Load modern path helpers for cleaner path management throughout
- * the application. These helpers provide a Laravel-style API for
- * working with paths.
+ * the application. Path helpers provide a Laravel-style API and
+ * should be used directly in code instead of defines.
  */
 require_once APPPATH . 'helpers/path_helper.php';
 
-// Define upload paths using helper functions for consistency
-define('UPLOADS_FOLDER', join_paths(dirname(FCPATH), 'uploads') . DIRECTORY_SEPARATOR);
-define('UPLOADS_ARCHIVE_FOLDER', join_paths(UPLOADS_FOLDER, 'archive') . DIRECTORY_SEPARATOR);
-define('UPLOADS_CFILES_FOLDER', join_paths(UPLOADS_FOLDER, 'customer_files') . DIRECTORY_SEPARATOR);
-define('UPLOADS_TEMP_FOLDER', join_paths(UPLOADS_FOLDER, 'temp') . DIRECTORY_SEPARATOR);
-define('UPLOADS_TEMP_MPDF_FOLDER', join_paths(UPLOADS_TEMP_FOLDER, 'mpdf') . DIRECTORY_SEPARATOR);
-
-// Define other paths using helpers
-define('LOGS_FOLDER', join_paths(APPPATH, 'logs') . DIRECTORY_SEPARATOR);
-define('IPCONFIG_FILE', join_paths(dirname(FCPATH), 'ipconfig.php'));
-
 // Automatic temp pdf & xml files cleanup using path helpers
 $files = array_merge(
-    glob(uploads_path('temp/*.pdf')),
-    glob(uploads_path('temp/*.xml'))
+    glob(uploads_temp_path('*.pdf')),
+    glob(uploads_temp_path('*.xml'))
 );
 
 array_map('unlink', $files);

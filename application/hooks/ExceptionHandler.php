@@ -221,7 +221,7 @@ class ExceptionHandler
      */
     protected function logException($exception)
     {
-        $logFile = LOGS_FOLDER . 'exceptions-' . date('Y-m-d') . '.php';
+        $logFile = logs_path('exceptions-' . date('Y-m-d') . '.php');
         
         // Create log entry
         $logEntry = sprintf(

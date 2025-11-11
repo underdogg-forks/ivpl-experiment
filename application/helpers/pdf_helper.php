@@ -176,13 +176,13 @@ function generate_invoice_pdf($invoice_id, $stream = true, $invoice_template = n
         associated_files: $associatedFiles
     );
 
-    if ($embed_xml && file_exists(UPLOADS_TEMP_FOLDER . $filename . '.xml')) {
+    if ($embed_xml && file_exists(uploads_temp_path($filename . '.xml'))) {
         if (IP_DEBUG) {
             // To simplify xml validation Copy to uploads/temp/einvoice_test.xml. Same file but Always new (when get/send pdf)
-            copy(UPLOADS_TEMP_FOLDER . $filename . '.xml', UPLOADS_TEMP_FOLDER . 'einvoice_test.xml');
+            copy(uploads_temp_path($filename . '.xml'), uploads_temp_path('einvoice_test.xml'));
         }
         // Delete the tmp CII-XML file
-        unlink(UPLOADS_TEMP_FOLDER . $filename . '.xml');
+        unlink(uploads_temp_path($filename . '.xml'));
     }
 
     // eInvoice Ok & not in pdf, create the UBL XML file
@@ -238,7 +238,7 @@ function generate_invoice_sumex($invoice_id, $stream = true, $invoice_template =
             return;
         }
 
-        $filePath = UPLOADS_TEMP_FOLDER . $filename . '.pdf';
+        $filePath = uploads_temp_path($filename . '.pdf');
         $pdf->Output($filePath, 'F');
 
         return $filePath;
@@ -247,7 +247,7 @@ function generate_invoice_sumex($invoice_id, $stream = true, $invoice_template =
         return $sumexPDF;
     }
 
-    $filePath = UPLOADS_TEMP_FOLDER . $filename . '.pdf';
+    $filePath = uploads_temp_path($filename . '.pdf');
     file_put_contents($filePath, $sumexPDF);
 
     return $filePath;

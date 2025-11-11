@@ -41,7 +41,7 @@ function generate_xml_invoice_file($invoice, $items, string $xml_lib, string $fi
     ], 'ublciixml');
     $CI->ublciixml->xml();
 
-    return UPLOADS_TEMP_FOLDER . $filename . '.xml';
+    return uploads_temp_path($filename . '.xml');
 }
 
 function include_rdf(string $embedXml, string $urn = 'factur-x'): string

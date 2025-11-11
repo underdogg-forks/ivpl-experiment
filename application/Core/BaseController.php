@@ -133,7 +133,7 @@ class BaseController extends \MX_Controller
 
         // Log to file if enabled
         if (defined('IP_DEBUG') && IP_DEBUG) {
-            $logFile = LOGS_FOLDER . 'requests-' . date('Y-m-d') . '.php';
+            $logFile = logs_path('requests-' . date('Y-m-d') . '.php');
             $logEntry = sprintf(
                 "[%s] %s %s from %s\n",
                 date('Y-m-d H:i:s'),
@@ -159,7 +159,7 @@ class BaseController extends \MX_Controller
             $duration = microtime(true) - $this->requestLog['timestamp'];
             $statusCode = http_response_code();
 
-            $logFile = LOGS_FOLDER . 'requests-' . date('Y-m-d') . '.php';
+            $logFile = logs_path('requests-' . date('Y-m-d') . '.php');
             $logEntry = sprintf(
                 "[%s] Response: %d - Duration: %.4fs\n",
                 date('Y-m-d H:i:s'),

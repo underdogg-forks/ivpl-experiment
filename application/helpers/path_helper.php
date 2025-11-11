@@ -86,7 +86,8 @@ if (!function_exists('uploads_path')) {
      */
     function uploads_path(string $path = ''): string
     {
-        $base = defined('UPLOADS_FOLDER') ? UPLOADS_FOLDER : base_path('uploads') . DIRECTORY_SEPARATOR;
+        // Modern storage location: storage/uploads
+        $base = storage_path('uploads') . DIRECTORY_SEPARATOR;
         return $path ? $base . ltrim($path, DIRECTORY_SEPARATOR) : rtrim($base, DIRECTORY_SEPARATOR);
     }
 }
@@ -100,7 +101,8 @@ if (!function_exists('logs_path')) {
      */
     function logs_path(string $path = ''): string
     {
-        $base = defined('LOGS_FOLDER') ? LOGS_FOLDER : app_path('logs') . DIRECTORY_SEPARATOR;
+        // Logs remain in application/logs for CodeIgniter compatibility
+        $base = app_path('logs') . DIRECTORY_SEPARATOR;
         return $path ? $base . ltrim($path, DIRECTORY_SEPARATOR) : rtrim($base, DIRECTORY_SEPARATOR);
     }
 }
@@ -130,6 +132,45 @@ if (!function_exists('asset_path')) {
     {
         $base = defined('THEME_FOLDER') ? THEME_FOLDER : public_path('assets') . DIRECTORY_SEPARATOR;
         return $path ? $base . ltrim($path, DIRECTORY_SEPARATOR) : rtrim($base, DIRECTORY_SEPARATOR);
+    }
+}
+
+if (!function_exists('uploads_temp_path')) {
+    /**
+     * Get the path to the temporary uploads directory
+     * 
+     * @param string $path Optional path to append
+     * @return string The full temporary uploads path
+     */
+    function uploads_temp_path(string $path = ''): string
+    {
+        return uploads_path('temp' . ($path ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : ''));
+    }
+}
+
+if (!function_exists('uploads_customer_files_path')) {
+    /**
+     * Get the path to the customer files uploads directory
+     * 
+     * @param string $path Optional path to append
+     * @return string The full customer files path
+     */
+    function uploads_customer_files_path(string $path = ''): string
+    {
+        return uploads_path('customer_files' . ($path ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : ''));
+    }
+}
+
+if (!function_exists('uploads_archive_path')) {
+    /**
+     * Get the path to the archive uploads directory
+     * 
+     * @param string $path Optional path to append
+     * @return string The full archive path
+     */
+    function uploads_archive_path(string $path = ''): string
+    {
+        return uploads_path('archive' . ($path ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : ''));
     }
 }
 
