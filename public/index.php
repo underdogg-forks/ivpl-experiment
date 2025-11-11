@@ -338,22 +338,16 @@ try {
         $handler = new ExceptionHandler();
         $handler->handleException($e);
     } else {
-        // Fallback error display
+        // Fallback error display using proper error page
         http_response_code(500);
+        $exception = $e;
         
-        if (ENVIRONMENT === 'development' || IP_DEBUG) {
-            echo '<!DOCTYPE html><html><head><title>Fatal Error</title></head><body>';
-            echo '<h1>Fatal Error</h1>';
-            echo '<p><strong>' . htmlspecialchars(get_class($e)) . ':</strong> ' . htmlspecialchars($e->getMessage()) . '</p>';
-            echo '<p><strong>File:</strong> ' . htmlspecialchars($e->getFile()) . '</p>';
-            echo '<p><strong>Line:</strong> ' . $e->getLine() . '</p>';
-            echo '<pre>' . htmlspecialchars($e->getTraceAsString()) . '</pre>';
-            echo '</body></html>';
+        if (file_exists(APPPATH . 'errors/error_fatal.php')) {
+            include APPPATH . 'errors/error_fatal.php';
         } else {
-            echo '<!DOCTYPE html><html><head><title>Error</title></head><body>';
-            echo '<h1>An Error Occurred</h1>';
-            echo '<p>The application encountered an unexpected error. Please try again later.</p>';
-            echo '</body></html>';
+            // Ultimate fallback
+            echo '<h1>Fatal Error</h1>';
+            echo '<p>The application encountered an unexpected error.</p>';
         }
     }
     exit(1);
