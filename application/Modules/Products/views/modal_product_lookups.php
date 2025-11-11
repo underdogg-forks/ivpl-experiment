@@ -15,10 +15,16 @@
             // No Check No post
             if ( ! product_ids.length) return; // todo: why not animate checkboxes
 
-            $.post("<?php echo site_url('products/ajax/process_product_selections'); ?>", {
+            ajaxPost("<?php echo site_url('products/ajax/process_product_selections'); ?>", {
                 product_ids: product_ids
-            }, function (data) {
-                var items = json_parse(data, <?php echo (int) IP_DEBUG; ?>);
+            }, {
+                beforeSend: function() {
+                    show_loader();
+                },
+                always: function() {
+                    close_loader();
+                }
+            }).done(function (items) {
                 for (var key in items) {
                     // Set default tax rate id if empty
                     if (!items[key].tax_rate_id) items[key].tax_rate_id = '<?php echo $default_item_tax_rate; ?>';
@@ -42,6 +48,8 @@
 
                 // Legacy:no: check items tax usage is correct (ReLoad on change) - since 1.6.3
                 check_items_tax_usages();
+            }).fail(function (errors) {
+                // Errors are automatically displayed by ajaxPost
             });
         });
 

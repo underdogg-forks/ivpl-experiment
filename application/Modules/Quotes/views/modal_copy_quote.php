@@ -10,31 +10,26 @@
 
         // Creates the quote
         $('#copy_quote_confirm').click(function () {
-            show_loader(); // Show spinner
-            $.post("<?php echo site_url('quotes/ajax/copy_quote'); ?>", {
-                    legacy_calculation: legacy_calculation, // Automatic. From meta (see script)
-                    quote_id: <?php echo $quote_id; ?>,
-                    client_id: $('#client_id').val(),
-                    user_id: $('#user_id').val(),
-                    quote_date_created: $('#quote_date_created_modal').val(),
-                    invoice_group_id: $('#invoice_group_id').val(),
-                    quote_password: $('#quote_password').val(),
+            ajaxPost("<?php echo site_url('quotes/ajax/copy_quote'); ?>", {
+                legacy_calculation: legacy_calculation, // Automatic. From meta (see script)
+                quote_id: <?php echo $quote_id; ?>,
+                client_id: $('#client_id').val(),
+                user_id: $('#user_id').val(),
+                quote_date_created: $('#quote_date_created_modal').val(),
+                invoice_group_id: $('#invoice_group_id').val(),
+                quote_password: $('#quote_password').val(),
+            }, {
+                beforeSend: function() {
+                    show_loader(); // Show spinner
                 },
-                function (data) {
-                    var response = json_parse(data, <?php echo (int) IP_DEBUG; ?>);
-                    if (response.success === 1) {
-                        window.location = "<?php echo site_url('quotes/view'); ?>/" + response.quote_id;
-                    }
-                    else {
-                        // The validation was not successful
-                        close_loader();
-                        $('.control-group').removeClass('has-error');
-                        for (var key in response.validation_errors) {
-                            $('#' + key).parent().parent().addClass('has-error');
-                        }
-                    }
+                always: function() {
+                    close_loader();
                 }
-            );
+            }).done(function (response) {
+                window.location = "<?php echo site_url('quotes/view'); ?>/" + response.quote_id;
+            }).fail(function (errors) {
+                // Errors are automatically displayed by ajaxPost
+            });
         });
     });
 

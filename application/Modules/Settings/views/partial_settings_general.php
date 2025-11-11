@@ -1,8 +1,10 @@
 <script>
     $(function () {
         $('#btn_generate_cron_key').click(function () {
-            $.post("<?php echo site_url('settings/ajax/get_cron_key'); ?>", function (data) {
+            ajaxPost("<?php echo site_url('settings/ajax/get_cron_key'); ?>", {}).done(function (data) {
                 $('#cron_key').val(data);
+            }).fail(function (errors) {
+                // Errors are automatically displayed by ajaxPost
             });
         });
     });

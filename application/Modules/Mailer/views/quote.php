@@ -7,10 +7,12 @@
 
             if (email_template_id === '') return;
 
-            $.post("<?php echo site_url('email_templates/ajax/get_content'); ?>", {
+            ajaxPost("<?php echo site_url('email_templates/ajax/get_content'); ?>", {
                 email_template_id: email_template_id
-            }, function (data) {
-                inject_email_template(template_fields, json_parse(data, <?php echo (int) IP_DEBUG; ?>));
+            }).done(function (data) {
+                inject_email_template(template_fields, data);
+            }).fail(function (errors) {
+                // Errors are automatically displayed by ajaxPost
             });
         });
 

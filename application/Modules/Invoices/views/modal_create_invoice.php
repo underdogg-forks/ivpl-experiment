@@ -11,30 +11,21 @@
         // Creates the invoice
         $('#invoice_create_confirm').click(function () {
             // Posts the data to validate and create the invoice;
-            // will create the new client if necessar
-            $.post("<?php echo site_url('invoices/ajax/create'); ?>", {
-                    client_id: $('#create_invoice_client_id').val(),
-                    invoice_date_created: $('#invoice_date_created').val(),
-                    invoice_group_id: $('#invoice_group_id').val(),
-                    invoice_time_created: '<?php echo date('H:i:s') ?>',
-                    invoice_password: $('#invoice_password').val(),
-                    user_id: '<?php echo $this->session->userdata('user_id'); ?>',
-                    payment_method: $('#payment_method_id').val()
-                },
-                function (data) {
-                    var response = json_parse(data, <?php echo (int) IP_DEBUG; ?>);
-                    if (response.success === 1) {
-                        // The validation was successful and invoice was created
-                        window.location = "<?php echo site_url('invoices/view'); ?>/" + response.invoice_id;
-                    }
-                    else {
-                        // The validation was not successful
-                        $('.control-group').removeClass('has-error');
-                        for (var key in response.validation_errors) {
-                            $('#' + key).parent().parent().addClass('has-error');
-                        }
-                    }
-                });
+            // will create the new client if necessary
+            ajaxPost("<?php echo site_url('invoices/ajax/create'); ?>", {
+                client_id: $('#create_invoice_client_id').val(),
+                invoice_date_created: $('#invoice_date_created').val(),
+                invoice_group_id: $('#invoice_group_id').val(),
+                invoice_time_created: '<?php echo date('H:i:s') ?>',
+                invoice_password: $('#invoice_password').val(),
+                user_id: '<?php echo $this->session->userdata('user_id'); ?>',
+                payment_method: $('#payment_method_id').val()
+            }).done(function (response) {
+                // The validation was successful and invoice was created
+                window.location = "<?php echo site_url('invoices/view'); ?>/" + response.invoice_id;
+            }).fail(function (errors) {
+                // Errors are automatically displayed by ajaxPost
+            });
         });
     });
 

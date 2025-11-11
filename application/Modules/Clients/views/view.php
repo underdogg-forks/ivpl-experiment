@@ -11,50 +11,52 @@
             $('.delete_client_note').click(delete_client_note);
         }
         function reload_client_notes(data){
-            var response = json_parse(data, <?php echo (int) IP_DEBUG; ?>);
-            if (response.success === 1) {
-                // The validation was successful
-                $('.has-error').removeClass('has-error');
-                $('#client_note').val('');
+            // The validation was successful - response already validated by ajaxPost
+            $('.has-error').removeClass('has-error');
+            $('#client_note').val('');
 
-                // Reload all notes
-                $('#notes_list').load("<?php echo site_url('clients/ajax/load_client_notes'); ?>",
-                    {
-                        client_id: client_id
-                    }, function (response) {
-                        <?php echo IP_DEBUG ? 'console.log(response);' : ''; ?>
+            // Reload all notes
+            $('#notes_list').load("<?php echo site_url('clients/ajax/load_client_notes'); ?>",
+                {
+                    client_id: client_id
+                }, function (response) {
+                    <?php echo IP_DEBUG ? 'console.log(response);' : ''; ?>
 
-                        setTimeout(add_delete_client_notes_click_event, 161);
-                    });
-            } else {
-                // The validation was not successful
-                $('.has-error').removeClass('has-error');
-                for (var key in response.validation_errors) {
-                    $('#' + key).parent().addClass('has-error');
-                }
-            }
-            close_loader();
+                    setTimeout(add_delete_client_notes_click_event, 161);
+                });
         }
         function delete_client_note(event) {
-            show_loader();
-            $.post('<?php echo site_url('clients/ajax/delete_client_note'); ?>',
-                {
-                    client_note_id: $(this).attr('data-id')
-                }, function (data) {
-                    reload_client_notes(data);
+            ajaxPost('<?php echo site_url('clients/ajax/delete_client_note'); ?>', {
+                client_note_id: $(this).attr('data-id')
+            }, {
+                beforeSend: function() {
+                    show_loader();
+                },
+                always: function() {
+                    close_loader();
                 }
-            );
+            }).done(function (data) {
+                reload_client_notes(data);
+            }).fail(function (errors) {
+                // Errors are automatically displayed by ajaxPost
+            });
         }
         $('#save_client_note').click(function () {
-            show_loader();
-            $.post('<?php echo site_url('clients/ajax/save_client_note'); ?>',
-                {
-                    client_id: client_id,
-                    client_note: $('#client_note').val()
-                }, function (data) {
-                    reload_client_notes(data);
+            ajaxPost('<?php echo site_url('clients/ajax/save_client_note'); ?>', {
+                client_id: client_id,
+                client_note: $('#client_note').val()
+            }, {
+                beforeSend: function() {
+                    show_loader();
+                },
+                always: function() {
+                    close_loader();
                 }
-            );
+            }).done(function (data) {
+                reload_client_notes(data);
+            }).fail(function (errors) {
+                // Errors are automatically displayed by ajaxPost
+            });
         });
         add_delete_client_notes_click_event();
     });

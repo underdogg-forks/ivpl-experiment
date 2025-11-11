@@ -23,6 +23,132 @@ function json_parse(data, debug) {
     }
 }
 
+/**
+ * Display validation errors in a consistent way
+ * @param {Object} errors - Validation errors object (key: field_name, value: error_message or array of messages)
+ * @param {string} targetSelector - CSS selector for the container to display errors (optional)
+ * @param {boolean} clearPrevious - Whether to clear previous error states (default: true)
+ */
+function showErrors(errors, targetSelector, clearPrevious) {
+    clearPrevious = typeof clearPrevious !== 'undefined' ? clearPrevious : true;
+
+    // Clear previous error states
+    if (clearPrevious) {
+        $('.control-group, .form-group').removeClass('has-error');
+        $('.help-block.error').remove();
+    }
+
+    // If target selector provided, display errors there
+    if (targetSelector && $(targetSelector).length) {
+        var errorHtml = '<div class="alert alert-danger"><ul class="list-unstyled">';
+        for (let errorKey in errors) {
+            if (errors.hasOwnProperty(errorKey)) {
+                let errorMsg = Array.isArray(errors[errorKey]) ? errors[errorKey].join(', ') : errors[errorKey];
+                errorHtml += '<li><strong>' + errorKey.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) + ':</strong> ' + errorMsg + '</li>';
+            }
+        }
+        errorHtml += '</ul></div>';
+        $(targetSelector).html(errorHtml);
+    }
+
+    // Highlight fields with errors
+    for (let fieldKey in errors) {
+        if (errors.hasOwnProperty(fieldKey)) {
+            var $field = $('#' + fieldKey);
+            if ($field.length) {
+                // Add error class to parent form group
+                $field.closest('.control-group, .form-group').addClass('has-error');
+                
+                // Optionally add error message below field
+                if (!targetSelector) {
+                    let fieldErrorMsg = Array.isArray(errors[fieldKey]) ? errors[fieldKey].join(', ') : errors[fieldKey];
+                    $field.after('<span class="help-block error text-danger">' + fieldErrorMsg + '</span>');
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Standardized AJAX POST wrapper with consistent error handling
+ * Provides a jQuery promise-based interface similar to modern frameworks
+ * 
+ * @param {string} url - The URL to post to
+ * @param {Object} data - Data to send in the POST request
+ * @param {Object} options - Optional configuration
+ * @param {string} options.errorTarget - CSS selector for error display container
+ * @param {Function} options.beforeSend - Callback before request is sent
+ * @param {Function} options.always - Callback that runs after success or failure
+ * @returns {Promise} jQuery promise with .done() and .fail() methods
+ * 
+ * @example
+ * ajaxPost('/payments/store', {
+ *   invoice_id: $('#invoice_id').val(),
+ *   amount: $('#amount').val()
+ * }).done(function(response) {
+ *   window.location = '/invoices/view/' + response.invoice_id;
+ * }).fail(function(errors) {
+ *   // Errors are automatically displayed
+ *   console.log('Payment failed:', errors);
+ * });
+ */
+function ajaxPost(url, data, options) {
+    options = options || {};
+    var deferred = $.Deferred();
+
+    // Call beforeSend callback if provided
+    if (options.beforeSend && typeof options.beforeSend === 'function') {
+        options.beforeSend();
+    }
+
+    $.post(url, data)
+        .done(function(responseData) {
+            var response = typeof responseData === 'string' ? json_parse(responseData) : responseData;
+            
+            if (response.success === 1 || response.success === true) {
+                deferred.resolve(response);
+            } else {
+                // Handle validation errors
+                var errors = response.validation_errors || response.errors || {};
+                
+                // If no specific errors, create a generic error message
+                if (Object.keys(errors).length === 0) {
+                    errors = {
+                        general: 'An unexpected error occurred. Please try again.'
+                    };
+                }
+                
+                // Display errors
+                showErrors(errors, options.errorTarget);
+                
+                deferred.reject(errors, response);
+            }
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            var errors = {};
+            try {
+                var response = JSON.parse(jqXHR.responseText);
+                errors = response.validation_errors || response.errors || {};
+            } catch (e) {
+                errors = {error: jqXHR.responseText || 'An error occurred'};
+            }
+            
+            // Display errors if they exist
+            if (Object.keys(errors).length > 0) {
+                showErrors(errors, options.errorTarget);
+            }
+            
+            deferred.reject(errors, jqXHR);
+        })
+        .always(function() {
+            if (options.always && typeof options.always === 'function') {
+                options.always();
+            }
+        });
+
+    return deferred.promise();
+}
+
 // Insert text into textarea at Caret Position
 function insert_at_caret(areaId, text) {
     var txtarea = document.getElementById(areaId),

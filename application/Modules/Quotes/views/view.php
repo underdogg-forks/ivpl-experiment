@@ -64,43 +64,27 @@ if ($quote->quote_status_id == 1) {
                 item_order++;
                 items.push(row);
             });
-            $.post("<?php echo site_url('quotes/ajax/save'); ?>", {
-                    legacy_calculation: <?php echo (int) $legacy_calculation; ?>,
-                    quote_id: <?php echo $quote_id; ?>,
-                    quote_number: $('#quote_number').val(),
-                    quote_date_created: $('#quote_date_created').val(),
-                    quote_date_expires: $('#quote_date_expires').val(),
-                    quote_status_id: $('#quote_status_id').val(),
-                    quote_password: $('#quote_password').val(),
-                    items: JSON.stringify(items),
-                    quote_discount_amount: $('#quote_discount_amount').val(),
-                    quote_discount_percent: $('#quote_discount_percent').val(),
-                    notes: $('#notes').val(),
-                    custom: $('input[name^=custom],select[name^=custom]').serializeArray(),
-                },
-                function (data) {
-                    var response = json_parse(data, <?php echo (int) IP_DEBUG; ?>);
-                    if (response.success === 1) {
-                        window.location = "<?php echo site_url('quotes/view'); ?>/" + <?php echo $quote_id; ?>;
-                    } else {
-                        $('#fullpage-loader').hide();
-                        $('.control-group').removeClass('has-error');
-                        $('div.alert[class*="alert-"]').remove();
-                        var resp_errors = response.validation_errors,
-                            all_resp_errors = '';
-
-                        if (typeof(resp_errors) == 'string') {
-                            all_resp_errors = resp_errors;
-                        } else {
-                            for (var key in resp_errors) {
-                                $('#' + key).parent().addClass('has-error');
-                                all_resp_errors += resp_errors[key];
-                            }
-                        }
-
-                        $('#quote_form').prepend('<div class="alert alert-danger">' + all_resp_errors + '</div>');
-                    }
-                });
+            ajaxPost("<?php echo site_url('quotes/ajax/save'); ?>", {
+                legacy_calculation: <?php echo (int) $legacy_calculation; ?>,
+                quote_id: <?php echo $quote_id; ?>,
+                quote_number: $('#quote_number').val(),
+                quote_date_created: $('#quote_date_created').val(),
+                quote_date_expires: $('#quote_date_expires').val(),
+                quote_status_id: $('#quote_status_id').val(),
+                quote_password: $('#quote_password').val(),
+                items: JSON.stringify(items),
+                quote_discount_amount: $('#quote_discount_amount').val(),
+                quote_discount_percent: $('#quote_discount_percent').val(),
+                notes: $('#notes').val(),
+                custom: $('input[name^=custom],select[name^=custom]').serializeArray(),
+            }, {
+                errorTarget: '#quote_form'
+            }).done(function (response) {
+                window.location = "<?php echo site_url('quotes/view'); ?>/" + <?php echo $quote_id; ?>;
+            }).fail(function (errors) {
+                $('#fullpage-loader').hide();
+                // Errors are automatically displayed by ajaxPost
+            });
         });
 
         $(document).on('click', '.btn_delete_item', function () {
@@ -112,20 +96,15 @@ if ($quote->quote_status_id == 1) {
                 $(this).parents('.item').remove();
                 check_items_tax_usages();
             } else {
-                $.post("<?php echo site_url('quotes/ajax/delete_item/' . $quote->quote_id); ?>", {
-                        'item_id': item_id,
-                    },
-                    function (data) {
-                        var response = json_parse(data, <?php echo (int) IP_DEBUG; ?>);
-                        if (response.success === 1) {
-                            btn.parents('.item').remove();
-                        } else {
-                            btn.removeClass('btn-link').addClass('btn-danger').prop('disabled', true);
-                        }
-
-                        check_items_tax_usages();
-                    }
-                );
+                ajaxPost("<?php echo site_url('quotes/ajax/delete_item/' . $quote->quote_id); ?>", {
+                    'item_id': item_id,
+                }).done(function (response) {
+                    btn.parents('.item').remove();
+                    check_items_tax_usages();
+                }).fail(function (errors) {
+                    btn.removeClass('btn-link').addClass('btn-danger').prop('disabled', true);
+                    check_items_tax_usages();
+                });
             }
         });
 
