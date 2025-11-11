@@ -14,27 +14,23 @@
 
         // Creates the invoice
         $('#create_recurring_confirm').click(function () {
-            show_loader(); // Show spinner
-            $.post("<?php echo site_url('invoices/ajax/create_recurring'); ?>", {
-                    invoice_id: <?php echo $invoice_id; ?>,
-                    recur_start_date: $('#recur_start_date').val(),
-                    recur_end_date: $('#recur_end_date').val(),
-                    recur_frequency: $('#recur_frequency').val()
+            ajaxPost("<?php echo site_url('invoices/ajax/create_recurring'); ?>", {
+                invoice_id: <?php echo $invoice_id; ?>,
+                recur_start_date: $('#recur_start_date').val(),
+                recur_end_date: $('#recur_end_date').val(),
+                recur_frequency: $('#recur_frequency').val()
+            }, {
+                beforeSend: function() {
+                    show_loader(); // Show spinner
                 },
-                function (data) {
-                    var response = json_parse(data, <?php echo (int) IP_DEBUG; ?>);
-                    if (response.success === 1) {
-                        window.location = "<?php echo site_url('invoices/view'); ?>/<?php echo $invoice_id; ?>";
-                    }
-                    else {
-                        // The validation was not successful
-                        close_loader();
-                        $('.control-group').removeClass('has-error');
-                        for (var key in response.validation_errors) {
-                            $('#' + key).parent().parent().addClass('has-error');
-                        }
-                    }
-                });
+                always: function() {
+                    close_loader();
+                }
+            }).done(function (response) {
+                window.location = "<?php echo site_url('invoices/view'); ?>/<?php echo $invoice_id; ?>";
+            }).fail(function (errors) {
+                // Errors are automatically displayed by ajaxPost
+            });
         });
 
         function get_recur_start_date() {

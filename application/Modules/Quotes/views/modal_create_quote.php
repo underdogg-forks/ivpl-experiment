@@ -10,31 +10,27 @@
 
         // Creates the quote
         $('#quote_create_confirm').click(function () {
-            show_loader(); // Show spinner
             // Posts the data to validate and create the quote;
             // will create the new client if necessary
-            $.post("<?php echo site_url('quotes/ajax/create'); ?>", {
-                    client_id: $('#create_quote_client_id').val(),
-                    quote_date_created: $('#quote_date_created').val(),
-                    quote_password: $('#quote_password').val(),
-                    user_id: '<?php echo $this->session->userdata('user_id'); ?>',
-                    invoice_group_id: $('#invoice_group_id').val()
+            ajaxPost("<?php echo site_url('quotes/ajax/create'); ?>", {
+                client_id: $('#create_quote_client_id').val(),
+                quote_date_created: $('#quote_date_created').val(),
+                quote_password: $('#quote_password').val(),
+                user_id: '<?php echo $this->session->userdata('user_id'); ?>',
+                invoice_group_id: $('#invoice_group_id').val()
+            }, {
+                beforeSend: function() {
+                    show_loader(); // Show spinner
                 },
-                function (data) {
-                    var response = json_parse(data, <?php echo (int) IP_DEBUG; ?>);
-                    if (response.success === 1) {
-                        // The validation was successful and quote was created
-                        window.location = "<?php echo site_url('quotes/view'); ?>/" + response.quote_id;
-                    }
-                    else {
-                        // The validation was not successful
-                        close_loader();
-                        $('.control-group').removeClass('has-error');
-                        for (var key in response.validation_errors) {
-                            $('#' + key).parent().parent().addClass('has-error');
-                        }
-                    }
-                });
+                always: function() {
+                    close_loader();
+                }
+            }).done(function (response) {
+                // The validation was successful and quote was created
+                window.location = "<?php echo site_url('quotes/view'); ?>/" + response.quote_id;
+            }).fail(function (errors) {
+                // Errors are automatically displayed by ajaxPost
+            });
         });
     });
 </script>

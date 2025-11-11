@@ -10,37 +10,25 @@
         $(".simple-select").select2();
 
         $('#btn_modal_payment_submit').click(function () {
-            $.post("<?php echo site_url('payments/ajax/add'); ?>", {
-                    invoice_id: $('#invoice_id').val(),
-                    payment_amount: $('#payment_amount').val(),
-                    payment_method_id: $('#payment_method_id').val(),
-                    payment_date: $('#payment_date').val(),
-                    payment_note: $('#payment_note').val()
-                },
-                function (data) {
-                    var response = json_parse(data, <?php echo (int) IP_DEBUG; ?>);
-                    if (response.success === 1) {
-                        // The validation was successful and payment was added
-                        if ($('#payment_cf_exist').val() === 'yes') {
-                            // There are payment custom fields, display the payment form
-                            // to allow completing the custom fields
-                            window.location = "<?php echo site_url('payments/form'); ?>/" + response.payment_id;
-                        }
-                        else {
-                            // There are no payment custom fields, return to invoice view
-                            window.location = "<?php echo $_SERVER['HTTP_REFERER']; ?>";
-                        }
-                    }
-                    else {
-                        // The validation was not successful
-                        $('.control-group').removeClass('has-error');
-                        for (var key in response.validation_errors) {
-                            if(response.validation_errors.hasOwnProperty(key)) {
-                                $('#' + key).parent().parent().addClass('has-error');
-                            }
-                        }
-                    }
-                });
+            ajaxPost("<?php echo site_url('payments/ajax/add'); ?>", {
+                invoice_id: $('#invoice_id').val(),
+                payment_amount: $('#payment_amount').val(),
+                payment_method_id: $('#payment_method_id').val(),
+                payment_date: $('#payment_date').val(),
+                payment_note: $('#payment_note').val()
+            }).done(function (response) {
+                // The validation was successful and payment was added
+                if ($('#payment_cf_exist').val() === 'yes') {
+                    // There are payment custom fields, display the payment form
+                    // to allow completing the custom fields
+                    window.location = "<?php echo site_url('payments/form'); ?>/" + response.payment_id;
+                } else {
+                    // There are no payment custom fields, return to invoice view
+                    window.location = "<?php echo $_SERVER['HTTP_REFERER']; ?>";
+                }
+            }).fail(function (errors) {
+                // Errors are automatically displayed by ajaxPost
+            });
         });
     });
 </script>

@@ -10,33 +10,28 @@
 
         // Creates the invoice
         $('#copy_invoice_confirm').click(function () {
-            show_loader(); // Show spinner
-            $.post("<?php echo site_url('invoices/ajax/copy_invoice'); ?>", {
-                    legacy_calculation: legacy_calculation, // Automatic. From meta (see script)
-                    invoice_id: <?php echo $invoice_id; ?>,
-                    client_id: $('#client_id').val(),
-                    user_id: $('#user_id').val(),
-                    invoice_date_created: $('#invoice_date_created_modal').val(),
-                    invoice_group_id: $('#invoice_group_id').val(),
-                    invoice_password: $('#invoice_password').val(),
-                    invoice_time_created: '<?php echo date('H:i:s') ?>',
-                    payment_method: $('#payment_method').val()
+            ajaxPost("<?php echo site_url('invoices/ajax/copy_invoice'); ?>", {
+                legacy_calculation: legacy_calculation, // Automatic. From meta (see script)
+                invoice_id: <?php echo $invoice_id; ?>,
+                client_id: $('#client_id').val(),
+                user_id: $('#user_id').val(),
+                invoice_date_created: $('#invoice_date_created_modal').val(),
+                invoice_group_id: $('#invoice_group_id').val(),
+                invoice_password: $('#invoice_password').val(),
+                invoice_time_created: '<?php echo date('H:i:s') ?>',
+                payment_method: $('#payment_method').val()
+            }, {
+                beforeSend: function() {
+                    show_loader(); // Show spinner
                 },
-                function (data) {
-                    var response = json_parse(data, <?php echo (int) IP_DEBUG; ?>);
-                    if (response.success === 1) {
-                        window.location = "<?php echo site_url('invoices/view'); ?>/" + response.invoice_id;
-                    }
-                    else {
-                        // The validation was not successful
-                        close_loader();
-                        $('.control-group').removeClass('has-error');
-                        for (var key in response.validation_errors) {
-                            $('#' + key).parent().parent().addClass('has-error');
-                        }
-                    }
+                always: function() {
+                    close_loader();
                 }
-            );
+            }).done(function (response) {
+                window.location = "<?php echo site_url('invoices/view'); ?>/" + response.invoice_id;
+            }).fail(function (errors) {
+                // Errors are automatically displayed by ajaxPost
+            });
         });
     });
 

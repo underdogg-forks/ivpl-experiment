@@ -7,19 +7,19 @@
         $('#invoice_tax_submit').click(function () {
             tax_rate_id = $('#tax_rate_id').val();
             if ('0' == tax_rate_id) return;
-            show_loader(); // Show spinner
-            $.post("<?php echo site_url('invoices/ajax/save_invoice_tax_rate'); ?>", {
-                    invoice_id: <?php echo $invoice_id; ?>,
-                    tax_rate_id: tax_rate_id,
-                    include_item_tax: $('#include_item_tax').val()
-                },
-                function (data) {
-                    var response = json_parse(data, <?php echo (int) IP_DEBUG; ?>);
-                    if (response.success === 1) {
-                        window.location = "<?php echo site_url('invoices/view'); ?>/" + <?php echo $invoice_id; ?>;
-                    }
-                    // close_loader(); No error returned (show go to wiki if not success after 10s)  Todo: else // The validation was not successful
-                });
+            ajaxPost("<?php echo site_url('invoices/ajax/save_invoice_tax_rate'); ?>", {
+                invoice_id: <?php echo $invoice_id; ?>,
+                tax_rate_id: tax_rate_id,
+                include_item_tax: $('#include_item_tax').val()
+            }, {
+                beforeSend: function() {
+                    show_loader(); // Show spinner
+                }
+            }).done(function (response) {
+                window.location = "<?php echo site_url('invoices/view'); ?>/" + <?php echo $invoice_id; ?>;
+            }).fail(function (errors) {
+                // Errors are automatically displayed by ajaxPost
+            });
         });
     });
 </script>
