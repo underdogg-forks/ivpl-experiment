@@ -3,6 +3,9 @@
 namespace App\Modules\Invoices\Controllers;
 
 use App\Core\AdminController;
+use App\Libraries\CustomFieldService;
+use App\Libraries\InvoiceStatusFilterStrategy;
+use App\Libraries\SettingsCache;
 
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
@@ -21,6 +24,16 @@ if ( ! defined('BASEPATH')) {
 class InvoicesController extends AdminController
 {
     /**
+     * Status filter strategy (Open/Closed Principle)
+     */
+    private InvoiceStatusFilterStrategy $statusFilter;
+
+    /**
+     * Custom field service (Dependency Inversion Principle)
+     */
+    private CustomFieldService $customFieldService;
+
+    /**
      * Invoices constructor.
      */
     public function __construct()
@@ -28,6 +41,10 @@ class InvoicesController extends AdminController
         parent::__construct();
 
         $this->load->model('invoices/invoice');
+
+        // Dependency Injection - SOLID principles
+        $this->statusFilter = new InvoiceStatusFilterStrategy();
+        $this->customFieldService = new CustomFieldService();
     }
 
     /**
@@ -50,24 +67,8 @@ class InvoicesController extends AdminController
      */
     public function status(string $status = 'all', $page = 0): void
     {
-        // Determine which group of invoices to load
-        switch ($status) {
-            case 'draft':
-                $this->invoice->is_draft();
-                break;
-            case 'sent':
-                $this->invoice->is_sent();
-                break;
-            case 'viewed':
-                $this->invoice->is_viewed();
-                break;
-            case 'paid':
-                $this->invoice->is_paid();
-                break;
-            case 'overdue':
-                $this->invoice->is_overdue();
-                break;
-        }
+        // Apply status filter using Strategy Pattern (Open/Closed Principle)
+        $this->statusFilter->apply($this->invoice, $status);
 
         $this->invoice->paginate(site_url('invoices/status/' . $status), $page);
         $invoices = $this->invoice->result();
@@ -116,20 +117,27 @@ class InvoicesController extends AdminController
     {
         $safeBaseDir = realpath(uploads_archive_path());
 
-        $fileName = urldecode(basename($invoice)); // Strip directory traversal sequences
-        $filePath = realpath($safeBaseDir . DIRECTORY_SEPARATOR . $fileName);
-
-        if ($filePath === false || ! str_starts_with($filePath, $safeBaseDir)) {
-            log_message('error', 'Invalid file access attempt: ' . $fileName);
+        // Early return for invalid base directory (Early Return principle)
+        if ($safeBaseDir === false) {
+            log_message('error', 'Invalid archive path configuration');
             show_404();
-
             return;
         }
 
+        $fileName = urldecode(basename($invoice)); // Strip directory traversal sequences
+        $filePath = realpath($safeBaseDir . DIRECTORY_SEPARATOR . $fileName);
+
+        // Early return for invalid file path (Early Return principle)
+        if ($filePath === false || ! str_starts_with($filePath, $safeBaseDir)) {
+            log_message('error', 'Invalid file access attempt: ' . $fileName);
+            show_404();
+            return;
+        }
+
+        // Early return for non-existent file (Early Return principle)
         if ( ! file_exists($filePath)) {
             log_message('error', 'While downloading: File not found: ' . $filePath);
             show_404();
-
             return;
         }
 
@@ -165,57 +173,39 @@ class InvoicesController extends AdminController
 
         $this->db->reset_query();
 
-        /*$invoice_custom = $this->invoicecustom->where('invoice_id', $invoice_id)->get();
-
-        if ($invoice_custom->num_rows()) {
-            $invoice_custom = $invoice_custom->row();
-
-            unset($invoice_custom->invoice_id, $invoice_custom->invoice_custom_id);
-
-            foreach ($invoice_custom as $key => $val) {
-                $this->invoice->set_form_value('custom[' . $key . ']', $val);
-            }
-        }*/
-
-        $fields  = $this->invoicecustom->by_id($invoice_id)->get()->result();
         $invoice = $this->invoice->get_by_id($invoice_id);
 
+        // Early return if invoice not found (Early Return principle)
         if ( ! $invoice) {
             show_404();
+            return;
         }
 
-        $custom_fields = $this->customfields->by_table('ip_invoice_custom')->get()->result();
-        $custom_values = [];
-        foreach ($custom_fields as $custom_field) {
-            if (in_array($custom_field->custom_field_type, $this->customvalues->custom_value_fields())) {
-                $values                                        = $this->customvalues->get_by_fid($custom_field->custom_field_id)->result();
-                $custom_values[$custom_field->custom_field_id] = $values;
-            }
-        }
-
-        foreach ($custom_fields as $cfield) {
-            foreach ($fields as $fvalue) {
-                if ($fvalue->invoice_custom_fieldid == $cfield->custom_field_id) {
-                    // TODO: Hackish, may need a better optimization
-                    $this->invoice->set_form_value(
-                        'custom[' . $cfield->custom_field_id . ']',
-                        $fvalue->invoice_custom_fieldvalue
-                    );
-                    break;
-                }
-            }
-        }
+        // Use CustomFieldService to load custom fields (DRY + Dynamic Programming)
+        $customFieldData = $this->customFieldService->loadDocumentCustomFields(
+            $this->invoice,
+            $this->invoicecustom,
+            $invoice_id,
+            'ip_invoice_custom',
+            'invoice_custom_fieldid',
+            'invoice_custom_fieldvalue'
+        );
 
         // Check whether there are payment custom fields
         $payment_cf       = $this->customfields->by_table('ip_payment_custom')->get();
         $payment_cf_exist = ($payment_cf->num_rows() > 0) ? 'yes' : 'no';
+
         // Get Items
         $items = $this->item->where('invoice_id', $invoice_id)->get()->result();
+
         // Get eInvoice library name and user checks
         $einvoice = get_einvoice_usage($invoice, $items);
-        // Activate 'Change_user' if admin users > 1  (get the sum of user type = 1 & active)
-        $change_user = $this->db->from('ip_users')->where(['user_type' => 1, 'user_active' => 1])->select_sum('user_type')->get()->row();
-        $change_user = $change_user->user_type > 1;
+
+        // Check for multiple admin users with memoization (Dynamic Programming)
+        $change_user = $this->hasMultipleAdminUsers();
+
+        // Use SettingsCache for memoized settings (Dynamic Programming)
+        $currencySettings = SettingsCache::getCurrencySettings();
 
         $this->layout->set(
             [
@@ -228,12 +218,12 @@ class InvoicesController extends AdminController
                 'invoice_tax_rates' => $this->invoicetaxrates->where('invoice_id', $invoice_id)->get()->result(),
                 'units'             => $this->unit->get()->result(),
                 'payment_methods'   => $this->paymentmethods->get()->result(),
-                'custom_fields'     => $custom_fields,
-                'custom_values'     => $custom_values,
+                'custom_fields'     => $customFieldData['custom_fields'],
+                'custom_values'     => $customFieldData['custom_values'],
                 'custom_js_vars'    => [
-                    'currency_symbol'           => get_setting('currency_symbol'),
-                    'currency_symbol_placement' => get_setting('currency_symbol_placement'),
-                    'decimal_point'             => get_setting('decimal_point'),
+                    'currency_symbol'           => $currencySettings['symbol'],
+                    'currency_symbol_placement' => $currencySettings['placement'],
+                    'decimal_point'             => $currencySettings['decimal_point'],
                 ],
                 'invoice_statuses'   => $this->invoice->statuses(),
                 'payment_cf_exist'   => $payment_cf_exist,
@@ -254,6 +244,31 @@ class InvoicesController extends AdminController
     }
 
     /**
+     * Check if multiple admin users exist
+     * Extracted common logic with memoization (DRY + Dynamic Programming)
+     */
+    private function hasMultipleAdminUsers(): bool
+    {
+        static $multipleAdmins = null;
+
+        // Dynamic Programming: Return cached result if available
+        if ($multipleAdmins !== null) {
+            return $multipleAdmins;
+        }
+
+        $result = $this->db
+            ->from('ip_users')
+            ->where(['user_type' => 1, 'user_active' => 1])
+            ->select_sum('user_type')
+            ->get()
+            ->row();
+
+        $multipleAdmins = ($result->user_type ?? 0) > 1;
+
+        return $multipleAdmins;
+    }
+
+    /**
      * Legacy migration info:
      * @legacy-file application/modules/invoices/controllers/Invoices.php
      * @legacy-function delete()
@@ -261,20 +276,32 @@ class InvoicesController extends AdminController
     public function delete($invoice_id): void
     {
         // Get the status of the invoice
-        $invoice        = $this->invoice->get_by_id($invoice_id);
-        $invoice_status = $invoice->invoice_status_id;
+        $invoice = $this->invoice->get_by_id($invoice_id);
 
-        if ($invoice_status == 1 || $this->config->item('enable_invoice_deletion') === true) {
-            // If invoice refers to tasks, mark those tasks back to 'Complete'
-            $this->load->model('tasks/task');
-            $tasks = $this->task->update_on_invoice_delete($invoice_id);
-
-            // Delete the invoice
-            $this->invoice->delete($invoice_id);
-        } else {
-            // Add alert that invoices can't be deleted
-            $this->session->set_flashdata('alert_error', trans('invoice_deletion_forbidden'));
+        // Early return if invoice not found (Early Return principle)
+        if (!$invoice) {
+            $this->session->set_flashdata('alert_error', trans('invoice_not_found'));
+            redirect('invoices/index');
+            return;
         }
+
+        $invoice_status = $invoice->invoice_status_id;
+        $canDelete = ($invoice_status == 1) || 
+                     SettingsCache::isEnabled('enable_invoice_deletion');
+
+        // Early return if deletion not allowed (Early Return principle)
+        if (!$canDelete) {
+            $this->session->set_flashdata('alert_error', trans('invoice_deletion_forbidden'));
+            redirect('invoices/index');
+            return;
+        }
+
+        // If invoice refers to tasks, mark those tasks back to 'Complete'
+        $this->load->model('tasks/task');
+        $this->task->update_on_invoice_delete($invoice_id);
+
+        // Delete the invoice
+        $this->invoice->delete($invoice_id);
 
         // Redirect to invoice index
         redirect('invoices/index');
@@ -292,7 +319,8 @@ class InvoicesController extends AdminController
     {
         $this->load->helper('pdf');
 
-        if (get_setting('mark_invoices_sent_pdf') == 1) {
+        // Use SettingsCache for memoized setting (Dynamic Programming)
+        if (SettingsCache::isEnabled('mark_invoices_sent_pdf')) {
             $this->invoice->generate_invoice_number_if_applicable($invoice_id);
             $this->invoice->mark_sent($invoice_id);
         }
@@ -308,8 +336,11 @@ class InvoicesController extends AdminController
     public function generate_xml($invoice_id): void
     {
         $invoice = $this->invoice->get_by_id($invoice_id);
+
+        // Early return if invoice not found (Early Return principle)
         if ( ! $invoice) {
             show_404();
+            return;
         }
 
         $this->load->model('invoices/item');
@@ -317,8 +348,11 @@ class InvoicesController extends AdminController
 
         $this->load->helper('e-invoice'); // eInvoicing++
         $einvoice = get_einvoice_usage($invoice, $items, false);
+
+        // Early return if no einvoice user (Early Return principle)
         if ( ! $einvoice->user) {
             show_404();
+            return;
         }
 
         // eInvoice library to Generate the appropriate UBL/CII or false
