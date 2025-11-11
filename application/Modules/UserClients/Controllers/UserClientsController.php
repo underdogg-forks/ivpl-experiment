@@ -29,7 +29,7 @@ class User_Clients extends AdminController
 
         $this->load->model('users/user');
         $this->load->model('clients/client');
-        $this->load->model('user_clients/userclient');
+        $this->load->model('user_clients/userclients');
     }
 
     /**
