@@ -28,8 +28,7 @@
         "laravel/pint": "^1.20",
         "squizlabs/php_codesniffer": "^3.13",
         "rector/rector": "^2.0",
-        "symfony/var-dumper": "^6.4",
-        "larastan/larastan": "^2.0"
+        "symfony/var-dumper": "^6.4"
     },
     "autoload": {
         "psr-4": {
