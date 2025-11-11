@@ -48,10 +48,10 @@ class InvoicesAjaxController extends AdminController
     public function save()
     {
         $this->load->model([
-            'invoices/mdl_item',
-            'invoices/mdl_invoices',
-            'units/mdl_units',
-            'invoices/mdl_invoice_sumex',
+            'invoices/item',
+            'invoices/invoice',
+            'units/unit',
+            'invoices/invoicesumex',
         ]);
 
         $invoice_id = $this->security->xss_clean($this->input->post('invoice_id', true));
@@ -313,10 +313,10 @@ class InvoicesAjaxController extends AdminController
         $this->load->module('layout');
 
         $this->load->model([
-            'invoices/mdl_invoices',
-            'invoice_groups/mdl_invoice_group',
-            'tax_rates/mdl_tax_rate',
-            'clients/mdl_clients',
+            'invoices/invoice',
+            'invoice_groups/invoice_group',
+            'tax_rates/tax_rate',
+            'clients/client',
         ]);
 
         $data = [
@@ -338,9 +338,9 @@ class InvoicesAjaxController extends AdminController
     public function copy_invoice()
     {
         $this->load->model([
-            'invoices/mdl_invoices',
-            'invoices/mdl_item',
-            'invoices/mdl_invoice_tax_rate',
+            'invoices/invoice',
+            'invoices/item',
+            'invoices/invoicetaxrate',
         ]);
 
         if ($this->invoice->run_validation()) {
@@ -397,8 +397,8 @@ class InvoicesAjaxController extends AdminController
     public function change_user()
     {
         $this->load->model([
-            'invoices/mdl_invoices',
-            'users/mdl_users',
+            'invoices/invoice',
+            'users/user',
         ]);
 
         // Get the user ID
@@ -456,8 +456,8 @@ class InvoicesAjaxController extends AdminController
     public function change_client()
     {
         $this->load->model([
-            'invoices/mdl_invoices',
-            'clients/mdl_clients',
+            'invoices/invoice',
+            'clients/client',
         ]);
 
         // Get the client ID
@@ -497,9 +497,9 @@ class InvoicesAjaxController extends AdminController
     {
         $this->load->module('layout');
         $this->load->model([
-            'invoice_groups/mdl_invoice_group',
-            'tax_rates/mdl_tax_rate',
-            'clients/mdl_clients',
+            'invoice_groups/invoice_group',
+            'tax_rates/tax_rate',
+            'clients/client',
         ]);
 
         $data = [
@@ -606,9 +606,9 @@ class InvoicesAjaxController extends AdminController
     {
         $this->load->module('layout');
         $this->load->model([
-            'invoices/mdl_invoices',
-            'invoice_groups/mdl_invoice_group',
-            'tax_rates/mdl_tax_rate',
+            'invoices/invoice',
+            'invoice_groups/invoice_group',
+            'tax_rates/tax_rate',
         ]);
 
         $data = [
@@ -629,9 +629,9 @@ class InvoicesAjaxController extends AdminController
     public function create_credit()
     {
         $this->load->model([
-            'invoices/mdl_invoices',
-            'invoices/mdl_item',
-            'invoices/mdl_invoice_tax_rate',
+            'invoices/invoice',
+            'invoices/item',
+            'invoices/invoicetaxrate',
         ]);
 
         if ($this->invoice->run_validation()) {

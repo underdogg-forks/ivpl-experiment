@@ -157,15 +157,15 @@ class InvoicesController extends AdminController
     {
         $this->load->model(
             [
-                'invoices/mdl_item',
-                'invoices/mdl_invoice_tax_rate',
-                'tax_rates/mdl_tax_rate',
-                'payment_methods/mdl_payment_method',
-                'custom_fields/mdl_custom_field',
-                'custom_values/mdl_custom_value',
-                'custom_fields/mdl_invoice_custom',
-                'units/mdl_units',
-                'upload/mdl_uploads',
+                'invoices/item',
+                'invoices/invoicetaxrate',
+                'tax_rates/tax_rate',
+                'payment_methods/payment_method',
+                'custom_fields/custom_field',
+                'custom_values/custom_value',
+                'custom_fields/invoicecustom',
+                'units/unit',
+                'upload/upload',
             ]
         );
         $this->load->helper(['custom_values', 'dropzone', 'e-invoice']);

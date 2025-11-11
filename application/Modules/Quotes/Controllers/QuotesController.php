@@ -99,14 +99,14 @@ class QuotesController extends AdminController
     {
         $this->load->model(
             [
-                'quotes/mdl_quote_item',
-                'tax_rates/mdl_tax_rate',
-                'units/mdl_units',
-                'mdl_quote_tax_rates',
-                'custom_fields/mdl_custom_field',
-                'custom_values/mdl_custom_value',
-                'custom_fields/mdl_quote_custom',
-                'upload/mdl_uploads',
+                'quotes/quoteitem',
+                'tax_rates/tax_rate',
+                'units/unit',
+                'quotes/quotetaxrate',
+                'custom_fields/custom_field',
+                'custom_values/custom_value',
+                'custom_fields/quotecustom',
+                'upload/upload',
             ]
         );
 

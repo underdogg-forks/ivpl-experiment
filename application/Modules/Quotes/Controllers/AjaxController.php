@@ -48,9 +48,9 @@ class QuotesAjaxController extends AdminController
     public function save()
     {
         $this->load->model([
-            'quotes/mdl_quote_item',
-            'quotes/mdl_quotes',
-            'units/mdl_units',
+            'quotes/quoteitem',
+            'quotes/quote',
+            'units/unit',
         ]);
 
         $quote_id = $this->security->xss_clean($this->input->post('quote_id', true));
@@ -267,10 +267,10 @@ class QuotesAjaxController extends AdminController
     {
         $this->load->module('layout');
         $this->load->model([
-            'quotes/mdl_quotes',
-            'invoice_groups/mdl_invoice_group',
-            'tax_rates/mdl_tax_rate',
-            'clients/mdl_clients',
+            'quotes/quote',
+            'invoice_groups/invoice_group',
+            'tax_rates/tax_rate',
+            'clients/client',
         ]);
 
         $data = [
@@ -292,9 +292,9 @@ class QuotesAjaxController extends AdminController
     public function copy_quote()
     {
         $this->load->model([
-            'quotes/mdl_quotes',
-            'quotes/mdl_quote_item',
-            'quotes/mdl_quote_tax_rate',
+            'quotes/quote',
+            'quotes/quoteitem',
+            'quotes/quotetaxrate',
         ]);
 
         if ($this->quote->run_validation()) {
@@ -351,8 +351,8 @@ class QuotesAjaxController extends AdminController
     public function change_user()
     {
         $this->load->model([
-            'quotes/mdl_quotes',
-            'users/mdl_users',
+            'quotes/quote',
+            'users/user',
         ]);
 
         // Get the user ID
@@ -410,8 +410,8 @@ class QuotesAjaxController extends AdminController
     public function change_client()
     {
         $this->load->model([
-            'quotes/mdl_quotes',
-            'clients/mdl_clients',
+            'quotes/quote',
+            'clients/client',
         ]);
 
         // Get the client ID
@@ -451,9 +451,9 @@ class QuotesAjaxController extends AdminController
     {
         $this->load->module('layout');
         $this->load->model([
-            'invoice_groups/mdl_invoice_group',
-            'tax_rates/mdl_tax_rate',
-            'clients/mdl_clients',
+            'invoice_groups/invoice_group',
+            'tax_rates/tax_rate',
+            'clients/client',
         ]);
 
         $data = [
@@ -501,8 +501,8 @@ class QuotesAjaxController extends AdminController
     public function modal_quote_to_invoice($quote_id)
     {
         $this->load->model([
-            'invoice_groups/mdl_invoice_group',
-            'quotes/mdl_quotes',
+            'invoice_groups/invoice_group',
+            'quotes/quote',
         ]);
 
         $data = [
@@ -522,12 +522,12 @@ class QuotesAjaxController extends AdminController
     public function quote_to_invoice()
     {
         $this->load->model([
-            'invoices/mdl_invoices',
-            'invoices/mdl_item',
-            'invoices/mdl_invoice_tax_rate',
-            'quotes/mdl_quotes',
-            'quotes/mdl_quote_item',
-            'quotes/mdl_quote_tax_rate',
+            'invoices/invoice',
+            'invoices/item',
+            'invoices/invoicetaxrate',
+            'quotes/quote',
+            'quotes/quoteitem',
+            'quotes/quotetaxrate',
         ]);
 
         if ($this->invoice->run_validation()) {
