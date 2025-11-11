@@ -75,7 +75,11 @@
 
             // Reload to default & add rows click event
             window.setTimeout(function () {
-                product_table.load(lookup_url, addClickTrToggleCheck);
+                $.get(lookup_url).done(function(data) {
+                    var response = typeof data === 'string' ? json_parse(data) : data;
+                    product_table.html(response.html);
+                    addClickTrToggleCheck();
+                });
             }, 250);
         });
 
@@ -110,7 +114,11 @@
 
             // Reload by filtered & add rows click event
             window.setTimeout(function () {
-                product_table.load(lookup_url, addClickTrToggleCheck);
+                $.get(lookup_url).done(function(data) {
+                    var response = typeof data === 'string' ? json_parse(data) : data;
+                    product_table.html(response.html);
+                    addClickTrToggleCheck();
+                });
             }, 250);
         }
 

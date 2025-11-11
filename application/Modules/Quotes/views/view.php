@@ -9,7 +9,9 @@ $edit_user_title = trans('edit') . ' ' . trans('user') . ' (' . trans('invoicing
 <script>
     $(function () {
         $('.btn_add_product').click(function () {
-            $('#modal-placeholder').load("<?php echo site_url('products/ajax/modal_product_lookups'); ?>/" + Math.floor(Math.random() * 1000));
+            ajaxPost("<?php echo site_url('products/ajax/modal_product_lookups'); ?>/" + Math.floor(Math.random() * 1000), {}).done(function(response) {
+                $('#modal-placeholder').html(response.html);
+            });
         });
 
         $('.btn_add_row').click(function () {
@@ -32,16 +34,20 @@ if ( ! $items) {
 if ($quote->quote_status_id == 1) {
 ?>
     $('#quote_change_client').click(function () {
-        $('#modal-placeholder').load("<?php echo site_url('quotes/ajax/modal_change_client'); ?>", {
+        ajaxPost("<?php echo site_url('quotes/ajax/modal_change_client'); ?>", {
             quote_id: <?php echo $quote_id; ?>,
             client_id: "<?php echo $this->db->escape_str($quote->client_id); ?>",
+        }).done(function(response) {
+            $('#modal-placeholder').html(response.html);
         });
     });
 
     $('#quote_change_user').click(function () {
-        $('#modal-placeholder').load("<?php echo site_url('quotes/ajax/modal_change_user'); ?>", {
+        ajaxPost("<?php echo site_url('quotes/ajax/modal_change_user'); ?>", {
             quote_id: <?php echo $quote_id; ?>,
             user_id: "<?php echo $this->db->escape_str($quote->user_id); ?>",
+        }).done(function(response) {
+            $('#modal-placeholder').html(response.html);
         });
     });
 <?php
