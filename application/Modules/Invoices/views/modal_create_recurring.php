@@ -34,13 +34,12 @@
         });
 
         function get_recur_start_date() {
-            $.post("<?php echo site_url('invoices/ajax/get_recur_start_date'); ?>", {
-                    invoice_date: $('#invoice_date_created').val(),
-                    recur_frequency: $('#recur_frequency').val()
-                },
-                function (data) {
-                    $('#recur_start_date').val(data);
-                });
+            ajaxPost("<?php echo site_url('invoices/ajax/get_recur_start_date'); ?>", {
+                invoice_date: $('#invoice_date_created').val(),
+                recur_frequency: $('#recur_frequency').val()
+            }).done(function (data) {
+                $('#recur_start_date').val(data);
+            });
         }
     });
 </script>
