@@ -37,6 +37,13 @@
 
             ajaxPost("<?php echo site_url('tasks/ajax/process_task_selections'); ?>", {
                 task_ids: task_ids
+            }, {
+                beforeSend: function() {
+                    show_loader();
+                },
+                always: function() {
+                    close_loader();
+                }
             }).done(function (items) {
                 for (var key in items) {
                     // Set default tax rate id if empty

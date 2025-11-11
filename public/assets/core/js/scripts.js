@@ -41,10 +41,10 @@ function showErrors(errors, targetSelector, clearPrevious) {
     // If target selector provided, display errors there
     if (targetSelector && $(targetSelector).length) {
         var errorHtml = '<div class="alert alert-danger"><ul class="list-unstyled">';
-        for (var key in errors) {
-            if (errors.hasOwnProperty(key)) {
-                var errorMsg = Array.isArray(errors[key]) ? errors[key].join(', ') : errors[key];
-                errorHtml += '<li><strong>' + key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) + ':</strong> ' + errorMsg + '</li>';
+        for (let errorKey in errors) {
+            if (errors.hasOwnProperty(errorKey)) {
+                let errorMsg = Array.isArray(errors[errorKey]) ? errors[errorKey].join(', ') : errors[errorKey];
+                errorHtml += '<li><strong>' + errorKey.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) + ':</strong> ' + errorMsg + '</li>';
             }
         }
         errorHtml += '</ul></div>';
@@ -52,17 +52,17 @@ function showErrors(errors, targetSelector, clearPrevious) {
     }
 
     // Highlight fields with errors
-    for (var key in errors) {
-        if (errors.hasOwnProperty(key)) {
-            var $field = $('#' + key);
+    for (let fieldKey in errors) {
+        if (errors.hasOwnProperty(fieldKey)) {
+            var $field = $('#' + fieldKey);
             if ($field.length) {
                 // Add error class to parent form group
                 $field.closest('.control-group, .form-group').addClass('has-error');
                 
                 // Optionally add error message below field
                 if (!targetSelector) {
-                    var errorMsg = Array.isArray(errors[key]) ? errors[key].join(', ') : errors[key];
-                    $field.after('<span class="help-block error text-danger">' + errorMsg + '</span>');
+                    let fieldErrorMsg = Array.isArray(errors[fieldKey]) ? errors[fieldKey].join(', ') : errors[fieldKey];
+                    $field.after('<span class="help-block error text-danger">' + fieldErrorMsg + '</span>');
                 }
             }
         }
@@ -111,10 +111,15 @@ function ajaxPost(url, data, options) {
                 // Handle validation errors
                 var errors = response.validation_errors || response.errors || {};
                 
-                // Display errors if they exist
-                if (Object.keys(errors).length > 0) {
-                    showErrors(errors, options.errorTarget);
+                // If no specific errors, create a generic error message
+                if (Object.keys(errors).length === 0) {
+                    errors = {
+                        general: 'An unexpected error occurred. Please try again.'
+                    };
                 }
+                
+                // Display errors
+                showErrors(errors, options.errorTarget);
                 
                 deferred.reject(errors, response);
             }
