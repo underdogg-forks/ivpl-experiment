@@ -133,7 +133,7 @@ class ClientsController extends AdminController
             $id = $this->client->save($id);
 
             if ($new_client) {
-                $this->load->model('user_clients/userclient');
+                $this->load->model('user_clients/userclient', 'userclients');
                 $this->userclients->get_users_all_clients();
             }
 

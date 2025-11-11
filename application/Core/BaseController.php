@@ -63,8 +63,8 @@ class BaseController extends \MX_Controller
 
             // Load setting model and load settings
             $this->load->model('settings/setting');
-            if ($this->mdl_settings != null) {
-                $this->mdl_settings->load_settings();
+            if ($this->setting != null) {
+                $this->setting->load_settings();
             }
 
             $this->load->helper('settings');

@@ -30,7 +30,7 @@ class GuestController extends UserController
 
         $this->load->model('user_clients/user_client');
 
-        $user_clients = $this->mdl_user_clients->assigned_to($this->session->userdata('user_id'))->get()->result();
+        $user_clients = $this->user_client->assigned_to($this->session->userdata('user_id'))->get()->result();
 
         if ( ! $user_clients) {
             show_error(trans('guest_account_denied'), 403);
