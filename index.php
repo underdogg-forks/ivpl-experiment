@@ -312,9 +312,61 @@ array_map('unlink', $files);
 
 /*
  * --------------------------------------------------------------------
- * LOAD THE BOOTSTRAP FILE
+ * GLOBAL TRY/CATCH WRAPPER
  * --------------------------------------------------------------------
  *
- * And away we go...
+ * Wrap the entire application in a try/catch/finally block to handle
+ * all exceptions and ensure proper cleanup
  */
-require_once BASEPATH . 'core/CodeIgniter.php';
+try {
+    /*
+     * --------------------------------------------------------------------
+     * LOAD THE BOOTSTRAP FILE
+     * --------------------------------------------------------------------
+     *
+     * And away we go...
+     */
+    require_once BASEPATH . 'core/CodeIgniter.php';
+} catch (Throwable $e) {
+    // Handle any uncaught exceptions at the top level
+    
+    // Try to use the exception handler if available
+    if (class_exists('ExceptionHandler')) {
+        $handler = new ExceptionHandler();
+        $handler->handleException($e);
+    } else {
+        // Fallback error display
+        http_response_code(500);
+        
+        if (ENVIRONMENT === 'development' || IP_DEBUG) {
+            echo '<!DOCTYPE html><html><head><title>Fatal Error</title></head><body>';
+            echo '<h1>Fatal Error</h1>';
+            echo '<p><strong>' . htmlspecialchars(get_class($e)) . ':</strong> ' . htmlspecialchars($e->getMessage()) . '</p>';
+            echo '<p><strong>File:</strong> ' . htmlspecialchars($e->getFile()) . '</p>';
+            echo '<p><strong>Line:</strong> ' . $e->getLine() . '</p>';
+            echo '<pre>' . htmlspecialchars($e->getTraceAsString()) . '</pre>';
+            echo '</body></html>';
+        } else {
+            echo '<!DOCTYPE html><html><head><title>Error</title></head><body>';
+            echo '<h1>An Error Occurred</h1>';
+            echo '<p>The application encountered an unexpected error. Please try again later.</p>';
+            echo '</body></html>';
+        }
+    }
+    exit(1);
+} finally {
+    // Cleanup operations that should always run
+    
+    // Close database connections
+    if (function_exists('get_instance')) {
+        $CI = &get_instance();
+        if (isset($CI->db) && is_object($CI->db)) {
+            $CI->db->close();
+        }
+    }
+    
+    // Flush output buffers
+    if (ob_get_level() > 0) {
+        ob_end_flush();
+    }
+}
