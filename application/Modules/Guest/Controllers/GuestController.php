@@ -294,7 +294,7 @@ class GuestController extends \Base_Controller
                 $names[] = [
                     'name'     => $row->file_name_original,
                     'fullname' => $row->file_name_new,
-                    'size'     => filesize(UPLOADS_CFILES_FOLDER . $row->file_name_new),
+                    'size'     => filesize(uploads_customer_files_path() . $row->file_name_new),
                 ];
             }
         }

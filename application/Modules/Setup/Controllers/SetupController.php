@@ -402,13 +402,13 @@ class SetupController extends MX_Controller
         $checks = [];
 
         $writables = [
-            IPCONFIG_FILE,
-            UPLOADS_FOLDER,
-            UPLOADS_ARCHIVE_FOLDER,
-            UPLOADS_CFILES_FOLDER,
-            UPLOADS_TEMP_FOLDER,
-            UPLOADS_TEMP_MPDF_FOLDER,
-            LOGS_FOLDER,
+            base_path('ipconfig.php'),
+            uploads_path(),
+            uploads_archive_path(),
+            uploads_customer_files_path(),
+            uploads_temp_path(),
+            uploads_temp_path('mpdf'),
+            logs_path(),
         ];
 
         foreach ($writables as $writable) {

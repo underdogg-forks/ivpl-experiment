@@ -20,7 +20,7 @@ if ( ! defined('BASEPATH')) {
 #[AllowDynamicProperties]
 class UploadController extends AdminController
 {
-    public $targetPath = UPLOADS_CFILES_FOLDER; // UPLOADS_FOLDER . 'customer_files/';
+    public $targetPath;
 
     public $ctype_default = 'application/octet-stream';
 
@@ -34,6 +34,7 @@ class UploadController extends AdminController
     public function __construct()
     {
         parent::__construct();
+        $this->targetPath = uploads_customer_files_path();
         $this->load->model('upload/uploads');
         $this->content_types = $this->upload->content_types;
     }
@@ -261,7 +262,7 @@ class UploadController extends AdminController
         http_response_code($httpCode);
         _trans($messageKey);
         if ($httpCode == 410) {
-            echo PHP_EOL . PHP_EOL . '"' . basename(UPLOADS_FOLDER) . DIRECTORY_SEPARATOR . basename($this->targetPath) . '"';
+            echo PHP_EOL . PHP_EOL . '"' . basename(uploads_path()) . DIRECTORY_SEPARATOR . basename($this->targetPath) . '"';
         }
 
         exit;

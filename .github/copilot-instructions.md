@@ -1,5 +1,215 @@
 # GitHub Copilot Instructions for InvoicePlane Modernization
 
+## 🚀 MODERN PATTERNS - READ THIS FIRST
+
+### Critical Modernization Principles
+
+**The application has been fully modernized. Follow these patterns:**
+
+1. **NO PATH DEFINES** - Use path helper functions, never defines
+2. **PSR-4 NAMESPACES** - All new code must use proper namespaces
+3. **EXCEPTION HANDLING** - Use try/catch/finally with centralized handler
+4. **TYPE HINTS** - Always use type declarations
+5. **PATH HELPERS** - Never concatenate paths manually
+
+### Path Management (MOST IMPORTANT)
+
+#### ❌ NEVER Do This:
+```php
+// DON'T use defines
+define('UPLOADS_FOLDER', '/path/to/uploads');
+$file = UPLOADS_FOLDER . 'temp/file.pdf';
+
+// DON'T concatenate paths manually  
+$path = APPPATH . 'logs' . DIRECTORY_SEPARATOR . 'error.log';
+```
+
+#### ✅ ALWAYS Do This:
+```php
+// Load path helper (done automatically in public/index.php)
+require_once APPPATH . 'helpers/path_helper.php';
+
+// Use path helpers throughout your code
+$file = uploads_temp_path('file.pdf');
+$log = logs_path('error.log');
+$archive = uploads_archive_path(date('Y-m-d') . '_invoice.pdf');
+$config = config_path('database.php');
+```
+
+### Available Path Helpers
+
+```php
+// Core paths
+app_path('models')              // application/models
+base_path('config')             // /path/to/project/config  
+public_path('assets')           // public/assets
+storage_path('cache')           // storage/cache
+config_path('app.php')          // config/app.php
+
+// Upload paths (in storage/uploads/)
+uploads_path('file.pdf')               // storage/uploads/file.pdf
+uploads_temp_path('temp.pdf')          // storage/uploads/temp/temp.pdf
+uploads_archive_path('inv.pdf')        // storage/uploads/archive/inv.pdf
+uploads_customer_files_path('doc.pdf') // storage/uploads/customer_files/doc.pdf
+
+// Other paths
+logs_path('app.log')            // application/logs/app.log
+view_path('template.php')       // application/views/template.php
+asset_path('css/style.css')     // public/assets/css/style.css
+
+// Utilities
+join_paths('base', 'path', 'file.txt')  // base/path/file.txt
+normalize_path('path\\to//file')        // path/to/file
+```
+
+### Exception Handling Pattern
+
+The application has a centralized exception handler. **Always use proper exception handling:**
+
+```php
+try {
+    // Your code
+    $invoice = $this->invoice->get_by_id($id);
+    
+    if (!$invoice) {
+        throw new NotFoundException("Invoice not found");
+    }
+    
+    $pdf = generate_pdf($invoice);
+    
+} catch (NotFoundException $e) {
+    // Handle specific exception
+    log_message('error', 'Invoice not found: ' . $id);
+    show_404();
+    
+} catch (Exception $e) {
+    // Let global handler catch and log
+    log_message('error', 'PDF generation failed: ' . $e->getMessage());
+    throw $e;
+    
+} finally {
+    // Cleanup always runs
+    cleanup_temp_files();
+}
+```
+
+**Exception Handler Features:**
+- Automatically logs to `application/logs/exceptions-{date}.php`
+- Shows Whoops error page in development
+- Shows safe error page in production
+- Catches even fatal errors
+
+### PSR-4 Namespace Structure
+
+**ALL new code must use PSR-4 namespaces:**
+
+```php
+// Controllers
+namespace App\Modules\Invoices\Controllers;
+
+class InvoicesController extends Admin_Controller
+{
+    public function index(): void
+    {
+        // ...
+    }
+}
+
+// Models  
+namespace App\Modules\Invoices\Models;
+
+class Invoice extends Response_Model
+{
+    protected string $table = 'ip_invoices';
+}
+
+// Libraries
+namespace App\Libraries;
+
+class Cryptor
+{
+    public function encrypt(string $data): string
+    {
+        // ...
+    }
+}
+```
+
+### public/index.php Bootstrap Pattern
+
+The entry point follows this modern pattern:
+
+```php
+// 1. Load Composer autoloader
+require __DIR__ . '/../vendor/autoload.php';
+
+// 2. Load environment
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__), 'ipconfig.php');
+$dotenv->load();
+
+// 3. Define core constants only (BASEPATH, APPPATH, FCPATH)
+define('BASEPATH', $system_path);
+define('APPPATH', $application_folder . DIRECTORY_SEPARATOR);
+define('FCPATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
+define('VIEWPATH', $view_folder . DIRECTORY_SEPARATOR);
+define('THEME_FOLDER', FCPATH . 'assets' . DIRECTORY_SEPARATOR);
+
+// 4. Load path helpers EARLY
+require_once APPPATH . 'helpers/path_helper.php';
+
+// 5. NO MORE PATH DEFINES!
+// Just use path helpers in your code
+
+// 6. Clean temp files using path helpers
+$files = array_merge(
+    glob(uploads_temp_path('*.pdf')),
+    glob(uploads_temp_path('*.xml'))
+);
+array_map('unlink', $files);
+
+// 7. Bootstrap CodeIgniter
+require_once BASEPATH . 'core/CodeIgniter.php';
+```
+
+### Storage Organization
+
+```
+storage/
+├── uploads/              # All file uploads (moved from root)
+│   ├── archive/          # Archived PDF invoices
+│   ├── customer_files/   # Customer file uploads
+│   ├── temp/             # Temporary files
+│   │   └── mpdf/         # mPDF temporary files
+│   └── import/           # Import files
+├── framework/            # Framework cache
+└── logs/                 # Storage logs (optional)
+```
+
+**Filesystem Configuration:** See `config/filesystem.php` for disk configurations
+
+### Model Pluralization
+
+Models auto-pluralize using the inflector helper:
+
+```php
+$this->load->model('clients/client');
+
+// All these work:
+$this->client->get_all();      // Singular (preferred)
+$this->clients->get_all();     // Plural (auto-created)
+$this->mdl_client->get_all();  // Legacy mdl_ prefix
+```
+
+### Directory Naming
+
+- **Modules**: `application/Modules/` (capital M)
+- **Controllers**: `application/Modules/{Module}/Controllers/` (capital C)
+- **Models**: `application/Modules/{Module}/Models/` (capital M) 
+- **Libraries**: `application/Libraries/` (capital L)
+- **Core**: `application/Core/` (capital C)
+
+---
+
 ## Table of Contents
 
 1. [Project Overview](#project-overview)
@@ -26,6 +236,51 @@
 ---
 
 ## Project Overview
+InvoicePlane is a CodeIgniter 3 application that has been fully modernized to follow modern PHP standards.
+
+## Current Architecture
+- **Framework**: CodeIgniter 3 (via pocketarc/codeigniter)
+- **Pattern**: HMVC using Modular Extensions (MX)
+- **Modules**: Located in `application/Modules/` (PSR-4)
+- **Assets**: Compiled to `public/assets/` from `resources/assets/`
+- **Entry Point**: `public/index.php`
+- **Storage**: `storage/uploads/` for all file uploads
+- **Path Management**: Path helper functions (no defines)
+
+## Modernization Goals
+1. ✅ Move application to use `public/` directory structure
+2. ✅ Separate source assets (`resources/assets/`) from built assets (`public/assets/`)
+3. ✅ Migrate to PSR-4 autoloading and naming conventions
+4. ✅ Eliminate path defines, use path helpers
+5. ✅ Move uploads to storage/uploads/
+6. ✅ Centralized exception handling
+
+## Code Style and Standards
+
+### PHP Code Style
+- **PHP Version**: 8.0+ (7.4 minimum)
+- **Standard**: PSR-12 for all code
+- **Attributes**: Use PHP 8 attributes (e.g., `#[AllowDynamicProperties]`)
+- **Type Hints**: ALWAYS use type hints
+- **Return Types**: ALWAYS declare return types
+- **Strict Types**: Use `declare(strict_types=1)` for new files
+
+### Linting and Formatting
+- **Laravel Pint**: Run `composer pint` before committing
+- **PHPCS**: Run `composer phpcs` for style checking
+- **Rector**: Run `composer rector` for automated refactoring
+
+### File Naming Conventions
+
+#### PSR-4 Standard (USE THIS)
+- Controllers: `InvoicesController.php` (class InvoicesController)
+  - Namespace: `App\Modules\Invoices\Controllers`
+- Models: `Invoice.php` (class Invoice)
+  - Namespace: `App\Modules\Invoices\Models`
+- Libraries: `Cryptor.php` (class Cryptor)
+  - Namespace: `App\Libraries`
+- Helpers: `invoice_helper.php` (functions)
+
 InvoicePlane is an ancient CodeIgniter 3 application being modernized to follow modern PHP standards while maintaining backward compatibility.
 
 ## Current Architecture

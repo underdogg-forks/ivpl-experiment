@@ -4,7 +4,15 @@ if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-defined('EXT') || define('EXT', '.php');
+// Use constant instead of define for PHP extension
+// This improves performance slightly and is more modern
+const MX_EXT = '.php';
+
+// Backward compatibility: define EXT if not already defined
+// This ensures other MX files and legacy code still work
+if (!defined('EXT')) {
+    define('EXT', MX_EXT);
+}
 
 global $CFG;
 
@@ -154,8 +162,8 @@ class Modules
     /** Load a module file **/
     public static function load_file($file, string $path, $type = 'other', $result = true)
     {
-        $file     = str_replace(EXT, '', $file);
-        $location = $path . $file . EXT;
+        $file     = str_replace(MX_EXT, '', $file);
+        $location = $path . $file . MX_EXT;
 
         if ($type === 'other') {
             if (class_exists($file, false)) {
@@ -191,7 +199,7 @@ class Modules
 
         // autoload Modular Extensions MX core classes
         if (mb_strstr($class, 'MX_')) {
-            if (is_file($location = dirname(__FILE__) . '/' . mb_substr($class, 3) . EXT)) {
+            if (is_file($location = dirname(__FILE__) . '/' . mb_substr($class, 3) . MX_EXT)) {
                 include_once $location;
 
                 return;
@@ -201,16 +209,29 @@ class Modules
         }
 
         // autoload core classes
-        if (is_file($location = APPPATH . 'core/' . ucfirst($class) . EXT)) {
+        if (is_file($location = APPPATH . 'core/' . ucfirst($class) . MX_EXT)) {
             include_once $location;
 
             return;
         }
 
         // autoload library classes
-        if (is_file($location = APPPATH . 'libraries/' . ucfirst($class) . EXT)) {
+        // First check PSR-4 Libraries (capital L) with namespace
+        $psr4_class = "App\\Libraries\\" . $class;
+        if (class_exists($psr4_class, false)) {
+            // Already loaded via Composer autoload
+            return;
+        }
+        
+        // Legacy: Check lowercase libraries directory (deprecated)
+        if (is_file($location = APPPATH . 'libraries/' . ucfirst($class) . MX_EXT)) {
             include_once $location;
-
+            return;
+        }
+        
+        // Modern: Check capital Libraries directory for non-namespaced classes
+        if (is_file($location = APPPATH . 'Libraries/' . ucfirst($class) . MX_EXT)) {
+            include_once $location;
             return;
         }
     }
@@ -254,7 +275,7 @@ class Modules
         $segments = explode('/', $file);
 
         $file     = array_pop($segments);
-        $file_ext = (pathinfo($file, PATHINFO_EXTENSION) !== '' && pathinfo($file, PATHINFO_EXTENSION) !== '0') ? $file : $file . EXT;
+        $file_ext = (pathinfo($file, PATHINFO_EXTENSION) !== '' && pathinfo($file, PATHINFO_EXTENSION) !== '0') ? $file : $file . MX_EXT;
 
         $path                       = mb_ltrim(implode('/', $segments) . '/', '/');
         $module ? $modules[$module] = $path : $modules = [];

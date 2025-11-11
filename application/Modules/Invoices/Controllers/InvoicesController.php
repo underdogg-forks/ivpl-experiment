@@ -114,7 +114,7 @@ class InvoicesController extends AdminController
      */
     public function download($invoice): void
     {
-        $safeBaseDir = realpath(UPLOADS_ARCHIVE_FOLDER);
+        $safeBaseDir = realpath(uploads_archive_path());
 
         $fileName = urldecode(basename($invoice)); // Strip directory traversal sequences
         $filePath = realpath($safeBaseDir . DIRECTORY_SEPARATOR . $fileName);

@@ -44,7 +44,7 @@ function pdf_create(
 
     // mPDF loading
     $mpdf = new \Mpdf\Mpdf([
-        'tempDir' => UPLOADS_TEMP_MPDF_FOLDER,
+        'tempDir' => uploads_temp_path('mpdf'),
     ]);
 
     // mPDF configuration
@@ -76,8 +76,8 @@ function pdf_create(
     }
 
     // Check if the archive folder is available
-    if ( ! is_dir(UPLOADS_ARCHIVE_FOLDER) || is_link(UPLOADS_ARCHIVE_FOLDER) && ( ! mkdir(UPLOADS_ARCHIVE_FOLDER, '0777') && ! is_dir(UPLOADS_ARCHIVE_FOLDER))) {
-        throw new \RuntimeException(sprintf('Directory "%s" was not created', UPLOADS_ARCHIVE_FOLDER));
+    if ( ! is_dir(uploads_archive_path()) || is_link(uploads_archive_path()) && ( ! mkdir(uploads_archive_path(), '0777') && ! is_dir(uploads_archive_path()))) {
+        throw new \RuntimeException(sprintf('Directory "%s" was not created', uploads_archive_path()));
     }
 
     //Set the default footer that shall always be available for mPDF
@@ -114,7 +114,7 @@ function pdf_create(
     }
 
     if ($isInvoice) {
-        $pdfFiles = glob(UPLOADS_ARCHIVE_FOLDER . '*' . $filename . '.pdf');
+        $pdfFiles = glob(uploads_archive_path('*' . $filename . '.pdf'));
 
         foreach ($pdfFiles as $file) {
             $invoice_array[] = $file;
@@ -130,7 +130,7 @@ function pdf_create(
             return $invoice_array[0];
         }
 
-        $archived_file = UPLOADS_ARCHIVE_FOLDER . date('Y-m-d') . '_' . $filename . '.pdf';
+        $archived_file = uploads_archive_path(date('Y-m-d') . '_' . $filename . '.pdf');
         $mpdf->Output($archived_file, 'F');
 
         if ($stream) {
@@ -146,7 +146,7 @@ function pdf_create(
         return $mpdf->Output($filename . '.pdf', 'I');
     }
 
-    $mpdf->Output(UPLOADS_TEMP_FOLDER . $filename . '.pdf', 'F');
+    $mpdf->Output(uploads_temp_path($filename . '.pdf'), 'F');
 
-    return UPLOADS_TEMP_FOLDER . $filename . '.pdf';
+    return uploads_temp_path($filename . '.pdf');
 }

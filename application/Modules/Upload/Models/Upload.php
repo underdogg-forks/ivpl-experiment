@@ -99,7 +99,7 @@ class Upload extends ResponseModel
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
                 $names[] = [
-                    'path'     => UPLOADS_CFILES_FOLDER . $row->file_name_new,
+                    'path'     => uploads_customer_files_path() . $row->file_name_new,
                     'filename' => $row->file_name_original,
                 ];
             }
@@ -128,7 +128,7 @@ class Upload extends ResponseModel
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
                 $names[] = [
-                    'path'     => UPLOADS_CFILES_FOLDER . $row->file_name_new,
+                    'path'     => uploads_customer_files_path() . $row->file_name_new,
                     'filename' => $row->file_name_original,
                 ];
             }
@@ -151,7 +151,7 @@ class Upload extends ResponseModel
         $result = [];
         if ($url_key && $rows = $this->where('url_key', $url_key)->get()->result()) {
             foreach ($rows as $row) {
-                $size = @filesize(UPLOADS_CFILES_FOLDER . $row->file_name_new);
+                $size = @filesize(uploads_customer_files_path() . $row->file_name_new);
                 if ($size === false) {
                     // Probably Deleted, remove it
                     $this->delete_file($url_key, $row->file_name_original);

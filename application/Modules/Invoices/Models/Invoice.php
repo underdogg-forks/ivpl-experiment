@@ -568,9 +568,9 @@ class Invoice extends ResponseModel
         $invoice_array = [];
 
         if ( ! empty($invoice_number)) {
-            $invoice_array = glob(UPLOADS_ARCHIVE_FOLDER . '*_*' . $invoice_number . '*.pdf');
+            $invoice_array = glob(uploads_archive_path() . '*_*' . $invoice_number . '*.pdf');
         } else {
-            foreach (glob(UPLOADS_ARCHIVE_FOLDER . '*.pdf') as $file) {
+            foreach (glob(uploads_archive_path() . '*.pdf') as $file) {
                 $invoice_array[] = $file;
             }
 
