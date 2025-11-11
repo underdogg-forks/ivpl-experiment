@@ -86,38 +86,28 @@ if ($invoice->invoice_status_id == 1 && ! $invoice->creditinvoice_parent_id) {
                 item_order++;
                 items.push(row);
             });
-            $.post("<?php echo site_url('invoices/ajax/save'); ?>", {
-                    legacy_calculation: <?php echo (int) $legacy_calculation; ?>,
-                    invoice_id: <?php echo $invoice_id; ?>,
-                    invoice_number: $('#invoice_number').val(),
-                    invoice_date_created: $('#invoice_date_created').val(),
-                    invoice_date_due: $('#invoice_date_due').val(),
-                    invoice_status_id: $('#invoice_status_id').val(),
-                    invoice_password: $('#invoice_password').val(),
-                    items: JSON.stringify(items),
-                    invoice_discount_amount: $('#invoice_discount_amount').val(),
-                    invoice_discount_percent: $('#invoice_discount_percent').val(),
-                    invoice_terms: $('#invoice_terms').val(),
-                    custom: $('input[name^=custom],select[name^=custom]').serializeArray(),
-                    payment_method: $('#payment_method').val(),
-                },
-                function (data) {
-                    var response = json_parse(data, <?php echo (int) IP_DEBUG; ?>);
-                    if (response.success === 1) {
-                        window.location = "<?php echo site_url('invoices/view'); ?>/" + <?php echo $invoice_id; ?>;
-                    } else {
-                        $('#fullpage-loader').hide();
-                        $('.control-group').removeClass('has-error');
-                        $('div.alert[class*="alert-"]').remove();
-                        var resp_errors = response.validation_errors,
-                            all_resp_errors = '';
-                        for (var key in resp_errors) {
-                            $('#' + key).parent().addClass('has-error');
-                            all_resp_errors += resp_errors[key];
-                        }
-                        $('#invoice_form').prepend('<div class="alert alert-danger">' + all_resp_errors + '</div>');
-                    }
-                });
+            ajaxPost("<?php echo site_url('invoices/ajax/save'); ?>", {
+                legacy_calculation: <?php echo (int) $legacy_calculation; ?>,
+                invoice_id: <?php echo $invoice_id; ?>,
+                invoice_number: $('#invoice_number').val(),
+                invoice_date_created: $('#invoice_date_created').val(),
+                invoice_date_due: $('#invoice_date_due').val(),
+                invoice_status_id: $('#invoice_status_id').val(),
+                invoice_password: $('#invoice_password').val(),
+                items: JSON.stringify(items),
+                invoice_discount_amount: $('#invoice_discount_amount').val(),
+                invoice_discount_percent: $('#invoice_discount_percent').val(),
+                invoice_terms: $('#invoice_terms').val(),
+                custom: $('input[name^=custom],select[name^=custom]').serializeArray(),
+                payment_method: $('#payment_method').val(),
+            }, {
+                errorTarget: '#invoice_form'
+            }).done(function (response) {
+                window.location = "<?php echo site_url('invoices/view'); ?>/" + <?php echo $invoice_id; ?>;
+            }).fail(function (errors) {
+                $('#fullpage-loader').hide();
+                // Errors are automatically displayed by ajaxPost
+            });
         });
 
         $('#btn_generate_pdf').click(function () {
@@ -137,20 +127,15 @@ if ($invoice->invoice_status_id == 1 && ! $invoice->creditinvoice_parent_id) {
                 $(this).parents('.item').remove();
                 check_items_tax_usages();
             } else {
-                $.post("<?php echo site_url('invoices/ajax/delete_item/' . $invoice->invoice_id); ?>", {
-                        'item_id': item_id,
-                    },
-                    function (data) {
-                        var response = json_parse(data, <?php echo (int) IP_DEBUG; ?>);
-                        if (response.success === 1) {
-                            btn.parents('.item').remove();
-                        } else {
-                            btn.removeClass('btn-link').addClass('btn-danger').prop('disabled', true);
-                        }
-
-                        check_items_tax_usages();
-                    }
-                );
+                ajaxPost("<?php echo site_url('invoices/ajax/delete_item/' . $invoice->invoice_id); ?>", {
+                    'item_id': item_id,
+                }).done(function (response) {
+                    btn.parents('.item').remove();
+                    check_items_tax_usages();
+                }).fail(function (errors) {
+                    btn.removeClass('btn-link').addClass('btn-danger').prop('disabled', true);
+                    check_items_tax_usages();
+                });
             }
         });
 
