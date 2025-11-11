@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Core;
+
+if ( ! defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
+
+/*
+ * InvoicePlane
+ *
+ * @author		InvoicePlane Developers & Contributors
+ * @copyright	Copyright (c) 2012 - 2018 InvoicePlane.com
+ * @license		https://invoiceplane.com/license.txt
+ * @link		https://invoiceplane.com
+ */
+
+#[AllowDynamicProperties]
+class GuestController extends UserController
+{
+    /** @var array */
+    public $user_clients = [];
+
+    /**
+     * Guest_Controller constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('user_type', 2);
+
+        $this->load->model('user_clients/user_client');
+
+        $user_clients = $this->user_client->assigned_to($this->session->userdata('user_id'))->get()->result();
+
+        if ( ! $user_clients) {
+            show_error(trans('guest_account_denied'), 403);
+            exit;
+        }
+
+        foreach ($user_clients as $user_client) {
+            $this->user_client[$user_client->client_id] = $user_client->client_id;
+        }
+    }
+}

@@ -1,0 +1,106 @@
+<?php
+
+namespace App\Modules\Families\Controllers;
+
+use App\Core\AdminController;
+
+if ( ! defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
+
+/*
+ * InvoicePlane
+ *
+ * @author      InvoicePlane Developers & Contributors
+ * @copyright   Copyright (c) 2012 - 2018 InvoicePlane.com
+ * @license     https://invoiceplane.com/license.txt
+ * @link        https://invoiceplane.com
+ */
+
+#[AllowDynamicProperties]
+class FamiliesController extends AdminController
+{
+    /**
+     * Families constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->load->model('families/family');
+    }
+
+    /**
+     * @param int $page
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/families/controllers/Families.php
+     * @legacy-function index()
+     */
+    public function index($page = 0)
+    {
+        $this->family->paginate(site_url('families/index'), $page);
+        $families = $this->family->result();
+
+        $this->layout->set([
+            'filter_display'     => true,
+            'filter_placeholder' => trans('filter_families'),
+            'filter_method'      => 'filter_families',
+            'families'           => $families,
+        ]);
+        $this->layout->buffer('content', 'families/index');
+        $this->layout->render();
+    }
+
+    /**
+     * Legacy migration info:
+     * @legacy-file application/modules/families/controllers/Families.php
+     * @legacy-function form()
+     */
+    public function form($id = null)
+    {
+        if ($this->input->post('btn_cancel')) {
+            redirect('families');
+        }
+
+        $this->filter_input();  // <<<--- filters _POST array for nastiness
+
+        if ($this->input->post('is_update') == 0 && $this->input->post('family_name') != '') {
+            $check = $this->db->get_where('ip_families', ['family_name' => $this->input->post('family_name')])->result();
+
+            if ( ! empty($check)) {
+                $this->session->set_flashdata('alert_error', trans('family_already_exists'));
+                redirect('families/form');
+            }
+        }
+
+        if ($this->family->run_validation()) {
+            $this->family->save($id);
+            redirect('families');
+        }
+
+        if ($id && ! $this->input->post('btn_submit')) {
+            if ( ! $this->family->prep_form($id)) {
+                show_404();
+            }
+
+            $this->family->set_form_value('is_update', true);
+        }
+
+        $this->layout->buffer('content', 'families/form');
+        $this->layout->render();
+    }
+
+    /**
+     * @param $id
+     *
+     * Legacy migration info:
+     * @legacy-file application/modules/families/controllers/Families.php
+     * @legacy-function delete()
+     */
+    public function delete($id)
+    {
+        $this->family->delete($id);
+        redirect('families');
+    }
+}

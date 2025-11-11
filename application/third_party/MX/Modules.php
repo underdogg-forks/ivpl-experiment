@@ -11,7 +11,7 @@ global $CFG;
 // get module locations from config settings or use the default module location and offset
 if ( ! is_array(Modules::$locations = $CFG->item('modules_locations'))) {
     Modules::$locations = [
-        APPPATH . 'modules/' => '../modules/',
+        APPPATH . 'Modules/' => '../Modules/',
     ];
 }
 
@@ -121,12 +121,30 @@ class Modules
             // set the module directory
             $path = APPPATH . 'controllers/' . CI::$APP->router->directory;
 
-            // load the controller class
-            $class .= CI::$APP->config->item('controller_suffix');
-            self::load_file(ucfirst($class), $path);
+            // Try PSR-4 first if we have a module name
+            $controller = null;
+            $module_name = CI::$APP->router->fetch_module();
+            
+            if ($module_name) {
+                // Build PSR-4 namespaced class name
+                // Example: invoices -> App\Modules\Invoices\Controllers\InvoicesController
+                $psr4_namespace = "App\\Modules\\" . ucfirst($module_name) . "\\Controllers\\";
+                $psr4_class = $psr4_namespace . ucfirst($class) . 'Controller';
+                
+                if (class_exists($psr4_class)) {
+                    $controller = $psr4_class;
+                }
+            }
+            
+            // Fall back to legacy loading if PSR-4 class doesn't exist
+            if ($controller === null) {
+                // load the controller class
+                $class .= CI::$APP->config->item('controller_suffix');
+                self::load_file(ucfirst($class), $path);
+                $controller = ucfirst($class);
+            }
 
             // create and register the new controller
-            $controller             = ucfirst($class);
             self::$registry[$alias] = new $controller($params);
         }
 

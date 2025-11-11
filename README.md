@@ -108,3 +108,14 @@ If you discover a security vulnerability, please email **[mail@invoiceplane.com]
 InvoicePlane is licensed under the [MIT License](LICENSE.txt).
 
 The **InvoicePlane name** and **logo** are copyrighted by [Kovah.de](https://kovah.de/) and [InvoicePlane.com](https://www.invoiceplane.com/). Usage is restricted. For more information, visit [license & copyright](https://www.invoiceplane.com/license-copyright).
+
+## Configuration
+
+InvoicePlane now uses a Laravel-style directory structure:
+
+- **Config**: `config/` (at project root, not `application/config`)
+- **Cache**: `storage/framework/cache/`
+- **Logs**: `storage/logs/`
+
+All CodeIgniter configuration files are located in the root `config/` directory.
+
