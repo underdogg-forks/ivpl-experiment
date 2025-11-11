@@ -3,6 +3,9 @@
 namespace App\Modules\Quotes\Controllers;
 
 use App\Core\AdminController;
+use App\Libraries\CustomFieldService;
+use App\Libraries\QuoteStatusFilterStrategy;
+use App\Libraries\SettingsCache;
 
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
@@ -21,6 +24,16 @@ if ( ! defined('BASEPATH')) {
 class QuotesController extends AdminController
 {
     /**
+     * Status filter strategy (Open/Closed Principle)
+     */
+    private QuoteStatusFilterStrategy $statusFilter;
+
+    /**
+     * Custom field service (Dependency Inversion Principle)
+     */
+    private CustomFieldService $customFieldService;
+
+    /**
      * Quotes constructor.
      */
     public function __construct()
@@ -28,6 +41,10 @@ class QuotesController extends AdminController
         parent::__construct();
 
         $this->load->model('quotes/quote');
+
+        // Dependency Injection - SOLID principles
+        $this->statusFilter = new QuoteStatusFilterStrategy();
+        $this->customFieldService = new CustomFieldService();
     }
 
     /**
@@ -50,27 +67,8 @@ class QuotesController extends AdminController
      */
     public function status(string $status = 'all', $page = 0)
     {
-        // Determine which group of quotes to load
-        switch ($status) {
-            case 'draft':
-                $this->quote->is_draft();
-                break;
-            case 'sent':
-                $this->quote->is_sent();
-                break;
-            case 'viewed':
-                $this->quote->is_viewed();
-                break;
-            case 'approved':
-                $this->quote->is_approved();
-                break;
-            case 'rejected':
-                $this->quote->is_rejected();
-                break;
-            case 'canceled':
-                $this->quote->is_canceled();
-                break;
-        }
+        // Apply status filter using Strategy Pattern (Open/Closed Principle)
+        $this->statusFilter->apply($this->quote, $status);
 
         $this->quote->paginate(site_url('quotes/status/' . $status), $page);
         $quotes = $this->quote->result();
@@ -101,70 +99,49 @@ class QuotesController extends AdminController
     {
         $this->load->model(
             [
-                'quotes/mdl_quote_item',
-                'tax_rates/mdl_tax_rate',
-                'units/mdl_units',
-                'mdl_quote_tax_rates',
-                'custom_fields/mdl_custom_field',
-                'custom_values/mdl_custom_value',
-                'custom_fields/mdl_quote_custom',
-                'upload/mdl_uploads',
+                'quotes/quoteitem',
+                'tax_rates/tax_rate',
+                'units/unit',
+                'quotes/quotetaxrate',
+                'custom_fields/custom_field',
+                'custom_values/custom_value',
+                'custom_fields/quotecustom',
+                'upload/upload',
             ]
         );
 
         $this->load->helper(['custom_values', 'dropzone', 'e-invoice']);
 
-        $fields = $this->quotecustom->by_id($quote_id)->get()->result();
         $this->db->reset_query();
-
-        $quote_custom = $this->quotecustom->where('quote_id', $quote_id)->get();
-
-        if ($quote_custom->num_rows()) {
-            $quote_custom = $quote_custom->row();
-
-            unset($quote_custom->quote_id, $quote_custom->quote_custom_id);
-
-            foreach ($quote_custom as $key => $val) {
-                $this->quote->set_form_value('custom[' . $key . ']', $val);
-            }
-        }
 
         $quote = $this->quote->get_by_id($quote_id);
 
+        // Early return if quote not found (Early Return principle)
         if ( ! $quote) {
             show_404();
+            return;
         }
 
-        $custom_fields = $this->customfields->by_table('ip_quote_custom')->get()->result();
-        $custom_values = [];
-        foreach ($custom_fields as $custom_field) {
-            if (in_array($custom_field->custom_field_type, $this->customvalues->custom_value_fields())) {
-                $values                                        = $this->customvalues->get_by_fid($custom_field->custom_field_id)->result();
-                $custom_values[$custom_field->custom_field_id] = $values;
-            }
-        }
-
-        foreach ($custom_fields as $cfield) {
-            foreach ($fields as $fvalue) {
-                if ($fvalue->quote_custom_fieldid == $cfield->custom_field_id) {
-                    // TODO: Hackish, may need a better optimization
-                    $this->quote->set_form_value(
-                        'custom[' . $cfield->custom_field_id . ']',
-                        $fvalue->quote_custom_fieldvalue
-                    );
-                    break;
-                }
-            }
-        }
+        // Use CustomFieldService to load custom fields (DRY + Dynamic Programming)
+        $customFieldData = $this->customFieldService->loadDocumentCustomFields(
+            $this->quote,
+            $this->quotecustom,
+            $quote_id,
+            'ip_quote_custom',
+            'quote_custom_fieldid',
+            'quote_custom_fieldvalue'
+        );
 
         $items = $this->quoteitems->where('quote_id', $quote_id)->get()->result();
 
         // Get eInvoice library name and user checks
         $einvoice = get_einvoice_usage($quote, $items);
 
-        // Activate 'Change_user' if admin users > 1  (get the sum of user type = 1 & active)
-        $change_user = $this->db->from('ip_users')->where(['user_type' => 1, 'user_active' => 1])->select_sum('user_type')->get()->row();
-        $change_user = $change_user->user_type > 1;
+        // Check for multiple admin users with memoization (Dynamic Programming)
+        $change_user = $this->hasMultipleAdminUsers();
+
+        // Use SettingsCache for memoized settings (Dynamic Programming)
+        $currencySettings = SettingsCache::getCurrencySettings();
 
         $this->layout->set(
             [
@@ -177,12 +154,12 @@ class QuotesController extends AdminController
                 'tax_rates'       => $this->taxrates->get()->result(),
                 'quote_tax_rates' => $this->quotetaxrates->where('quote_id', $quote_id)->get()->result(),
                 'quote_statuses'  => $this->quote->statuses(),
-                'custom_fields'   => $custom_fields,
-                'custom_values'   => $custom_values,
+                'custom_fields'   => $customFieldData['custom_fields'],
+                'custom_values'   => $customFieldData['custom_values'],
                 'custom_js_vars'  => [
-                    'currency_symbol'           => get_setting('currency_symbol'),
-                    'currency_symbol_placement' => get_setting('currency_symbol_placement'),
-                    'decimal_point'             => get_setting('decimal_point'),
+                    'currency_symbol'           => $currencySettings['symbol'],
+                    'currency_symbol_placement' => $currencySettings['placement'],
+                    'decimal_point'             => $currencySettings['decimal_point'],
                 ],
                 'legacy_calculation' => config_item('legacy_calculation'),
             ]
@@ -197,6 +174,31 @@ class QuotesController extends AdminController
         );
 
         $this->layout->render();
+    }
+
+    /**
+     * Check if multiple admin users exist
+     * Extracted common logic with memoization (DRY + Dynamic Programming)
+     */
+    private function hasMultipleAdminUsers(): bool
+    {
+        static $multipleAdmins = null;
+
+        // Dynamic Programming: Return cached result if available
+        if ($multipleAdmins !== null) {
+            return $multipleAdmins;
+        }
+
+        $result = $this->db
+            ->from('ip_users')
+            ->where(['user_type' => 1, 'user_active' => 1])
+            ->select_sum('user_type')
+            ->get()
+            ->row();
+
+        $multipleAdmins = ($result->user_type ?? 0) > 1;
+
+        return $multipleAdmins;
     }
 
     /**
@@ -227,7 +229,8 @@ class QuotesController extends AdminController
     {
         $this->load->helper('pdf');
 
-        if (get_setting('mark_quotes_sent_pdf') == 1) {
+        // Use SettingsCache for memoized setting (Dynamic Programming)
+        if (SettingsCache::isEnabled('mark_quotes_sent_pdf')) {
             $this->quote->generate_quote_number_if_applicable($quote_id);
             $this->quote->mark_sent($quote_id);
         }

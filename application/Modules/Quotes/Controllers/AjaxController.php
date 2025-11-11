@@ -3,6 +3,8 @@
 namespace App\Modules\Quotes\Controllers;
 
 use App\Core\AdminController;
+use App\Libraries\DocumentItemProcessor;
+use App\Libraries\SettingsCache;
 
 if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
@@ -23,6 +25,22 @@ class QuotesAjaxController extends AdminController
     public $ajax_controller = true;
 
     /**
+     * Document item processor (Dependency Inversion Principle)
+     */
+    private DocumentItemProcessor $itemProcessor;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Dependency Injection - SOLID principles
+        $this->itemProcessor = new DocumentItemProcessor();
+    }
+
+    /**
      * Legacy migration info:
      * @legacy-file application/modules/quotes/controllers/Ajax.php
      * @legacy-function save()
@@ -30,129 +48,111 @@ class QuotesAjaxController extends AdminController
     public function save()
     {
         $this->load->model([
-            'quotes/mdl_quote_item',
-            'quotes/mdl_quotes',
-            'units/mdl_units',
+            'quotes/quoteitem',
+            'quotes/quote',
+            'units/unit',
         ]);
 
         $quote_id = $this->security->xss_clean($this->input->post('quote_id', true));
 
         $this->quote->set_id($quote_id);
 
-        if ($this->quote->run_validation('validation_rules_save_quote')) {
-            $items = json_decode($this->input->post('items'));
-
-            $quote_discount_percent = (float) $this->input->post('quote_discount_percent');
-            $quote_discount_amount  = (float) $this->input->post('quote_discount_amount');
-
-            // Percent by default. Only one allowed. Prevent set 2 global discounts by geeky client - since v1.6.3
-            if ($quote_discount_percent && $quote_discount_amount) {
-                $quote_discount_amount = 0.0;
-            }
-
-            // New discounts (for legacy_calculation false) - since v1.6.3 Need if taxes applied after discounts
-            $items_subtotal = 0.0;
-            if ($quote_discount_amount) {
-                foreach ($items as $item) {
-                    if ( ! empty($item->item_name)) {
-                        $items_subtotal += standardize_amount($item->item_quantity) * standardize_amount($item->item_price);
-                    }
-                }
-            }
-
-            // New discounts (for legacy_calculation false) - since v1.6.3 Need if taxes applied after discounts
-            $global_discount = [
-                'amount'         => $quote_discount_amount ? standardize_amount($quote_discount_amount) : 0.0,
-                'percent'        => $quote_discount_percent ? standardize_amount($quote_discount_percent) : 0.0,
-                'item'           => 0.0, // Updated by ref (Need for quote_item_subtotal calculation in Mdl_quote_amounts)
-                'items_subtotal' => $items_subtotal,
-            ];
-
-            // Automatic calculation mode
-            if (get_setting('einvoicing')) {
-                // Shift to false (by default). Need true? See Dev Note on ipconfig example
-                $this->config->set_item('legacy_calculation', ! empty($this->input->post('legacy_calculation')));
-            }
-
-            foreach ($items as $item) {
-                // Check if an item has either a quantity + price or name or description
-                if ( ! empty($item->item_name)) {
-                    // Standardize item data
-                    $item->item_quantity        = $item->item_quantity ? standardize_amount($item->item_quantity) : 0.0;
-                    $item->item_price           = $item->item_price ? standardize_amount($item->item_price) : 0.0;
-                    $item->item_discount_amount = $item->item_discount_amount ? standardize_amount($item->item_discount_amount) : null;
-                    $item->item_product_id      = $item->item_product_id ? $item->item_product_id : null;
-                    $item->item_product_unit_id = $item->item_product_unit_id ? $item->item_product_unit_id : null;
-                    $item->item_product_unit    = $this->unit->get_name($item->item_product_unit_id, $item->item_quantity);
-
-                    $item_id = ($item->item_id) ?: null;
-                    unset($item->item_id);
-
-                    $this->quoteitems->save($item_id, $item, $global_discount);
-                } elseif (empty($item->item_name) && ( ! empty($item->item_quantity) || ! empty($item->item_price))) {
-                    // Throw an error message and use the form validation for that (todo: where the translations of: The .* field is required.)
-                    $this->load->library('form_validation');
-                    $this->form_validation->set_rules('item_name', trans('item'), 'required');
-                    $this->form_validation->run();
-
-                    $response = [
-                        'success'           => 0,
-                        'validation_errors' => [
-                            'item_name' => form_error('item_name', '', ''),
-                        ],
-                    ];
-
-                    exit(json_encode($response));
-                }
-            }
-
-            $quote_status_id = $this->input->post('quote_status_id');
-
-            // Generate new quote number if needed
-            $quote_number = $this->input->post('quote_number');
-
-            if (empty($quote_number) && $quote_status_id != 1) {
-                $quote_group_id = $this->quote->get_invoice_group_id($quote_id);
-                $quote_number   = $this->quote->get_quote_number($quote_group_id);
-            }
-
-            // Sometime global discount total value (round) need little adjust to be valid in ZugFerd2.3 standard
-            if ( ! config_item('legacy_calculation') && $quote_discount_amount && $quote_discount_amount != $global_discount['item']) {
-                // Adjust amount to reflect real calculation (cents)
-                $quote_discount_amount = $global_discount['item'];
-            }
-
-            $db_array = [
-                'quote_number'           => $quote_number,
-                'quote_status_id'        => $quote_status_id,
-                'quote_date_created'     => date_to_mysql($this->input->post('quote_date_created')),
-                'quote_date_expires'     => date_to_mysql($this->input->post('quote_date_expires')),
-                'quote_password'         => $this->input->post('quote_password'),
-                'notes'                  => $this->input->post('notes'),
-                'quote_discount_amount'  => standardize_amount($quote_discount_amount),
-                'quote_discount_percent' => standardize_amount($quote_discount_percent),
-            ];
-
-            $this->quote->save($quote_id, $db_array, $global_discount);
-
-            if (config_item('legacy_calculation')) {
-                // Recalculate for discounts
-                $this->load->model('quotes/quoteamount');
-                $this->quoteamounts->calculate($quote_id, $global_discount);
-            }
-
-            $response = [
-                'success' => 1,
-            ];
-        } else {
-            log_message('error', '980: I wasnt able to run the validation validation_rules_save_quote');
-
-            $this->load->helper('json_error');
-            $response = [
-                'success'           => 0,
-                'validation_errors' => json_errors(),
-            ];
+        // Early return if validation fails (Early Return principle)
+        if (!$this->quote->run_validation('validation_rules_save_quote')) {
+            return;
         }
+
+        $items = json_decode($this->input->post('items'));
+
+        $quote_discount_percent = (float) $this->input->post('quote_discount_percent');
+        $quote_discount_amount  = (float) $this->input->post('quote_discount_amount');
+
+        // Use DocumentItemProcessor to normalize discounts (DRY principle)
+        $normalizedDiscounts = $this->itemProcessor->normalizeDiscounts(
+            $quote_discount_percent,
+            $quote_discount_amount
+        );
+
+        $quote_discount_percent = $normalizedDiscounts['percent'];
+        $quote_discount_amount = $normalizedDiscounts['amount'];
+
+        // Calculate items subtotal using DocumentItemProcessor (Dynamic Programming)
+        $items_subtotal = 0.0;
+        if ($quote_discount_amount) {
+            $items_subtotal = $this->itemProcessor->calculateItemsSubtotal($items);
+        }
+
+        // Build global discount using DocumentItemProcessor (DRY principle)
+        $global_discount = $this->itemProcessor->buildGlobalDiscount(
+            $quote_discount_percent,
+            $quote_discount_amount,
+            $items_subtotal
+        );
+
+        // Automatic calculation mode
+        if (SettingsCache::isEnabled('einvoicing')) {
+            // Shift to false (by default). Need true? See Dev Note on ipconfig example
+            $this->config->set_item('legacy_calculation', ! empty($this->input->post('legacy_calculation')));
+        }
+
+        foreach ($items as $item) {
+            // Early continue if no item name (Early Return principle)
+            if (empty($item->item_name)) {
+                // Check if quantity or price exists - throw error
+                if (!empty($item->item_quantity) || !empty($item->item_price)) {
+                    $this->returnValidationError('item_name', trans('item'));
+                    return;
+                }
+                continue;
+            }
+
+            // Process item data using DocumentItemProcessor (DRY + Dynamic Programming)
+            $item = $this->itemProcessor->processItemData($item);
+
+            $item_id = ($item->item_id) ?: null;
+            unset($item->item_id);
+
+            $this->quoteitems->save($item_id, $item, $global_discount);
+        }
+
+        $quote_status_id = $this->input->post('quote_status_id');
+
+        // Generate new quote number if needed
+        $quote_number = $this->input->post('quote_number');
+
+        if (empty($quote_number) && $quote_status_id != 1) {
+            $quote_group_id = $this->quote->get_invoice_group_id($quote_id);
+            $quote_number   = $this->quote->get_quote_number($quote_group_id);
+        }
+
+        // Sometime global discount total value (round) need little adjust to be valid in ZugFerd2.3 standard
+        if ( ! config_item('legacy_calculation') && $quote_discount_amount && $quote_discount_amount != $global_discount['item']) {
+            // Adjust amount to reflect real calculation (cents)
+            $quote_discount_amount = $global_discount['item'];
+        }
+
+        $db_array = [
+            'quote_number'           => $quote_number,
+            'quote_status_id'        => $quote_status_id,
+            'quote_date_created'     => date_to_mysql($this->input->post('quote_date_created')),
+            'quote_date_expires'     => date_to_mysql($this->input->post('quote_date_expires')),
+            'quote_password'         => $this->input->post('quote_password'),
+            'notes'                  => $this->input->post('notes'),
+            'quote_discount_amount'  => standardize_amount($quote_discount_amount),
+            'quote_discount_percent' => standardize_amount($quote_discount_percent),
+        ];
+
+        $this->quote->save($quote_id, $db_array, $global_discount);
+
+        if (config_item('legacy_calculation')) {
+            // Recalculate for discounts
+            $this->load->model('quotes/quoteamount');
+            $this->quoteamounts->calculate($quote_id, $global_discount);
+        }
+
+        $response = [
+            'success' => 1,
+        ];
 
         // Save all custom fields
         if ($this->input->post('custom')) {
@@ -267,10 +267,10 @@ class QuotesAjaxController extends AdminController
     {
         $this->load->module('layout');
         $this->load->model([
-            'quotes/mdl_quotes',
-            'invoice_groups/mdl_invoice_group',
-            'tax_rates/mdl_tax_rate',
-            'clients/mdl_clients',
+            'quotes/quote',
+            'invoice_groups/invoice_group',
+            'tax_rates/tax_rate',
+            'clients/client',
         ]);
 
         $data = [
@@ -292,9 +292,9 @@ class QuotesAjaxController extends AdminController
     public function copy_quote()
     {
         $this->load->model([
-            'quotes/mdl_quotes',
-            'quotes/mdl_quote_item',
-            'quotes/mdl_quote_tax_rate',
+            'quotes/quote',
+            'quotes/quoteitem',
+            'quotes/quotetaxrate',
         ]);
 
         if ($this->quote->run_validation()) {
@@ -351,8 +351,8 @@ class QuotesAjaxController extends AdminController
     public function change_user()
     {
         $this->load->model([
-            'quotes/mdl_quotes',
-            'users/mdl_users',
+            'quotes/quote',
+            'users/user',
         ]);
 
         // Get the user ID
@@ -410,8 +410,8 @@ class QuotesAjaxController extends AdminController
     public function change_client()
     {
         $this->load->model([
-            'quotes/mdl_quotes',
-            'clients/mdl_clients',
+            'quotes/quote',
+            'clients/client',
         ]);
 
         // Get the client ID
@@ -451,9 +451,9 @@ class QuotesAjaxController extends AdminController
     {
         $this->load->module('layout');
         $this->load->model([
-            'invoice_groups/mdl_invoice_group',
-            'tax_rates/mdl_tax_rate',
-            'clients/mdl_clients',
+            'invoice_groups/invoice_group',
+            'tax_rates/tax_rate',
+            'clients/client',
         ]);
 
         $data = [
@@ -501,8 +501,8 @@ class QuotesAjaxController extends AdminController
     public function modal_quote_to_invoice($quote_id)
     {
         $this->load->model([
-            'invoice_groups/mdl_invoice_group',
-            'quotes/mdl_quotes',
+            'invoice_groups/invoice_group',
+            'quotes/quote',
         ]);
 
         $data = [
@@ -522,12 +522,12 @@ class QuotesAjaxController extends AdminController
     public function quote_to_invoice()
     {
         $this->load->model([
-            'invoices/mdl_invoices',
-            'invoices/mdl_item',
-            'invoices/mdl_invoice_tax_rate',
-            'quotes/mdl_quotes',
-            'quotes/mdl_quote_item',
-            'quotes/mdl_quote_tax_rate',
+            'invoices/invoice',
+            'invoices/item',
+            'invoices/invoicetaxrate',
+            'quotes/quote',
+            'quotes/quoteitem',
+            'quotes/quotetaxrate',
         ]);
 
         if ($this->invoice->run_validation()) {
@@ -608,6 +608,30 @@ class QuotesAjaxController extends AdminController
                 'validation_errors' => json_errors(),
             ];
         }
+
+        exit(json_encode($response));
+    }
+
+    /**
+     * Return validation error response and exit
+     * DRY: Extracted common error handling pattern
+     *
+     * @param string $fieldName The field name
+     * @param string $fieldLabel The field label for error message
+     * @return void
+     */
+    private function returnValidationError(string $fieldName, string $fieldLabel): void
+    {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules($fieldName, $fieldLabel, 'required');
+        $this->form_validation->run();
+
+        $response = [
+            'success'           => 0,
+            'validation_errors' => [
+                $fieldName => form_error($fieldName, '', ''),
+            ],
+        ];
 
         exit(json_encode($response));
     }
