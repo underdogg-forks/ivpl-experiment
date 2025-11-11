@@ -315,9 +315,55 @@ array_map('unlink', $files);
 
 /*
  * --------------------------------------------------------------------
- * LOAD THE BOOTSTRAP FILE
+ * GLOBAL TRY/CATCH WRAPPER
  * --------------------------------------------------------------------
  *
- * And away we go...
+ * Wrap the entire application in a try/catch/finally block to handle
+ * all exceptions and ensure proper cleanup
  */
-require_once BASEPATH . 'core/CodeIgniter.php';
+try {
+    /*
+     * --------------------------------------------------------------------
+     * LOAD THE BOOTSTRAP FILE
+     * --------------------------------------------------------------------
+     *
+     * And away we go...
+     */
+    require_once BASEPATH . 'core/CodeIgniter.php';
+} catch (Throwable $e) {
+    // Handle any uncaught exceptions at the top level
+    
+    // Try to use the exception handler if available
+    if (class_exists('ExceptionHandler')) {
+        $handler = new ExceptionHandler();
+        $handler->handleException($e);
+    } else {
+        // Fallback error display using proper error page
+        http_response_code(500);
+        $exception = $e;
+        
+        if (file_exists(APPPATH . 'errors/error_fatal.php')) {
+            include APPPATH . 'errors/error_fatal.php';
+        } else {
+            // Ultimate fallback
+            echo '<h1>Fatal Error</h1>';
+            echo '<p>The application encountered an unexpected error.</p>';
+        }
+    }
+    exit(1);
+} finally {
+    // Cleanup operations that should always run
+    
+    // Close database connections
+    if (function_exists('get_instance')) {
+        $CI = &get_instance();
+        if (isset($CI->db) && is_object($CI->db)) {
+            $CI->db->close();
+        }
+    }
+    
+    // Flush output buffers
+    if (ob_get_level() > 0) {
+        ob_end_flush();
+    }
+}

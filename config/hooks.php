@@ -13,6 +13,14 @@ defined('BASEPATH') || exit('No direct script access allowed');
 |
 */
 
+// Initialize exception handler first
+$hook['pre_system'] = [
+    'class'    => 'ExceptionHandler',
+    'function' => 'init',
+    'filename' => 'ExceptionHandler.php',
+    'filepath' => 'hooks',
+];
+
 $hook['pre_controller'] = [
     'class'    => 'SetTimezoneClass',
     'function' => 'setTimezone',
