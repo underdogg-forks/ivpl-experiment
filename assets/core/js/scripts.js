@@ -123,13 +123,15 @@ function ajaxPost(url, data, options) {
             var errors = {};
             try {
                 var response = JSON.parse(jqXHR.responseText);
-                errors = response.validation_errors || response.errors || response;
+                errors = response.validation_errors || response.errors || {};
             } catch (e) {
                 errors = {error: jqXHR.responseText || 'An error occurred'};
             }
             
-            // Display errors
-            showErrors(errors, options.errorTarget);
+            // Display errors if they exist
+            if (Object.keys(errors).length > 0) {
+                showErrors(errors, options.errorTarget);
+            }
             
             deferred.reject(errors, jqXHR);
         })
