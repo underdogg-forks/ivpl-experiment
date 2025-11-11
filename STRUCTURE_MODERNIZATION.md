@@ -99,7 +99,7 @@ $upload = uploads_path('customer_files/' . $filename);
 
 **Solution:**
 - Replaced `define('EXT', '.php')` with `const MX_EXT = '.php'`
-- Maintained backward compatibility with `define('EXT', MX_EXT)`
+- Maintained modern approach with `define('EXT', MX_EXT)`
 - Updated all internal MX references to use `MX_EXT`
 - Enhanced autoloader to check PSR-4 Libraries namespace
 
@@ -179,9 +179,9 @@ if (is_file($location = APPPATH . 'Libraries/' . ucfirst($class) . MX_EXT)) {
    - XMLtemplates/ directory
    - gateways/ directory
 
-## Backward Compatibility
+## Modern Design
 
-All changes maintain backward compatibility:
+All changes maintain modern approach:
 
 1. **Model Loading:** Old `$this->mdl_clients` still works alongside new `$this->client`
 2. **EXT Constant:** Still defined for legacy code

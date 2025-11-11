@@ -292,23 +292,35 @@ if ( ! isset($view_folder[0]) && is_dir(APPPATH . 'views' . DIRECTORY_SEPARATOR)
     exit(3); // EXIT_CONFIG
 }
 
-define('IPCONFIG_FILE', dirname(FCPATH) . DIRECTORY_SEPARATOR . 'ipconfig.php');
-
-define('LOGS_FOLDER', APPPATH . 'logs' . DIRECTORY_SEPARATOR);
-
-define('UPLOADS_FOLDER', dirname(FCPATH) . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR);
-define('UPLOADS_ARCHIVE_FOLDER', UPLOADS_FOLDER . 'archive' . DIRECTORY_SEPARATOR);
-define('UPLOADS_CFILES_FOLDER', UPLOADS_FOLDER . 'customer_files' . DIRECTORY_SEPARATOR);
-define('UPLOADS_TEMP_FOLDER', UPLOADS_FOLDER . 'temp' . DIRECTORY_SEPARATOR);
-define('UPLOADS_TEMP_MPDF_FOLDER', UPLOADS_TEMP_FOLDER . 'mpdf' . DIRECTORY_SEPARATOR);
-
 define('VIEWPATH', $view_folder . DIRECTORY_SEPARATOR);
 define('THEME_FOLDER', FCPATH . 'assets' . DIRECTORY_SEPARATOR);
 
-// Automatic temp pdf & xml files cleanup
+/*
+ * --------------------------------------------------------------------
+ * LOAD PATH HELPERS
+ * --------------------------------------------------------------------
+ * 
+ * Load modern path helpers for cleaner path management throughout
+ * the application. These helpers provide a Laravel-style API for
+ * working with paths.
+ */
+require_once APPPATH . 'helpers/path_helper.php';
+
+// Define upload paths using helper functions for consistency
+define('UPLOADS_FOLDER', join_paths(dirname(FCPATH), 'uploads') . DIRECTORY_SEPARATOR);
+define('UPLOADS_ARCHIVE_FOLDER', join_paths(UPLOADS_FOLDER, 'archive') . DIRECTORY_SEPARATOR);
+define('UPLOADS_CFILES_FOLDER', join_paths(UPLOADS_FOLDER, 'customer_files') . DIRECTORY_SEPARATOR);
+define('UPLOADS_TEMP_FOLDER', join_paths(UPLOADS_FOLDER, 'temp') . DIRECTORY_SEPARATOR);
+define('UPLOADS_TEMP_MPDF_FOLDER', join_paths(UPLOADS_TEMP_FOLDER, 'mpdf') . DIRECTORY_SEPARATOR);
+
+// Define other paths using helpers
+define('LOGS_FOLDER', join_paths(APPPATH, 'logs') . DIRECTORY_SEPARATOR);
+define('IPCONFIG_FILE', join_paths(dirname(FCPATH), 'ipconfig.php'));
+
+// Automatic temp pdf & xml files cleanup using path helpers
 $files = array_merge(
-    glob(UPLOADS_TEMP_FOLDER . '*.pdf'),
-    glob(UPLOADS_TEMP_FOLDER . '*.xml')
+    glob(uploads_path('temp/*.pdf')),
+    glob(uploads_path('temp/*.xml'))
 );
 
 array_map('unlink', $files);

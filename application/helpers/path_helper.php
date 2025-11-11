@@ -1,14 +1,10 @@
 <?php
 
-if (!defined('BASEPATH')) {
-    exit('No direct script access allowed');
-}
-
 /**
  * Path Helpers
  * 
- * Modern helper functions for path manipulation inspired by Laravel helpers.
- * These provide alternatives to using defines for paths.
+ * Modern helper functions for path manipulation.
+ * These helpers work with or without CodeIgniter constants being defined.
  */
 
 if (!function_exists('app_path')) {
