@@ -33,7 +33,6 @@
                     $('#' + key).parent().addClass('has-error');
                 }
             }
-            close_loader();
         }
         function delete_client_note(event) {
             ajaxPost('<?php echo site_url('clients/ajax/delete_client_note'); ?>', {
@@ -41,11 +40,13 @@
             }, {
                 beforeSend: function() {
                     show_loader();
+                },
+                always: function() {
+                    close_loader();
                 }
             }).done(function (data) {
                 reload_client_notes(data);
             }).fail(function (errors) {
-                close_loader();
                 // Errors are automatically displayed by ajaxPost
             });
         }
@@ -56,11 +57,13 @@
             }, {
                 beforeSend: function() {
                     show_loader();
+                },
+                always: function() {
+                    close_loader();
                 }
             }).done(function (data) {
                 reload_client_notes(data);
             }).fail(function (errors) {
-                close_loader();
                 // Errors are automatically displayed by ajaxPost
             });
         });
