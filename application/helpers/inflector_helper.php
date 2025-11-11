@@ -51,9 +51,12 @@ if (!function_exists('pluralize')) {
             'move' => 'moves',
             'zombie' => 'zombies',
         ];
-
         $lower = mb_strtolower($word);
         if (isset($irregulars[$lower])) {
+            // Preserve original case
+            if (mb_strtoupper($word[0]) === $word[0]) {
+                return ucfirst($irregulars[$lower]);
+            }
             return $irregulars[$lower];
         }
 
