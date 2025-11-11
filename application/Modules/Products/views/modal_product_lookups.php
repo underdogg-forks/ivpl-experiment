@@ -75,8 +75,7 @@
 
             // Reload to default & add rows click event
             window.setTimeout(function () {
-                $.get(lookup_url).done(function(data) {
-                    var response = typeof data === 'string' ? json_parse(data) : data;
+                ajaxGet(lookup_url).done(function(response) {
                     product_table.html(response.html);
                     addClickTrToggleCheck();
                 });
@@ -114,8 +113,7 @@
 
             // Reload by filtered & add rows click event
             window.setTimeout(function () {
-                $.get(lookup_url).done(function(data) {
-                    var response = typeof data === 'string' ? json_parse(data) : data;
+                ajaxGet(lookup_url).done(function(response) {
                     product_table.html(response.html);
                     addClickTrToggleCheck();
                 });
