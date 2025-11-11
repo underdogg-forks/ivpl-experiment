@@ -15,10 +15,9 @@
             // No Check No post
             if ( ! product_ids.length) return; // todo: why not animate checkboxes
 
-            $.post("<?php echo site_url('products/ajax/process_product_selections'); ?>", {
+            ajaxPost("<?php echo site_url('products/ajax/process_product_selections'); ?>", {
                 product_ids: product_ids
-            }, function (data) {
-                var items = json_parse(data, <?php echo (int) IP_DEBUG; ?>);
+            }).done(function (items) {
                 for (var key in items) {
                     // Set default tax rate id if empty
                     if (!items[key].tax_rate_id) items[key].tax_rate_id = '<?php echo $default_item_tax_rate; ?>';
