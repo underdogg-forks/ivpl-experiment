@@ -66,4 +66,24 @@ class AdminController extends UserController
             $this->output->set_header('X-Content-Type-Options: nosniff');
         }
     }
+
+    /**
+     * Render a view as JSON response for AJAX requests
+     * 
+     * This method captures the view output using output buffering and returns it
+     * as a JSON response with a success flag. This standardizes the pattern used
+     * across all AJAX controllers for returning HTML content.
+     * 
+     * @param string $viewPath The path to the view file (e.g., 'invoices/modal_copy_invoice')
+     * @param array $data The data array to pass to the view
+     * @return void Outputs JSON directly and terminates
+     */
+    protected function renderViewAsJson(string $viewPath, array $data = []): void
+    {
+        ob_start();
+        $this->layout->load_view($viewPath, $data);
+        $html = ob_get_clean();
+        
+        echo json_encode(['success' => 1, 'html' => $html]);
+    }
 }

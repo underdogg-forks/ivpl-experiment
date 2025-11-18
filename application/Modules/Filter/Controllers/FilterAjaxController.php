@@ -46,12 +46,7 @@ class FilterAjaxController extends AdminController
             'invoice_statuses' => $this->invoice->statuses(),
         ];
 
-        // Capture view output and return as JSON
-        ob_start();
-        $this->layout->load_view('invoices/partial_invoice_table', $data);
-        $html = ob_get_clean();
-        
-        echo json_encode(['success' => 1, 'html' => $html]);
+        $this->renderViewAsJson('invoices/partial_invoice_table', $data);
     }
 
     /**
@@ -78,12 +73,7 @@ class FilterAjaxController extends AdminController
             'quote_statuses' => $this->quote->statuses(),
         ];
 
-        // Capture view output and return as JSON
-        ob_start();
-        $this->layout->load_view('quotes/partial_quote_table', $data);
-        $html = ob_get_clean();
-        
-        echo json_encode(['success' => 1, 'html' => $html]);
+        $this->renderViewAsJson('quotes/partial_quote_table', $data);
     }
 
     /**
@@ -110,12 +100,7 @@ class FilterAjaxController extends AdminController
             'einvoicing' => get_setting('einvoicing'),
         ];
 
-        // Capture view output and return as JSON
-        ob_start();
-        $this->layout->load_view('clients/partial_client_table', $data);
-        $html = ob_get_clean();
-        
-        echo json_encode(['success' => 1, 'html' => $html]);
+        $this->renderViewAsJson('clients/partial_client_table', $data);
     }
 
     /**
@@ -157,12 +142,7 @@ class FilterAjaxController extends AdminController
             'positions'           => $this->customfields->get_positions(true),
         ];
 
-        // Capture view output and return as JSON
-        ob_start();
-        $this->layout->load_view('custom_fields/partial_custom_fields_table', $data);
-        $html = ob_get_clean();
-        
-        echo json_encode(['success' => 1, 'html' => $html]);
+        $this->renderViewAsJson('custom_fields/partial_custom_fields_table', $data);
     }
 
     /**
@@ -202,12 +182,7 @@ class FilterAjaxController extends AdminController
             'positions'     => $this->customfields->get_positions(true),
         ];
         
-        // Capture view output and return as JSON
-        ob_start();
-        $this->layout->load_view('custom_values/partial_custom_values_table', $data);
-        $html = ob_get_clean();
-        
-        echo json_encode(['success' => 1, 'html' => $html]);
+        $this->renderViewAsJson('custom_values/partial_custom_values_table', $data);
     }
 
     /**
@@ -238,12 +213,7 @@ class FilterAjaxController extends AdminController
             'elements' => $elements,
         ];
         
-        // Capture view output and return as JSON
-        ob_start();
-        $this->layout->load_view('custom_values/partial_custom_values_field', $data);
-        $html = ob_get_clean();
-        
-        echo json_encode(['success' => 1, 'html' => $html]);
+        $this->renderViewAsJson('custom_values/partial_custom_values_field', $data);
     }
 
     /**
@@ -271,12 +241,7 @@ class FilterAjaxController extends AdminController
             'projects' => $this->project->get()->result(),
         ];
 
-        // Capture view output and return as JSON
-        ob_start();
-        $this->layout->load_view('projects/partial_projects_table', $data);
-        $html = ob_get_clean();
-        
-        echo json_encode(['success' => 1, 'html' => $html]);
+        $this->renderViewAsJson('projects/partial_projects_table', $data);
     }
 
     /**
@@ -305,12 +270,7 @@ class FilterAjaxController extends AdminController
             'task_statuses' => $this->task->statuses(),
         ];
 
-        // Capture view output and return as JSON
-        ob_start();
-        $this->layout->load_view('tasks/partial_tasks_table', $data);
-        $html = ob_get_clean();
-        
-        echo json_encode(['success' => 1, 'html' => $html]);
+        $this->renderViewAsJson('tasks/partial_tasks_table', $data);
     }
 
     /**
@@ -339,12 +299,7 @@ class FilterAjaxController extends AdminController
             'products' => $this->product->get()->result(),
         ];
 
-        // Capture view output and return as JSON
-        ob_start();
-        $this->layout->load_view('products/partial_products_table', $data);
-        $html = ob_get_clean();
-        
-        echo json_encode(['success' => 1, 'html' => $html]);
+        $this->renderViewAsJson('products/partial_products_table', $data);
     }
 
     /**
@@ -377,12 +332,7 @@ class FilterAjaxController extends AdminController
             'user_types' => $this->user->user_types(),
         ];
 
-        // Capture view output and return as JSON
-        ob_start();
-        $this->layout->load_view('users/partial_users_table', $data);
-        $html = ob_get_clean();
-        
-        echo json_encode(['success' => 1, 'html' => $html]);
+        $this->renderViewAsJson('users/partial_users_table', $data);
     }
 
     /**
@@ -409,12 +359,7 @@ class FilterAjaxController extends AdminController
             'families' => $this->family->get()->result(),
         ];
 
-        // Capture view output and return as JSON
-        ob_start();
-        $this->layout->load_view('families/partial_families_table', $data);
-        $html = ob_get_clean();
-        
-        echo json_encode(['success' => 1, 'html' => $html]);
+        $this->renderViewAsJson('families/partial_families_table', $data);
     }
 
     /**
@@ -442,12 +387,7 @@ class FilterAjaxController extends AdminController
             'recurring_invoices' => $this->invoice_recurring->get()->result(),
         ];
 
-        // Capture view output and return as JSON
-        ob_start();
-        $this->layout->load_view('invoices/partial_invoices_recurring_table', $data);
-        $html = ob_get_clean();
-        
-        echo json_encode(['success' => 1, 'html' => $html]);
+        $this->renderViewAsJson('invoices/partial_invoices_recurring_table', $data);
     }
 
     /**
@@ -473,12 +413,7 @@ class FilterAjaxController extends AdminController
             'payment_logs' => $this->paymentlogs->get()->result(),
         ];
 
-        // Capture view output and return as JSON
-        ob_start();
-        $this->layout->load_view('payments/partial_online_logs_table', $data);
-        $html = ob_get_clean();
-        
-        echo json_encode(['success' => 1, 'html' => $html]);
+        $this->renderViewAsJson('payments/partial_online_logs_table', $data);
     }
 
     /**
@@ -494,12 +429,7 @@ class FilterAjaxController extends AdminController
             'invoices_archive' => $this->invoice->get_archives($this->input->post('filter_query')),
         ];
 
-        // Capture view output and return as JSON
-        ob_start();
-        $this->layout->load_view('invoices/partial_invoice_archive', $data);
-        $html = ob_get_clean();
-        
-        echo json_encode(['success' => 1, 'html' => $html]);
+        $this->renderViewAsJson('invoices/partial_invoice_archive', $data);
     }
 
     /**
@@ -525,11 +455,6 @@ class FilterAjaxController extends AdminController
             'payments' => $this->payment->get()->result(),
         ];
 
-        // Capture view output and return as JSON
-        ob_start();
-        $this->layout->load_view('payments/partial_payments_table', $data);
-        $html = ob_get_clean();
-        
-        echo json_encode(['success' => 1, 'html' => $html]);
+        $this->renderViewAsJson('payments/partial_payments_table', $data);
     }
 }

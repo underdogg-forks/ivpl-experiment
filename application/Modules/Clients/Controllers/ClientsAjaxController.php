@@ -193,11 +193,6 @@ class ClientsAjaxController extends AdminController
             )->get()->result(),
         ];
 
-        // Capture view output and return as JSON
-        ob_start();
-        $this->layout->load_view('clients/partial_notes', $data);
-        $html = ob_get_clean();
-        
-        echo json_encode(['success' => 1, 'html' => $html]);
+        $this->renderViewAsJson('clients/partial_notes', $data);
     }
 }
