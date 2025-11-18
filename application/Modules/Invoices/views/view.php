@@ -20,11 +20,15 @@ $edit_user_title = trans('edit') . ' ' . trans('user') . ' (' . trans('invoicing
         });
 
         $('.btn_add_product').click(function () {
-            $('#modal-placeholder').load("<?php echo site_url('products/ajax/modal_product_lookups'); ?>/" + Math.floor(Math.random() * 1000));
+            ajaxPost("<?php echo site_url('products/ajax/modal_product_lookups'); ?>/" + Math.floor(Math.random() * 1000), {}).done(function(response) {
+                $('#modal-placeholder').html(response.html);
+            });
         });
 
         $('.btn_add_task').click(function () {
-            $('#modal-placeholder').load("<?php echo site_url('tasks/ajax/modal_task_lookups/' . $invoice_id); ?>/" + Math.floor(Math.random() * 1000));
+            ajaxPost("<?php echo site_url('tasks/ajax/modal_task_lookups/' . $invoice_id); ?>/" + Math.floor(Math.random() * 1000), {}).done(function(response) {
+                $('#modal-placeholder').html(response.html);
+            });
         });
 
         $('.btn_add_row').click(function () {
@@ -45,8 +49,10 @@ if ( ! $items) {
         $(document).on('loaded', check_items_tax_usages());
 
         $('#btn_create_recurring').click(function () {
-            $('#modal-placeholder').load("<?php echo site_url('invoices/ajax/modal_create_recurring'); ?>", {
+            ajaxPost("<?php echo site_url('invoices/ajax/modal_create_recurring'); ?>", {
                 invoice_id: <?php echo $invoice_id; ?>
+            }).done(function(response) {
+                $('#modal-placeholder').html(response.html);
             });
         });
 <?php
@@ -54,16 +60,20 @@ if ($invoice->invoice_status_id == 1 && ! $invoice->creditinvoice_parent_id) {
 ?>
 
         $('#invoice_change_client').click(function () {
-            $('#modal-placeholder').load("<?php echo site_url('invoices/ajax/modal_change_client'); ?>", {
+            ajaxPost("<?php echo site_url('invoices/ajax/modal_change_client'); ?>", {
                 invoice_id: <?php echo $invoice_id; ?>,
                 client_id: "<?php echo $this->db->escape_str($invoice->client_id); ?>",
+            }).done(function(response) {
+                $('#modal-placeholder').html(response.html);
             });
         });
 
         $('#invoice_change_user').click(function () {
-            $('#modal-placeholder').load("<?php echo site_url('invoices/ajax/modal_change_user'); ?>", {
+            ajaxPost("<?php echo site_url('invoices/ajax/modal_change_user'); ?>", {
                 invoice_id: <?php echo $invoice_id; ?>,
                 user_id: "<?php echo $this->db->escape_str($invoice->user_id); ?>",
+            }).done(function(response) {
+                $('#modal-placeholder').html(response.html);
             });
         });
 <?php

@@ -46,7 +46,7 @@ class FilterAjaxController extends AdminController
             'invoice_statuses' => $this->invoice->statuses(),
         ];
 
-        $this->layout->load_view('invoices/partial_invoice_table', $data);
+        $this->renderViewAsJson('invoices/partial_invoice_table', $data);
     }
 
     /**
@@ -73,7 +73,7 @@ class FilterAjaxController extends AdminController
             'quote_statuses' => $this->quote->statuses(),
         ];
 
-        $this->layout->load_view('quotes/partial_quote_table', $data);
+        $this->renderViewAsJson('quotes/partial_quote_table', $data);
     }
 
     /**
@@ -100,7 +100,7 @@ class FilterAjaxController extends AdminController
             'einvoicing' => get_setting('einvoicing'),
         ];
 
-        $this->layout->load_view('clients/partial_client_table', $data);
+        $this->renderViewAsJson('clients/partial_client_table', $data);
     }
 
     /**
@@ -142,7 +142,7 @@ class FilterAjaxController extends AdminController
             'positions'           => $this->customfields->get_positions(true),
         ];
 
-        $this->layout->load_view('custom_fields/partial_custom_fields_table', $data);
+        $this->renderViewAsJson('custom_fields/partial_custom_fields_table', $data);
     }
 
     /**
@@ -181,7 +181,8 @@ class FilterAjaxController extends AdminController
             'custom_tables' => $this->customfields->custom_tables(),
             'positions'     => $this->customfields->get_positions(true),
         ];
-        $this->layout->load_view('custom_values/partial_custom_values_table', $data);
+        
+        $this->renderViewAsJson('custom_values/partial_custom_values_table', $data);
     }
 
     /**
@@ -211,7 +212,8 @@ class FilterAjaxController extends AdminController
             'id'       => $id,
             'elements' => $elements,
         ];
-        $this->layout->load_view('custom_values/partial_custom_values_field', $data);
+        
+        $this->renderViewAsJson('custom_values/partial_custom_values_field', $data);
     }
 
     /**
@@ -239,7 +241,7 @@ class FilterAjaxController extends AdminController
             'projects' => $this->project->get()->result(),
         ];
 
-        $this->layout->load_view('projects/partial_projects_table', $data);
+        $this->renderViewAsJson('projects/partial_projects_table', $data);
     }
 
     /**
@@ -268,7 +270,7 @@ class FilterAjaxController extends AdminController
             'task_statuses' => $this->task->statuses(),
         ];
 
-        $this->layout->load_view('tasks/partial_tasks_table', $data);
+        $this->renderViewAsJson('tasks/partial_tasks_table', $data);
     }
 
     /**
@@ -297,7 +299,7 @@ class FilterAjaxController extends AdminController
             'products' => $this->product->get()->result(),
         ];
 
-        $this->layout->load_view('products/partial_products_table', $data);
+        $this->renderViewAsJson('products/partial_products_table', $data);
     }
 
     /**
@@ -330,7 +332,7 @@ class FilterAjaxController extends AdminController
             'user_types' => $this->user->user_types(),
         ];
 
-        $this->layout->load_view('users/partial_users_table', $data);
+        $this->renderViewAsJson('users/partial_users_table', $data);
     }
 
     /**
@@ -357,7 +359,7 @@ class FilterAjaxController extends AdminController
             'families' => $this->family->get()->result(),
         ];
 
-        $this->layout->load_view('families/partial_families_table', $data);
+        $this->renderViewAsJson('families/partial_families_table', $data);
     }
 
     /**
@@ -385,7 +387,7 @@ class FilterAjaxController extends AdminController
             'recurring_invoices' => $this->invoice_recurring->get()->result(),
         ];
 
-        $this->layout->load_view('invoices/partial_invoices_recurring_table', $data);
+        $this->renderViewAsJson('invoices/partial_invoices_recurring_table', $data);
     }
 
     /**
@@ -411,7 +413,7 @@ class FilterAjaxController extends AdminController
             'payment_logs' => $this->paymentlogs->get()->result(),
         ];
 
-        $this->layout->load_view('payments/partial_online_logs_table', $data);
+        $this->renderViewAsJson('payments/partial_online_logs_table', $data);
     }
 
     /**
@@ -427,7 +429,7 @@ class FilterAjaxController extends AdminController
             'invoices_archive' => $this->invoice->get_archives($this->input->post('filter_query')),
         ];
 
-        $this->layout->load_view('invoices/partial_invoice_archive', $data);
+        $this->renderViewAsJson('invoices/partial_invoice_archive', $data);
     }
 
     /**
@@ -453,6 +455,6 @@ class FilterAjaxController extends AdminController
             'payments' => $this->payment->get()->result(),
         ];
 
-        $this->layout->load_view('payments/partial_payments_table', $data);
+        $this->renderViewAsJson('payments/partial_payments_table', $data);
     }
 }

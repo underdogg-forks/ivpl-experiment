@@ -40,7 +40,7 @@ class TasksAjaxController extends AdminController
             $data['tasks'] = $this->task->get_tasks_to_invoice($invoice_id);
         }
 
-        $this->layout->load_view('tasks/modal_task_lookups', $data);
+        $this->renderViewAsJson('tasks/modal_task_lookups', $data);
     }
 
     /**

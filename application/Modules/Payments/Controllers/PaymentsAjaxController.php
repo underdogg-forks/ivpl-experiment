@@ -69,6 +69,6 @@ class PaymentsAjaxController extends AdminController
             'payment_cf_exist'       => $this->security->xss_clean($this->input->post('payment_cf_exist')),
         ];
 
-        $this->layout->load_view('payments/modal_add_payment', $data);
+        $this->renderViewAsJson('payments/modal_add_payment', $data);
     }
 }

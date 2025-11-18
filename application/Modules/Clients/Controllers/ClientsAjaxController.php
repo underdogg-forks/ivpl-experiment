@@ -193,6 +193,6 @@ class ClientsAjaxController extends AdminController
             )->get()->result(),
         ];
 
-        $this->layout->load_view('clients/partial_notes', $data);
+        $this->renderViewAsJson('clients/partial_notes', $data);
     }
 }
