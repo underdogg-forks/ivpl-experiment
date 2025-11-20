@@ -15,15 +15,14 @@
             $('.has-error').removeClass('has-error');
             $('#client_note').val('');
 
-            // Reload all notes
-            $('#notes_list').load("<?php echo site_url('clients/ajax/load_client_notes'); ?>",
-                {
-                    client_id: client_id
-                }, function (response) {
-                    <?php echo IP_DEBUG ? 'console.log(response);' : ''; ?>
-
-                    setTimeout(add_delete_client_notes_click_event, 161);
-                });
+            // Reload all notes using ajaxPost
+            ajaxPost("<?php echo site_url('clients/ajax/load_client_notes'); ?>", {
+                client_id: client_id
+            }).done(function(response) {
+                <?php echo IP_DEBUG ? 'console.log(response);' : ''; ?>
+                $('#notes_list').html(response.html);
+                setTimeout(add_delete_client_notes_click_event, 161);
+            });
         }
         function delete_client_note(event) {
             ajaxPost('<?php echo site_url('clients/ajax/delete_client_note'); ?>', {

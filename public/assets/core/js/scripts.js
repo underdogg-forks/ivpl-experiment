@@ -147,6 +147,86 @@ function ajaxPost(url, data, options) {
     return deferred.promise();
 }
 
+/**
+ * Standardized AJAX GET wrapper with consistent error handling
+ * Provides a jQuery promise-based interface similar to ajaxPost
+ * 
+ * @param {string} url - The URL to get from
+ * @param {Object} options - Optional configuration
+ * @param {string} options.errorTarget - CSS selector for error display container
+ * @param {Function} options.beforeSend - Callback before request is sent
+ * @param {Function} options.always - Callback that runs after success or failure
+ * @returns {Promise} jQuery promise with .done() and .fail() methods
+ * 
+ * @example
+ * ajaxGet('/products/ajax/modal_product_lookups?filter_family=1', {
+ *   beforeSend: function() {
+ *     $('#product-table').html('<i class="fa fa-spinner fa-spin"></i>');
+ *   }
+ * }).done(function(response) {
+ *   $('#product-table').html(response.html);
+ * }).fail(function(errors) {
+ *   // Errors are automatically displayed
+ *   console.log('Request failed:', errors);
+ * });
+ */
+function ajaxGet(url, options) {
+    options = options || {};
+    var deferred = $.Deferred();
+
+    // Call beforeSend callback if provided
+    if (options.beforeSend && typeof options.beforeSend === 'function') {
+        options.beforeSend();
+    }
+
+    $.get(url)
+        .done(function(responseData) {
+            var response = typeof responseData === 'string' ? json_parse(responseData) : responseData;
+            
+            if (response.success === 1 || response.success === true) {
+                deferred.resolve(response);
+            } else {
+                // Handle validation errors
+                var errors = response.validation_errors || response.errors || {};
+                
+                // If no specific errors, create a generic error message
+                if (Object.keys(errors).length === 0) {
+                    errors = {
+                        general: 'An unexpected error occurred. Please try again.'
+                    };
+                }
+                
+                // Display errors
+                showErrors(errors, options.errorTarget);
+                
+                deferred.reject(errors, response);
+            }
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            var errors = {};
+            try {
+                var response = JSON.parse(jqXHR.responseText);
+                errors = response.validation_errors || response.errors || {};
+            } catch (e) {
+                errors = {error: jqXHR.responseText || 'An error occurred'};
+            }
+            
+            // Display errors if they exist
+            if (Object.keys(errors).length > 0) {
+                showErrors(errors, options.errorTarget);
+            }
+            
+            deferred.reject(errors, jqXHR);
+        })
+        .always(function() {
+            if (options.always && typeof options.always === 'function') {
+                options.always();
+            }
+        });
+
+    return deferred.promise();
+}
+
 // Insert text into textarea at Caret Position
 function insert_at_caret(areaId, text) {
     var txtarea = document.getElementById(areaId),

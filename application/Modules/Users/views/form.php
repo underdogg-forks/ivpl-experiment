@@ -35,7 +35,9 @@ $einvoicingOpt = $einvoicing ? $einvoicingTip . trans('optional') . ')"' : '';
 
         $('#add-user-client-modal').click(function () {
             <?php $user_id = $id ?? ''; ?>
-            $('#modal-placeholder').load("<?php echo site_url('users/ajax/modal_add_user_client/' . $user_id); ?>");
+            ajaxPost("<?php echo site_url('users/ajax/modal_add_user_client/' . $user_id); ?>", {}).done(function(response) {
+                $('#modal-placeholder').html(response.html);
+            });
         });
     });
 </script>

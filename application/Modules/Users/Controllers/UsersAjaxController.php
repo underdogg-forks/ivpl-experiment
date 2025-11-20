@@ -183,7 +183,7 @@ class UsersAjaxController extends AdminController
             ];
         }
 
-        $this->layout->load_view('users/partial_user_client_table', $data);
+        $this->renderViewAsJson('users/partial_user_client_table', $data);
     }
 
     /**
@@ -219,6 +219,6 @@ class UsersAjaxController extends AdminController
             'clients' => $clients,
         ];
 
-        $this->layout->load_view('users/modal_user_client', $data);
+        $this->renderViewAsJson('users/modal_user_client', $data);
     }
 }

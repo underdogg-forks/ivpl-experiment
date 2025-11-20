@@ -75,7 +75,10 @@
 
             // Reload to default & add rows click event
             window.setTimeout(function () {
-                product_table.load(lookup_url, addClickTrToggleCheck);
+                ajaxGet(lookup_url).done(function(response) {
+                    product_table.html(response.html);
+                    addClickTrToggleCheck();
+                });
             }, 250);
         });
 
@@ -110,7 +113,10 @@
 
             // Reload by filtered & add rows click event
             window.setTimeout(function () {
-                product_table.load(lookup_url, addClickTrToggleCheck);
+                ajaxGet(lookup_url).done(function(response) {
+                    product_table.html(response.html);
+                    addClickTrToggleCheck();
+                });
             }, 250);
         }
 

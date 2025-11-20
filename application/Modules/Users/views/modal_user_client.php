@@ -12,8 +12,10 @@
                 client_id: $('#client_id').val()
             }).done(function (data) {
                 <?php echo IP_DEBUG ? 'console.log(data);' : ''; ?>
-                $('#div_user_client_table').load('<?php echo site_url('users/ajax/load_user_client_table'); ?>', {
+                ajaxPost('<?php echo site_url('users/ajax/load_user_client_table'); ?>', {
                     user_id: '<?php echo $user_id; ?>'
+                }).done(function(response) {
+                    $('#div_user_client_table').html(response.html);
                 });
 
                 user_client_modal.modal('hide');
