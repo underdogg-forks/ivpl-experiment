@@ -11,27 +11,27 @@
         }
     },
     "require": {
-        "endroid/qr-code": "^4.8",
-        "filp/whoops": "^2.18",
-        "guzzlehttp/guzzle": "^7.9",
-        "illuminate/support": "^10.0",
-        "laravel/helpers": "*",
-        "moneyphp/money": "^4.7",
-        "mpdf/mpdf": "^8.2",
-        "paragonie/random_compat": "^2.0",
-        "phpmailer/phpmailer": "^6.10",
+        "endroid/qr-code": "^4.8.5",
+        "filp/whoops": "^2.18.4",
+        "guzzlehttp/guzzle": "^7.10",
+        "illuminate/support": "^10.49",
+        "laravel/helpers": ">=1.8.1",
+        "moneyphp/money": "^4.8",
+        "mpdf/mpdf": "^8.2.6",
+        "paragonie/random_compat": "^2.0.21",
+        "phpmailer/phpmailer": "^6.12",
         "pocketarc/codeigniter": "3.3",
-        "setasign/fpdf": "^1.8",
+        "setasign/fpdf": "^1.8.6",
         "smhg/sepa-qr-data": "^1.2",
         "stripe/stripe-php": "^14.10",
-        "vlucas/phpdotenv": "^5.6"
+        "vlucas/phpdotenv": "^5.6.2"
     },
     "require-dev": {
-        "filp/whoops": "^2.18",
-        "laravel/pint": "^1.20",
-        "squizlabs/php_codesniffer": "^3.13",
-        "rector/rector": "^2.0",
-        "symfony/var-dumper": "^6.4"
+        "filp/whoops": "^2.18.4",
+        "laravel/pint": "^1.25.1",
+        "squizlabs/php_codesniffer": "^3.13.5",
+        "rector/rector": "^2.2.8",
+        "symfony/var-dumper": "^6.4.26"
     },
     "autoload": {
         "psr-4": {

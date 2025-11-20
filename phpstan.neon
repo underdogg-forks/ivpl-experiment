@@ -1,15 +1,25 @@
+#includes:
+#    - phpstan-baseline.neon
+
 parameters:
-    level: 0
+    tmpDir: null
+    level: 5
     paths:
-        - application/Core
-        - application/Modules
-        - application/libraries
+        - app/
+
     excludePaths:
-        - vendor
-    
-    # Include baseline to ignore existing issues
-    baseline: phpstan-baseline.neon
-    
-    # Additional options
-    checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
+        analyse:
+            - */Http/*
+
+    ignoreErrors:
+        - '#Access to an undefined property#'
+        - '#Access to an undefined static property#'
+        - '#Call to an undefined method#'
+        - '#Call to an undefined static method#'
+        - '#Call to method .* on an unknown class .*#'
+        - '#Constructor of class .* has an unused parameter#'
+        - '#Instantiated class .* not found#'
+        # Optional: Add other common ignores here if needed
+
+    treatPhpDocTypesAsCertain: false
+    reportUnmatchedIgnoredErrors: false
